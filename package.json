@@ -1,0 +1,17 @@
+{
+  "name": "shared-server",
+  "version": "0.0.1",
+  "description": "Shared server del TP de Taller II 2018/2",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0"
+  }
+}
