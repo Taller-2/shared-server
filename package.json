@@ -20,5 +20,9 @@
   },
   "devDependencies": {
     "concurrently": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Taller-2/shared-server.git"
   }
 }
