@@ -1,5 +1,11 @@
 # shared-server
-Shared server del TP de Taller II 2018/2. Aplicación en Node 8
+Shared server del TP de Taller II 2018/2. Aplicación en Node/Express con frontend en react.
+
+Para levantar el server en un entorno de desarrollo ejecutar:
+```
+npm run dev
+```
+
 
 ## Docs
 
