@@ -1,18 +1,28 @@
 {
   "name": "shared-server",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "ajv": "^6.5.3",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "react-scripts": "1.1.5"
-  },
+  "version": "0.0.1",
+  "description": "Shared server del TP de Taller II 2018/2",
+  "main": "server",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "client": "cd client && npm run start",
+    "server": "node server",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start": "node server",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+    "test": "mocha"
   },
-  "proxy": "http://localhost:5000/"
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Taller-2/shared-server.git"
+  }
 }

@@ -1,13 +1,3 @@
 language: node_js
 node_js:
-  - '8'
-cache:
-  directories:
-  - node_modules
-script:
-  - npm test
-  - npm run build
-deploy:
-  provider: heroku
-  api_key:
-    secure: JGescy9ZN+0y10pypc2/1kmxWeGcxBVJNZp9T0lELO4wwRxtGqrftWl5eCq6Y+iQh5xquCnXKeOZulY+PbVtDr0O9N9z+lgZn7qih+yEy2yrnLNyqJBAs10Wd/CiqShsfMIpTl5eF15404HaSs+v4B7sQjI6iNlVGk1BJ93jrKlr6JY2T5lBOuepjtkAnuE1Yc7lMKcG4uRIELRsg8eJ4+nLu8iznXmjFZ53zMGLS1lnRu4wPi3hqf3obugiu9eTYxcq/KqGDBL2M0nVuawkx/4MzAVCE8JCckosnO+mQD/Ac+uvb3NnTJqmldQFvDkqVMNeTH7ONhdArX2G6HbjoquxNxyoJkImTZ7tu4LufkFgnduzcYsYZYxp6sjyebeBrgM2H76D6NWfksr5id86PofRB+Y91F1pn0C5WJTcUf2tkCgctc+KL9s19h+YvenPA4ZBQAUJ4PkmrF2E5gEnLh2HP0OfpFZ7sMx5U7zcdXwJkGza6d7gWgD/7ZdtlpzlZ+hefwVq69IS4Nd+t6G2aynvoNgRC1CwR/ErCzAkjDT2nbcZGHBq+zMUfeZbNySKIf0rPxyAXPqKn4UtkSYLnLiCCG0o3VunNwCwCkhxb5PSJ6FQtQvMFfMGRI3GxLeDyowb8Fiz1fDoVj37cWPbz6omo/RZJykfNqMDhSHkF0Y=
+  - "8"
