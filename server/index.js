@@ -2,10 +2,9 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const obj = { message:'Hello World!' };
 const port = process.env.PORT || 5000;
 
-app.get('/hello', (req, res) => res.send(obj));
+app.get('/hello', (req, res) => res.send({ message: 'Hello Worlde!' }));
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files

@@ -5,8 +5,8 @@
   "main": "server",
   "scripts": {
     "client": "cd client && npm run start",
-    "server": "node server",
-    "server-debug":"node --inspect server",
+    "server": "nodemon server",
+    "server-debug": "nodemon --inspect server",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "debug": "concurrently --kill-others-on-fail \"npm run server-debug\" \"npm run client\"",
     "start": "node server",
@@ -18,7 +18,11 @@
   "dependencies": {
     "chai": "^4.1.2",
     "express": "^4.16.3",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "nodemon": "latest",
+    "sequelize": "latest",
+    "pg": "latest",
+    "pg-hstore": "latest"
   },
   "devDependencies": {
     "concurrently": "^4.0.0"
