@@ -10,6 +10,11 @@ Para levantar el server en un entorno de desarrollo ejecutar:
 npm run dev
 ```
 
+En debug:
+```
+npm run debug
+```
+y luego correr 'Attach' en VSCode
 
 ## Docs
 
