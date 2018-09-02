@@ -23,7 +23,8 @@
     "nodemon": "latest",
     "pg": "^7.4.3",
     "pg-hstore": "latest",
-    "sequelize": "^4.38.0"
+    "sequelize": "^4.38.0",
+    "sequelize-cli": "^4.1.1"
   },
   "devDependencies": {
     "concurrently": "^4.0.0"
