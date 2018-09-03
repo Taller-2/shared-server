@@ -26,7 +26,7 @@ router.put('/:id', function (request, response) {
 })
 
 router.delete('/:id', function (request, response) {
-  model.Todo.destroy({ where: { id: request.params.id } })
+  model.User.destroy({ where: { id: request.params.id } })
     .then(_ => response.status(201).json({ success: true }))
     .catch(error => response.json({ success: false, error: error }))
 })
