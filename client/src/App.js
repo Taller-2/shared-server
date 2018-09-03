@@ -1,30 +1,31 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import logo from './logo.svg';
+import logo from './logo.svg'
 
-import './App.css';
+import './App.css'
 
 class App extends Component {
-  state = {
-    response: ''
-  };
-
-  componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.message }))
-      .catch(err => console.log(err));
+  constructor (props) {
+    super(props)
+    this.state = { response: '' }
   }
 
-  callApi = async () => {
-    const response = await fetch('/hello');
-    const body = await response.json();
+  componentDidMount () {
+    this.callApi()
+      .then(res => this.setState({ response: res.message }))
+      .catch(err => console.log(err))
+  }
 
-    if (response.status !== 200) throw Error(body.message);
+  async callApi () {
+    const response = await fetch('/hello')
+    const body = await response.json()
 
-    return body;
+    if (response.status !== 200) throw Error(body.message)
+
+    return body
   };
 
-  render() {
+  render () {
     return (
       <div className="App">
         <header className="App-header">
@@ -33,8 +34,8 @@ class App extends Component {
         </header>
         <p className="App-intro">{this.state.response}</p>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

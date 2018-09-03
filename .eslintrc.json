@@ -1,0 +1,13 @@
+{
+    "extends": ["standard", "plugin:react/recommended", "plugin:jest/recommended"],
+    "plugins": ["react", "jest"],
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "settings": {
+        "react": {
+            "version": "^16.4.2"
+        }
+    }
+}

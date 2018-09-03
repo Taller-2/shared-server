@@ -11,7 +11,8 @@
     "debug": "concurrently --kill-others-on-fail \"npm run server-debug\" \"npm run client\"",
     "start": "node server",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
-    "test": "mocha"
+    "test": "npm run beforetest && mocha",
+    "beforetest": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -27,7 +28,15 @@
     "sequelize-cli": "^4.1.1"
   },
   "devDependencies": {
-    "concurrently": "^4.0.0"
+    "concurrently": "^4.0.0",
+    "eslint": "^5.5.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.22.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-standard": "^4.0.0"
   },
   "repository": {
     "type": "git",
