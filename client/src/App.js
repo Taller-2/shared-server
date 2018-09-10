@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import LoginContainer from './containers/LoginContainer'
 
 import logo from './logo.svg'
 
@@ -27,13 +29,13 @@ class App extends Component {
 
   render () {
     return (
+    <React.Fragment>
+      <CssBaseline />
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
         <p className="App-intro">{this.state.response}</p>
+        <LoginContainer />
       </div>
+    </React.Fragment>
     )
   }
 }

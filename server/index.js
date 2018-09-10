@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Routes
 app.use('/user', require('./routes/user'))
 app.use('/hello', require('./routes/hello'))
+app.use('/session', require('./routes/session'))
 
 // Production-specific setup
 if (process.env.NODE_ENV === 'production') {
