@@ -1,5 +1,6 @@
 import React from 'react'
 import LoginForm from '../components/LoginForm'
+import jwt_decode from 'jwt-decode'
 
 export default class LoginContainer extends React.Component {
 	constructor(props) {
@@ -31,6 +32,7 @@ export default class LoginContainer extends React.Component {
 		.then(respose => {
 			console.log('promise resolved')
 			console.log(respose)
+			console.log(jwt_decode(respose.token));
 		})
 		.catch(err => {
 			console.log('whoops')
