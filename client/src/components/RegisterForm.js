@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { Form, FormGroup, FormControl, Col, Button, ControlLabel, Grid, Row } from 'react-bootstrap'
 
 
-export default class LoginForm extends React.Component {
+export default class RegisterForm extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			user: '',
+			name: '',
+			mail: '',
 			pass: '',
 		}
 	}
@@ -18,7 +19,7 @@ export default class LoginForm extends React.Component {
 	}
 
 	submit = (event) => { 
-		event.preventDefault(); this.props.onClick(this.state.user, this.state.pass)
+		event.preventDefault(); this.props.onClick(this.state.name, this.state.pass, this.state.pass)
 	}
 
 	render() {
@@ -26,19 +27,28 @@ export default class LoginForm extends React.Component {
 			<Grid>
 				<Row className="show-grid">
 					<Col xs={12} md={6} mdOffset={3}>
-						<h1 style={{ textAlign: 'center' }} > Ingresar </h1>
+						<h1 style={{ textAlign: 'center' }} > Registrarse </h1>
 					</Col>
 				</Row>
 
 				<Row className="show-grid">
 					<Col xs={12} md={6} mdOffset={3}>
 						<Form horizontal>
-							<FormGroup controlId="user">
+							<FormGroup controlId="name">
+								<Col componentClass={ControlLabel} sm={2}>
+									Nombre
+								</Col>
+								<Col sm={10}>
+									<FormControl type="text" placeholder="Nombre" onChange={this.handleChange('name')}/>
+								</Col>
+							</FormGroup>
+
+							<FormGroup controlId="email">
 								<Col componentClass={ControlLabel} sm={2}>
 									Email
 								</Col>
 								<Col sm={10}>
-									<FormControl type="email" placeholder="Email" onChange={this.handleChange('user')}/>
+									<FormControl type="email" placeholder="Email" onChange={this.handleChange('email')}/>
 								</Col>
 							</FormGroup>
 

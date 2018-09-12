@@ -1,46 +1,42 @@
 import React from 'react'
 import LoginForm from '../components/LoginForm'
-import jwt_decode from 'jwt-decode'
+import { Redirect } from 'react-router-dom'
+import Http from '../service/Http'
 
 export default class LoginContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			errors: []
+			redirectToReferrer: false
 		}
 	}
 
-	async postLogin(body) {
-		const rawResponse = await fetch('/session/', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(body)
-		});
-		const content = await rawResponse.json()
-
-		console.log(content)
-		return content
-	};
-
 	handleClick(email, pass) {
-		console.log('email: ' + email)
-		console.log('pass: ' + pass)
-		this.postLogin({email, pass})
-		.then(respose => {
-			console.log('promise resolved')
-			console.log(respose)
-			console.log(jwt_decode(respose.token));
-		})
-		.catch(err => {
-			console.log('whoops')
-			console.log(err)
-		})
+		console.log(Http)
+		Http.post('/session/', {email, pass})
+			.then(respose => {
+				sessionStorage.setItem('auth', respose.token)
+				this.setState({ redirectToReferrer: true })
+				this.props.onLogin() // Hack para que se refresque la NavBar
+			})
+			.catch(err => {
+				alert('Auth Error')
+				console.log(err)
+			})
 	}
 
 	render() {
+		const { from } = this.props.location.state || { from: { pathname: '/' } }
+		const token = sessionStorage.getItem('auth')
+		const { redirectToReferrer } = this.state
+
+		if (redirectToReferrer) {
+			return <Redirect to={from} />
+		}
+		if (token) {
+			return <Redirect to='/' />
+		}
+		
 		return (
 			<LoginForm onClick={(user, pass) => this.handleClick(user, pass)} />
 		)

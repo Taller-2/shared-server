@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import LoginContainer from './containers/LoginContainer'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import { Navbar, Nav, NavItem } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import RegisterContainer from './containers/RegisterContainer'
+import LoggedNavbar from './components/LoggedNavbar'
+import GuestNavbar from './components/GuestNavbar'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
 import logo from './logo.svg'
 
@@ -32,37 +33,57 @@ class App extends Component {
 		return body
 	}
 
+	loginOk() {
+		this.setState(this.state)
+	}
+
 	render () {
+		const isLogged = (sessionStorage.getItem('auth') !== null)
 		return (
 			<React.Fragment>
 				<div>
 					<Router>
 						<div>
-							<Navbar>
-								<Nav>
-									<LinkContainer exact to="/">
-										<NavItem eventKey={1}>Home</NavItem>
-									</LinkContainer>
-									<LinkContainer to="/login">
-										<NavItem eventKey={2}>Login</NavItem>
-									</LinkContainer>
-									<LinkContainer to="/about">
-										<NavItem eventKey={2}>About</NavItem>
-									</LinkContainer>
-								</Nav>
-							</Navbar>
+							{ isLogged ? <LoggedNavbar /> : <GuestNavbar/> }
 
-							<Route exact path="/" component={Home} />
-							<Route path="/login" component={LoginContainer} />
-							<Route path="/about" component={About} />
+							<Route path="/login" 
+								render={routeProps => <LoginContainer {...routeProps} onLogin={ () => this.setState(this.state) }/>} />
+							<Route path="/logout"
+								render={routeProps => <Logout {...routeProps} onLogout={ () => this.setState(this.state) }/>} />
+							<Route path="/register" component={RegisterContainer} />
+							<PrivateRoute exact path="/" component={Home} />
+							<PrivateRoute path="/about" component={About} />
 						</div>
 					</Router>
-					
 				</div>
 			</React.Fragment>
 		)
 	}
-} 
+}
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+	<Route
+		{...rest}
+		render={props =>
+			sessionStorage.getItem('auth') ? (
+				<Component {...props} />
+			) : (
+				<Redirect
+					to={{
+						pathname: '/login',
+						state: { from: props.location }
+					}}
+				/>
+			)
+		}
+	/>
+)
+		
+const Logout = (props) => {
+	sessionStorage.clear()
+	props.onLogout() // Hack para que se refresque la NavBar
+	return <Redirect to='/' />
+}
 		
 const Home = () => (
 	<div>
