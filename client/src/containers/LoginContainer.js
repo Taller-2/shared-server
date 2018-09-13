@@ -14,10 +14,14 @@ export default class LoginContainer extends React.Component {
 
 	handleClick(email, pass) {
 		Http.post('/session/', {email, pass})
-			.then(respose => {
-				sessionStorage.setItem('auth', respose.token)
-				this.setState({ redirectToReferrer: true })
-				this.props.onLogin() // Hack para que se refresque la NavBar
+			.then(response => {
+				if (response.status === 200) {
+					sessionStorage.setItem('auth', response.token)
+					this.setState({ redirectToReferrer: true })
+					this.props.onLogin() // Hack para que se refresque la NavBar
+				} else {
+					alert('Usuario o password invalido')
+				}
 			})
 			.catch(err => {
 				alert('Auth Error' + err) //TODO hacer algo
@@ -44,7 +48,7 @@ export default class LoginContainer extends React.Component {
 
 LoginContainer.propTypes = {
 	onLogin: PropTypes.func,
-	location: PropTypes.exact({
-		state: PropTypes.string
+	location: PropTypes.shape({
+		state: PropTypes.object
 	}),
 }

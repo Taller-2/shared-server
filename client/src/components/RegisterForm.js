@@ -64,7 +64,7 @@ export default class RegisterForm extends React.Component {
 							<FormGroup>
 								<Col smOffset={2} sm={10}>
 									<Button type="submit" onClick={ this.submit }>
-										Ingresar
+										Aceptar
 									</Button>
 								</Col>
 							</FormGroup>

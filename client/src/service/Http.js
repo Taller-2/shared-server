@@ -26,7 +26,10 @@ class Http {
 		})
 		const content = await rawResponse.json()
 
-		return content
+		return {
+			content,
+			status: rawResponse.status
+		}
 	}
 
 }
