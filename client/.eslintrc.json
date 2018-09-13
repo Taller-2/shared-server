@@ -1,26 +1,38 @@
 {
 	"env": {
 		"browser": true,
-		"es6": true
+		"es6": true,
+		"jest": true
 	},
 	"extends": [
 		"eslint:recommended",
 		"plugin:react/recommended"
 	],
-	"parserOptions": {
+	
+  "parser": "babel-eslint",
+  "parserOptions": {
 		"ecmaFeatures": {
 			"experimentalObjectRestSpread": true,
 			"jsx": true
 		},
-		"sourceType": "module"
-	},
+    "sourceType": "module",
+    "allowImportExportEverywhere": false,
+    "codeFrame": true
+  },
 	"plugins": [
-		"react"
+		"react",
+		"jest"
 	],
 	"rules": {
 		"indent": [
 			"error",
 			"tab"
+		],
+		"no-console": [
+			"error", 
+			{
+				"allow": ["log", "warn", "error"] 
+			}
 		],
 		"linebreak-style": [
 			"error",
@@ -33,6 +45,11 @@
 		"semi": [
 			"error",
 			"never"
-		]
+		],
+		"jest/no-disabled-tests": "warn",
+		"jest/no-focused-tests": "error",
+		"jest/no-identical-title": "error",
+		"jest/prefer-to-have-length": "warn",
+		"jest/valid-expect": "error"
 	}
 }

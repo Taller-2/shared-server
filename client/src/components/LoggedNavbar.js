@@ -2,7 +2,7 @@ import React from 'react'
 import { Navbar, Nav, NavItem } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-const LoggedNavbar = function(props) {
+const LoggedNavbar = function() {
 	return (
 		<Navbar>
 			<Nav>

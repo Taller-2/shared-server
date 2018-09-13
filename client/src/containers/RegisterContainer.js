@@ -13,13 +13,12 @@ export default class RegisterContainer extends React.Component {
 
 	handleClick(name, email, pass) {
 		Http.post('user/', {name, email, pass})
-			.then(respose => {
+			.then( () => {
 				alert('usuario creado exitosamente')
 				this.setState({ redirectToLogin: true })
 			})
 			.catch(err => {
-				alert('Error al crear usuario')
-				console.log(err)
+				alert('Error al crear usuario' + err) // TODO hacer algo
 			})
 	}
 

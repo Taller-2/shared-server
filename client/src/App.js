@@ -4,8 +4,7 @@ import RegisterContainer from './containers/RegisterContainer'
 import LoggedNavbar from './components/LoggedNavbar'
 import GuestNavbar from './components/GuestNavbar'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
-
-import logo from './logo.svg'
+import PropTypes from 'prop-types'
 
 import './App.css'
 
@@ -21,7 +20,7 @@ class App extends Component {
 	componentDidMount () {
 		this.callApi()
 			.then(res => this.setState({ response: res.message }))
-			.catch(err => console.log(err))
+			.catch(err => alert(err))
 	}
 
 	async callApi () {
@@ -83,6 +82,10 @@ const Logout = (props) => {
 	sessionStorage.clear()
 	props.onLogout() // Hack para que se refresque la NavBar
 	return <Redirect to='/' />
+}
+
+Logout.propTypes = {
+	onLogout: PropTypes.func
 }
 		
 const Home = () => (
