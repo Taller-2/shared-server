@@ -2,10 +2,6 @@ import React from 'react'
 import { Form, FormGroup, FormControl, Col, Button, ControlLabel, Grid, Row } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
-LoginForm.propTypes = {
-	onClick: PropTypes.func
-}
-
 export default class LoginForm extends React.Component {
 	constructor(props) {
 		super(props)
@@ -68,4 +64,8 @@ export default class LoginForm extends React.Component {
 			</Grid>
 		)
 	}
+}
+
+LoginForm.propTypes = {
+	onClick: PropTypes.func
 }

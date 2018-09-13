@@ -2,10 +2,6 @@ import React from 'react'
 import { Form, FormGroup, FormControl, Col, Button, ControlLabel, Grid, Row } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
-RegisterForm.propTypes = {
-	onClick: PropTypes.func
-}
-
 export default class RegisterForm extends React.Component {
 	constructor(props) {
 		super(props)
@@ -78,4 +74,8 @@ export default class RegisterForm extends React.Component {
 			</Grid>
 		)
 	}
+}
+
+RegisterForm.propTypes = {
+	onClick: PropTypes.func
 }

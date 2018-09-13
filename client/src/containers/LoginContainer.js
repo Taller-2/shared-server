@@ -4,13 +4,6 @@ import { Redirect } from 'react-router-dom'
 import Http from '../service/Http'
 import PropTypes from 'prop-types'
 
-LoginContainer.propTypes = {
-	onLogin: PropTypes.func,
-	location: PropTypes.exact({
-		state: PropTypes.string
-	}),
-}
-
 export default class LoginContainer extends React.Component {
 	constructor(props) {
 		super(props)
@@ -47,4 +40,11 @@ export default class LoginContainer extends React.Component {
 			<LoginForm onClick={(user, pass) => this.handleClick(user, pass)} />
 		)
 	}
+}
+
+LoginContainer.propTypes = {
+	onLogin: PropTypes.func,
+	location: PropTypes.exact({
+		state: PropTypes.string
+	}),
 }
