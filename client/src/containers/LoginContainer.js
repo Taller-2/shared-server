@@ -2,6 +2,14 @@ import React from 'react'
 import LoginForm from '../components/LoginForm'
 import { Redirect } from 'react-router-dom'
 import Http from '../service/Http'
+import PropTypes from 'prop-types'
+
+LoginContainer.propTypes = {
+	onLogin: PropTypes.func,
+	location: PropTypes.exact({
+		state: PropTypes.string
+	}),
+}
 
 export default class LoginContainer extends React.Component {
 	constructor(props) {
@@ -12,7 +20,6 @@ export default class LoginContainer extends React.Component {
 	}
 
 	handleClick(email, pass) {
-		console.log(Http)
 		Http.post('/session/', {email, pass})
 			.then(respose => {
 				sessionStorage.setItem('auth', respose.token)
@@ -20,8 +27,7 @@ export default class LoginContainer extends React.Component {
 				this.props.onLogin() // Hack para que se refresque la NavBar
 			})
 			.catch(err => {
-				alert('Auth Error')
-				console.log(err)
+				alert('Auth Error' + err) //TODO hacer algo
 			})
 	}
 

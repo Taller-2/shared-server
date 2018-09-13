@@ -8,21 +8,27 @@
 		"eslint:recommended",
 		"plugin:react/recommended"
 	],
-	
-  "parser": "babel-eslint",
-  "parserOptions": {
+	"parser": "babel-eslint",
+	"parserOptions": {
 		"ecmaFeatures": {
 			"experimentalObjectRestSpread": true,
 			"jsx": true
 		},
-    "sourceType": "module",
-    "allowImportExportEverywhere": false,
-    "codeFrame": true
-  },
+		"sourceType": "module",
+		"allowImportExportEverywhere": false,
+		"codeFrame": true
+	},
 	"plugins": [
 		"react",
 		"jest"
 	],
+	"settings": {
+		"react": {
+			"createClass": "createReactClass",
+			"pragma": "React",
+			"version": "^16.4.2"
+		}
+	},
 	"rules": {
 		"indent": [
 			"error",
