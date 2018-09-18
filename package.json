@@ -9,7 +9,7 @@
   "scripts": {
     "client": "cd client && npm run start",
     "server": "nodemon server",
-    "server-debug": "nodemon --inspect server",
+    "server-debug": "nodemon $NODE_DEBUG_OPTION server",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "debug": "concurrently --kill-others-on-fail \"npm run server-debug\" \"npm run client\"",
     "start": "node server",
