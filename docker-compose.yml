@@ -1,0 +1,21 @@
+version: '2'
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postman_dev
+  web:
+    build: .
+    command: npm run ${ENV}
+    image: shared-server-img
+    ports:
+      - "${WEB_PORT}:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres@db
