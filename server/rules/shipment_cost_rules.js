@@ -1,6 +1,9 @@
+'use strict'
+
 require('colors')
-let Rule = require('../dist').Rule
-let Engine = require('../dist').Engine
+
+let Rule = require('json-rules-engine').Rule
+let Engine = require('json-rules-engine').Engine
 
 let engine = new Engine()
 
@@ -21,3 +24,7 @@ let rule = new Rule({
 })
 
 engine.addRule(rule)
+module.exports = {
+	engine: engine,
+	rule: rule
+}
