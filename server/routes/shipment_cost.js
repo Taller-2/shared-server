@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const bodyParser = require('body-parser')
-const shipment_cost_rule = require("../rules")
+const shipment_cost_rule = require('../rules')
 
 router.post('/', bodyParser.json(), function (/*req, res, next*/) {
 	/*
