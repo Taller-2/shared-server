@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const bodyParser = require('body-parser')
-const shipment_cost_rule = require('../rules')
+const shipment_cost_rule = require("../rules")
 
-router.post('/shipment-cost', bodyParser.json(), function (/*req, res, next*/) {
+router.post('/', bodyParser.json(), function (/*req, res, next*/) {
 	/*
 	const {
 		user_characteristics, 
@@ -28,3 +28,5 @@ router.post('/shipment-cost', bodyParser.json(), function (/*req, res, next*/) {
 		triggeredEvents.map(event => console.log(event.params.data.green))
 	}).catch(console.log)
 })
+
+module.exports = router
