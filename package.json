@@ -25,7 +25,7 @@
     "chai": "^4.1.2",
     "ethereumjs-wallet": "^0.6.0",
     "express": "^4.16.3",
-    "json-rules-engine": "git+https://github.com/CacheControl/json-rules-engine.git",
+    "json-rules-engine": "^2.3.0",
     "jsonwebtoken": "^8.3.0",
     "mocha": "^5.2.0",
     "mysql": "^2.16.0",
