@@ -1,9 +1,9 @@
 const router = require('express').Router()
 const bodyParser = require('body-parser')
-const shipment_cost_rule = require('../rules')
+const engine = require('../rules/shipment_cost_rules')
 
-router.post('/', bodyParser.json(), function (/*req, res, next*/) {
-	/*
+
+router.post('/', bodyParser.json(), function (req, res) {
 	const {
 		user_characteristics, 
 		User_score, 
@@ -12,21 +12,23 @@ router.post('/', bodyParser.json(), function (/*req, res, next*/) {
 		server_id,
 		trip_date,
 		trip_time
-	} = request.body
-	const { daytripps, monthtrips, Antiquity} = usercharacteristics
+	} = req.body
+	const { daytripps, monthtrips, Antiquity} = user_characteristics
 	const { 
 		duration, 
 		distance, 
-		geographical_position, 
+		geographical_position,
 		date, 
 		time
 	} = shipping_characteristics
-	*/
+	//res.send({ message: req.body })
 	let facts = { test_rule: true }
-	shipment_cost_rule.engine.run(facts).then(triggeredEvents => {
+	engine.run(facts).then(triggered_events => {
 		// engine returns a list of events with truthy conditions
-		triggeredEvents.map(event => console.log(event.params.data.green))
-	}).catch(console.log)
+		array = triggered_events.map(
+			event => ({ message: event.params.data}))
+			res.send(array)
+	}).catch(() => res.send({ message: "test_rule failed"}))
 })
 
 module.exports = router
