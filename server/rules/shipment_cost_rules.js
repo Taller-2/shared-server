@@ -1,6 +1,4 @@
-'use strict'
-
-require('colors')
+//'use strict'
 
 let Rule = require('json-rules-engine').Rule
 let Engine = require('json-rules-engine').Engine
@@ -24,7 +22,4 @@ let rule = new Rule({
 })
 
 engine.addRule(rule)
-module.exports = {
-	engine: engine,
-	rule: rule
-}
+module.exports = engine
