@@ -2,10 +2,11 @@ const chai = require('chai')
 const chai_http = require('chai-http')
 var should = require('should')
 var app = require('../server/index')
+var server = app.listen()
 chai.use(chai_http)
 
 describe('Sample test shipment rule', function() {
-	it('Trivial shipment rule test', function() { 
+	it('Trivial shipment rule test', function(done) { 
 		chai.request(app.listen()) 
 			.post('/shipment-cost')
 			.send({}) 
@@ -19,7 +20,11 @@ describe('Sample test shipment rule', function() {
 				res.body[0].should.have.property('message')
 				res.body[0].message.should.be.a('string')
 				res.body[0].message.should.equal('0')
-				//done()
+				setImmediate(done)
 			})
-	})		
+	})
+	after(function (done) {
+		server.close()
+		done()
+	})
 })
