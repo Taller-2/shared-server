@@ -17,6 +17,7 @@
 	"plugins": [
 		"react"
 	],
+	"parser": "esprima",
 	"rules": {
 		"indent": [
 			"error",
