@@ -1,7 +1,7 @@
 const chai = require('chai')
 const chai_http = require('chai-http')
 var should = require('should')
-var app = require('../server/index').app
+var app = require('../server/index')
 chai.use(chai_http)
 
 describe('Sample test shipment rule', function() {
