@@ -1,4 +1,6 @@
 {
+	"extends": ["standard", "plugin:react/recommended", "plugin:jest/recommended"],
+	"plugins": ["react", "jest"],
 	"env": {
 		"browser": true,
 		"commonjs": true,
@@ -6,39 +8,10 @@
 		"node": true,
 		"mocha": true
 	},
-	"extends": "eslint:recommended",
-	"parserOptions": {
-		"ecmaFeatures": {
-			"experimentalObjectRestSpread": true,
-			"jsx": true
-		},
-		"sourceType": "module"
-	},
-	"plugins": [
-		"react"
-	],
-	"rules": {
-		"indent": [
-			"error",
-			"tab"
-		],
-		"linebreak-style": [
-			"error",
-			"unix"
-		],
-		"quotes": [
-			"error",
-			"single"
-		],
-		"no-console": [
-			"error", 
-			{
-				"allow": ["log", "warn", "error"] 
-			}
-		],
-		"semi": [
-			"error",
-			"never"
-		]
+
+	"settings": {
+		"react": {
+			"version": "^16.4.2"
+		}
 	}
 }
