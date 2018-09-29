@@ -3,39 +3,39 @@ const model = require('../models')
 const bcrypt = require('bcrypt')
 
 router.get('/:id?', function (request, response) {
-	let scope = request.params.id ? { where: { id: request.params.id } } : {}
-	model.User.findAll(scope)
-		.then(users => response.json({ success: true, users: users }))
-		.catch(error => response.json({ success: false, error: error }))
+  let scope = request.params.id ? { where: { id: request.params.id } } : {}
+  model.User.findAll(scope)
+    .then(users => response.json({ success: true, users: users }))
+    .catch(error => response.json({ success: false, error: error }))
 })
 
 router.post('/', function (request, response) {
-	const { name, email, pass } = request.body
+  const { name, email, pass } = request.body
 
-	model.User.create({
-		name: name, 
-		email: email, 
-		password: bcrypt.hashSync(pass, 10),
-		enabled: false
-	})
-		.then(user => response.status(201).json({ success: true, user: user }))
-		.catch(error => response.json({ success: false, error: error }))
+  model.User.create({
+    name: name,
+    email: email,
+    password: bcrypt.hashSync(pass, 10),
+    enabled: false
+  })
+    .then(user => response.status(201).json({ success: true, user: user }))
+    .catch(error => response.json({ success: false, error: error }))
 })
 
 router.put('/:id', function (request, response) {
-	const { name, email } = request.body
-	model.User.update(
-		{ name: name, email: email },
-		{ where: { id: request.params.id } }
-	)
-		.then(user => response.status(201).json({ success: true, user: user }))
-		.catch(error => response.json({ success: false, error: error }))
+  const { name, email } = request.body
+  model.User.update(
+    { name: name, email: email },
+    { where: { id: request.params.id } }
+  )
+    .then(user => response.status(201).json({ success: true, user: user }))
+    .catch(error => response.json({ success: false, error: error }))
 })
 
 router.delete('/:id', function (request, response) {
-	model.User.destroy({ where: { id: request.params.id } })
-		.then(() => response.status(201).json({ success: true }))
-		.catch(error => response.json({ success: false, error: error }))
+  model.User.destroy({ where: { id: request.params.id } })
+    .then(() => response.status(201).json({ success: true }))
+    .catch(error => response.json({ success: false, error: error }))
 })
 
 module.exports = router
