@@ -6,22 +6,27 @@ const engine = require('../rules/shipment_cost_rules')
 router.post('/', bodyParser.json(), function (req, res) {
 	/*
 	const {
-		user_characteristics, 
-		User_score, 
-		Payment_method, 
-		shipping_characteristics,
-		server_id,
-		trip_date,
-		trip_time
+		user_characteristics: { 
+			daytrips, // (int)
+			monthtrips, // (int)
+			antiquity  // (int)
+		}, 
+		user_score,  // (float)
+		payment_method, // (string)
+		shipping_characteristics: { 
+			duration,  // (float)
+			distance,  // (float)
+			geographical_position: {
+				latitud,  // (float)
+				longitud // (float)
+			},
+			date, // (string: YYYY/MM/DD)
+			time // (string: HH:MM)
+		},
+		server_id, // (int)
+		trip_date, // (string: YYYY/MM/DD)
+		trip_time // (string: HH:MM)
 	} = req.body
-	const { daytripps, monthtrips, Antiquity} = user_characteristics
-	const { 
-		duration, 
-		distance, 
-		geographical_position,
-		date, 
-		time
-	} = shipping_characteristics
 	*/
 	let facts = { test_rule: true }
 	let array
