@@ -6,7 +6,7 @@ var server = app.listen()
 chai.use(chai_http)
 
 describe('Sample test shipment rule', function() {
-	it('Trivial shipment rule test', function(done) { 
+	it('should receive an object with messagge that says: 0', function(done) { 
 		chai.request(app.listen()) 
 			.post('/shipment-cost')
 			.send({}) 
