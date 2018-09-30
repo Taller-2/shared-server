@@ -9,5 +9,13 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function () {
   // associations can be defined here
   }
+  User.findByEmail = email => {
+    return User.findOne({
+      where: {
+        email: email
+      },
+      raw: true
+    })
+  }
   return User
 }

@@ -18,21 +18,6 @@ class App extends Component {
     }
   }
 
-  componentDidMount () {
-    this.callApi()
-      .then(res => this.setState({ response: res.message }))
-      .catch(err => alert(err))
-  }
-
-  async callApi () {
-    const response = await fetch('/hello')
-    const body = await response.json()
-
-    if (response.status !== 200) throw Error(body.message)
-
-    return body
-  }
-
   loginOk () {
     this.setState(this.state)
   }
