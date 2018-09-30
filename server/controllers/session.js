@@ -17,12 +17,7 @@ function dbError (error, req, res) {
 }
 
 module.exports.create = function (req, res, next) {
-  model.User.findOne({
-    where: {
-      email: req.body.email
-    },
-    raw: true
-  })
+  model.User.findByEmail(req.body.email)
     .then(user => createSession(user, req, res))
     .catch(error => dbError(error, req, res, next))
 }

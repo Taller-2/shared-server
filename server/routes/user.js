@@ -3,7 +3,7 @@ const userController = require('../controllers/user')
 
 router.get('/:id?', userController.findById)
 
-router.post('/', userController.create)
+router.post('/', userController.validateCreate(), userController.create)
 
 router.put('/:id', userController.update)
 
