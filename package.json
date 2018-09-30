@@ -9,13 +9,14 @@
   "scripts": {
     "client": "cd client && npm run start",
     "server": "nodemon server",
-    "server-debug": "nodemon $NODE_DEBUG_OPTION server",
+    "server-debug": "node $NODE_DEBUG_OPTION server",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "debug": "concurrently --kill-others-on-fail \"npm run server-debug\" \"npm run client\"",
     "start": "node server",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "test": "npm run beforetest && mocha",
-    "beforetest": "eslint ."
+    "beforetest": "eslint .",
+    "eslint-fix": "eslint . --fix"
   },
   "author": "",
   "license": "ISC",
