@@ -19,7 +19,7 @@ export default class RegisterForm extends React.Component {
 	}
 
 	submit = (event) => { 
-		event.preventDefault(); this.props.onClick(this.state.name, this.state.pass, this.state.pass)
+		event.preventDefault(); this.props.onClick(this.state.name, this.state.email, this.state.pass)
 	}
 
 	render() {
