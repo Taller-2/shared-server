@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // Routes
 app.use('/user', require('./routes/user'))
+app.use('/app-server', require('./routes/app_server'))
 app.use('/session', require('./routes/session'))
 app.use('/shipment-cost', require('./routes/shipment_cost'))
 

@@ -1,4 +1,3 @@
-
 class Http {
   // TODO: Agregar JWT
   async get (url) {
@@ -10,7 +9,12 @@ class Http {
       }
     })
     const content = await rawResponse.json()
+    return content
+  }
 
+  async delete (url, id) {
+    const rawResponse = await fetch(`${url}${id}/`, { method: 'DELETE' })
+    const content = await rawResponse.json()
     return content
   }
 
