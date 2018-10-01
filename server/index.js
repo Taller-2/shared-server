@@ -13,7 +13,8 @@ app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// Hack horrible para que pase los tests
+// Skip authorization middleware if the app is being used for running tests
+// (This is in order to have tests pass without having to mock this functionality)
 if (!process.env.LOADED_MOCHA_OPTS) {
   app.use(jwt({ secret: secret }).unless({ path: ['/session/', '/user/'] }))
 }
