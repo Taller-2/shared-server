@@ -7,13 +7,10 @@ import AddAppServerForm from './AddAppServerForm'
 export default class AppServerStatus extends React.Component {
   constructor (props) {
     super(props)
-    console.log('constructor AppServerStatus')
     this.state = { appServers: [] }
   }
 
   render () {
-    console.log('render')
-    console.log(this.state)
     return (
       <Grid>
         <Table striped bordered condensed hover>
