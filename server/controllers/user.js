@@ -45,15 +45,15 @@ const { body } = require('express-validator/check')
 
 exports.validateCreate = () => {
   return [
-    body('name', 'El nombre de usuario es requerido').exists(),
-    body('email', 'Email invalido').trim().isEmail().normalizeEmail().custom(value => {
+    body('name', 'El nombre de usuario es requerido').trim().not().isEmpty(),
+    body('email', 'El email es invalido').trim().isEmail().normalizeEmail().custom(value => {
       return model.User.findByEmail(value).then(user => {
         if (user) {
-          return Promise.reject(new Error('E-mail already in use'))
+          return Promise.reject(new Error('El email ya se encuentra registrado'))
         }
       })
     }),
-    body('pass', 'El password es muy corto').isLength({ min: 5 })
+    body('pass', 'La contraseña es muy corta').isLength({ min: 6 })
   ]
 }
 
