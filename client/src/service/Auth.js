@@ -1,4 +1,8 @@
 class Auth {
+  setApp (app) {
+    this.app = app
+  }
+
   getToken () {
     if (!this.token) {
       this.token = sessionStorage.getItem('auth')
@@ -17,6 +21,10 @@ class Auth {
   logout () {
     this.token = null
     sessionStorage.clear()
+    if (this.app) {
+      alert('Se ha cerrado su sesion')
+      this.app.forceUpdate() // Hack para redirigir a login
+    }
   }
 }
 const instance = new Auth()

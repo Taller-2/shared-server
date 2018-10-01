@@ -5,11 +5,19 @@ const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const app = express()
 const port = process.env.PORT || 5000
+const secret = require('./secrets')
+var jwt = require('express-jwt')
 
 // Request body-parsing middleware
 app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// Skip authorization middleware if the app is being used for running tests
+// (This is in order to have tests pass without having to mock this functionality)
+if (!process.env.LOADED_MOCHA_OPTS) {
+  app.use(jwt({ secret: secret }).unless({ path: ['/session/', '/user/'] }))
+}
 
 // Routes
 app.use('/user', require('./routes/user'))
@@ -17,9 +25,12 @@ app.use('/app-server', require('./routes/app_server'))
 app.use('/session', require('./routes/session'))
 app.use('/shipment-cost', require('./routes/shipment_cost'))
 
-// Error handler - TODO setear status code apropiadamente
 app.use(function (error, req, res, next) {
-  res.status(400).json(JSON.parse(error.message))
+  if (error.name === 'UnauthorizedError') {
+    res.status(401).json(error)
+  } else {
+    res.status(400).json(JSON.parse(error.message))
+  }
 })
 
 // Production-specific setup

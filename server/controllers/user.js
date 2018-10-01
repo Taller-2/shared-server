@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const model = require('../models')
+const { body } = require('express-validator/check')
 
 module.exports.findById = function (request, response) {
   let scope = request.params.id ? { where: { id: request.params.id } } : {}
@@ -40,8 +41,6 @@ module.exports.delete = function (request, response) {
     .then(() => response.status(201).json({ success: true }))
     .catch(error => response.json({ success: false, error: error }))
 }
-
-const { body } = require('express-validator/check')
 
 exports.validateCreate = () => {
   return [

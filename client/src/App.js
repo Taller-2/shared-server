@@ -13,6 +13,7 @@ import AppServerStatus from './components/app_server_status/AppServerStatus'
 class App extends Component {
   constructor (props) {
     super(props)
+    Auth.setApp(this)
     this.state = {
       user: null,
       token: null

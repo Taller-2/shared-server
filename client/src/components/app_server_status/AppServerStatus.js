@@ -46,7 +46,13 @@ export default class AppServerStatus extends React.Component {
   componentDidMount () {
     Http
       .get('/app-server/')
-      .then(response => { this.setState({ appServers: response.servers }) })
+      .then(response => {
+        if (response.servers) {
+          this.setState({ appServers: response.servers })
+        } else {
+          alert('error cargar los app-servers :(') // TODO manejar errores apropiadamente
+        }
+      })
   }
 
   onDeleteServer (id) {
