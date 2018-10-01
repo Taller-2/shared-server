@@ -53,7 +53,7 @@ export default class AppServerStatus extends React.Component {
         if (response.servers) {
           this.setState({ appServers: response.servers })
         } else {
-          alert('error cargar los app-servers :(') //TODO manejar errores apropiadamente
+          alert('error cargar los app-servers :(') // TODO manejar errores apropiadamente
         }
       })
   }
