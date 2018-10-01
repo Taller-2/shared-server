@@ -23,7 +23,6 @@ export default class RegisterContainer extends React.Component {
             this.setState({ redirectToLogin: true })
           } else {
             let errors = {}
-            console.log(response)
             response.content.forEach(e => { errors[e.param] = e.msg })
             this.setState({ errors: errors })
           }
@@ -36,7 +35,6 @@ export default class RegisterContainer extends React.Component {
 
   render () {
     const { redirectToLogin, errors } = this.state
-    console.log(errors)
     if (redirectToLogin) {
       return <Redirect to='/' />
     }
