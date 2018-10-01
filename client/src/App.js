@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Auth from './service/Auth'
 
 import './App.css'
-import AppServerStatus from './components/AppServerStatus'
+import AppServerStatus from './components/app_server_status/AppServerStatus'
 
 class App extends Component {
   constructor (props) {
