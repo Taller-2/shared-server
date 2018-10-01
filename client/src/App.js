@@ -5,6 +5,7 @@ import LoggedNavbar from './components/LoggedNavbar'
 import GuestNavbar from './components/GuestNavbar'
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import Auth from './service/Auth'
 
 import './App.css'
 import AppServerStatus from './components/AppServerStatus'
@@ -23,13 +24,12 @@ class App extends Component {
   }
 
   render () {
-    const isLogged = (sessionStorage.getItem('auth') !== null)
     return (
       <React.Fragment>
         <div>
           <Router>
             <div>
-              { isLogged ? <LoggedNavbar /> : <GuestNavbar/> }
+              { Auth.isLogged() ? <LoggedNavbar /> : <GuestNavbar/> }
 
               <Route path="/login"
                 render={routeProps => <LoginContainer {...routeProps} onLogin={ () => this.setState(this.state) }/>} />
@@ -50,7 +50,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      sessionStorage.getItem('auth') ? (
+      Auth.getToken() ? (
         <Component {...props} />
       ) : (
         <Redirect
@@ -65,7 +65,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 )
 
 const Logout = (props) => {
-  sessionStorage.clear()
+  Auth.logout()
   props.onLogout() // Hack para que se refresque la NavBar
   return <Redirect to='/' />
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import LoginForm from '../components/LoginForm'
 import { Redirect } from 'react-router-dom'
 import Http from '../service/Http'
+import Auth from '../service/Auth'
 import PropTypes from 'prop-types'
 
 export default class LoginContainer extends React.Component {
@@ -16,7 +17,7 @@ export default class LoginContainer extends React.Component {
     Http.post('/session/', { email, pass })
       .then(response => {
         if (response.status === 200) {
-          sessionStorage.setItem('auth', response.token)
+          Auth.login(response.token)
           this.setState({ redirectToReferrer: true })
           this.props.onLogin() // Hack para que se refresque la NavBar
         } else {
@@ -30,7 +31,7 @@ export default class LoginContainer extends React.Component {
 
   render () {
     const { from } = this.props.location.state || { from: { pathname: '/' } }
-    const token = sessionStorage.getItem('auth')
+    const token = Auth.getToken()
     const { redirectToReferrer } = this.state
 
     if (redirectToReferrer) {

@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 export default class RegisterForm extends React.Component {
   constructor (props) {
     super(props)
-    console.log(props.errors)
     this.state = {
       name: '',
       mail: '',
