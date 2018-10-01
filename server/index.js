@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Skip authorization middleware if the app is being used for running tests
 // (This is in order to have tests pass without having to mock this functionality)
 if (!process.env.LOADED_MOCHA_OPTS) {
-  app.use(jwt({ secret: secret }).unless({ path: ['/session/', '/user/'] }))
+  app.use(jwt({ secret: secret }).unless({ path: ['/', '/session/', '/user/'] }))
 }
 
 // Routes
