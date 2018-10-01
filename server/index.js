@@ -5,11 +5,14 @@ const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const app = express()
 const port = process.env.PORT || 5000
+const secret = require('./secrets')
+var jwt = require('express-jwt')
 
 // Request body-parsing middleware
 app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(jwt({ secret: secret }).unless({ path: ['/session/', '/user/'] }))
 
 // Routes
 app.use('/user', require('./routes/user'))
@@ -19,7 +22,13 @@ app.use('/shipment-cost', require('./routes/shipment_cost'))
 
 // Error handler - TODO setear status code apropiadamente
 app.use(function (error, req, res, next) {
-  res.status(400).json(JSON.parse(error.message))
+  console.log(error)
+  if (error.name === 'UnauthorizedError') {
+    console.log('entro al branch correcto')
+    res.status(401).json(error)
+  } else {
+    res.status(400).json(JSON.parse(error.message))
+  }
 })
 
 // Production-specific setup

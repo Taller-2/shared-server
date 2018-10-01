@@ -7,10 +7,13 @@ import AddAppServerForm from './AddAppServerForm'
 export default class AppServerStatus extends React.Component {
   constructor (props) {
     super(props)
+    console.log('constructor AppServerStatus')
     this.state = { appServers: [] }
   }
 
   render () {
+    console.log('render')
+    console.log(this.state)
     return (
       <Grid>
         <Table striped bordered condensed hover>
@@ -46,7 +49,13 @@ export default class AppServerStatus extends React.Component {
   componentDidMount () {
     Http
       .get('/app-server/')
-      .then(response => { this.setState({ appServers: response.servers }) })
+      .then(response => {
+        if (response.servers) {
+          this.setState({ appServers: response.servers })
+        } else {
+          alert('error cargar los app-servers :(') //TODO manejar errores apropiadamente
+        }
+      })
   }
 
   onDeleteServer (id) {

@@ -16,8 +16,8 @@ export default class LoginContainer extends React.Component {
   handleClick (email, pass) {
     Http.post('/session/', { email, pass })
       .then(response => {
-        if (response.status === 200) {
-          Auth.login(response.token)
+        if (response.status === 200 && response.content && response.content.token) {
+          Auth.login(response.content.token)
           this.setState({ redirectToReferrer: true })
           this.props.onLogin() // Hack para que se refresque la NavBar
         } else {
