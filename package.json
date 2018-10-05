@@ -14,7 +14,6 @@
     "debug": "concurrently --kill-others-on-fail \"npm run server-debug\" \"npm run client\"",
     "start": "node server",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
-    "db:migrate": "babel-node ./scripts/db/migrate",
     "test": "NODE_ENV=test npm run beforetest && mocha --exit",
     "beforetest": "eslint .",
     "eslint-fix": "eslint . --fix"
@@ -44,7 +43,6 @@
     "whatwg-url": "^7.0.0"
   },
   "devDependencies": {
-    "faker": "4.1.0",
     "gulp-sourcemaps": "1.7.x",
     "babel-cli": "^6.6.0",
     "babel-core": "^6.6.0",
