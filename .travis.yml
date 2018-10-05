@@ -11,7 +11,10 @@ deploy:
   services:
    - postgresql
   env:
-   - NODE_ENV=test
-   - NODE_ENV=development
-  run: sh db.sh
+    - NODE_ENV=test
+  before_script:
+  - sequelize db:create
+  - sequelize db:migrate
+  script: npm test
+  run: ./db.sh
 
