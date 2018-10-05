@@ -13,5 +13,5 @@ deploy:
   env:
    - NODE_ENV=test
    - NODE_ENV=development
-  run: sh db.sh
+  run: db.sh
 
