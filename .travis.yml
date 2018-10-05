@@ -8,13 +8,4 @@ deploy:
     repo: Taller-2/shared-server
   api_key:
     secure: Swn2Zlw5Gzg+OkjnWGZpeLv0zLKKBHiIhqvyXdI2H0b1Jvmv7bULHTOLymdwUy6TzunGoprkbB4f2f74X5ylsz678X5OGf4o3GBIV4f1c+EtNsWgyiT2IWRnugrH6cPCkQaNCu/HG/uBY7QkrBacjmxV7aijFTWkGCV+GGFrbWDLcyE2dJw+1W1RgB5kckZbYQL47+E97JBOQxGQGzEhjcmuiMgi5Sic/SXQniqgeQJN59iV9a4jLLcRRzToGuwTyppkpQ8qi+u1u17sIB57srsJWVTFzr0BCgJn58IztdWrUQ8B5K/eInAlMZI+fPALOWlur2zWMER2lESkBJGNMKoBVaE5LHFmeBu+jutvO4/ati6SR3NNnd614Fmyf0jJF+Y5wpf1CJ/C1+W4TIxzmUWvnfndnpyLe8Pm3VLaUurp4ZWoM1l33wNMA7KjjB6NKjZORlEkD9USfDkEQEHe3+pKGvK0N/ldueq/0s/5mCC5WnmW42j27Jw9eBh47n0YnBCELTj/3Gac+ZOs1S/VboX08jmqM+Db5H1eRUASnV/uZy4XVI/kU5Pmqy37L8jRJpUVvUvqWWYo6DRiWCydKoDs3MYarthzz4X4x3tXP001LjWq/v2a3WlYISp5KuQQFQMdScrpvKTtx11EBrCipE9CUk4JbG8YqakfVv7Ivv8=
-  services:
-   - postgresql
-  env:
-    - NODE_ENV=test
-  before_script:
-  - sequelize db:create
-  - sequelize db:migrate
-  script: npm test
-  run: ./db.sh
 
