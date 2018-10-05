@@ -3,6 +3,7 @@ const chaihttp = require('chai-http')
 var should = require('should')
 var app = require('../server/index')
 var server = app.listen()
+var truncate = require('../server/models/truncate')
 chai.use(chaihttp)
 
 let rule = {
@@ -23,17 +24,8 @@ let rule = {
 
 describe('add simple rule', function () {
   before(function (done) {
-    chai.request(server)
-      .delete('/rules')
-      .end(function (err, res) {
-        // expected: { success: true, rule: rule }
-        should.equal(err, null)
-        res.should.have.status(201)
-        res.body.should.be.a('object')
-        res.body.should.have.property('success')
-        res.body.success.should.be.equal(true)
-        setImmediate(done)
-      })
+    truncate('Rules')
+    done()
   })
   it('should save a rule in data base and receive success message', function (done) {
     let jsonRule = JSON.stringify(rule)
