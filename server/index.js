@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/user', require('./routes/user'))
 app.use('/session', require('./routes/session'))
 app.use('/shipment-cost', require('./routes/shipment_cost'))
+app.use('/rules', require('./routes/rules'))
 
 // Error handler - TODO setear status code apropiadamente
 app.use(function (error, req, res, next) {
