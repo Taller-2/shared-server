@@ -16,7 +16,7 @@
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "create": "sequelize db:create",
     "migrate": "sequelize db:migrate",
-    "test": "NODE_ENV=test npm run beforetest && mocha --exit && create && migrate",
+    "test": "npm run beforetest && mocha --exit",
     "beforetest": "eslint .",
     "eslint-fix": "eslint . --fix"
   },
