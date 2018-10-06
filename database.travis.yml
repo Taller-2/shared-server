@@ -1,0 +1,5 @@
+postgresql: &postgresql
+adapter: postgresql
+username: postgres
+password: postgrews
+database: test_travis
