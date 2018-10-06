@@ -4,8 +4,6 @@ const rulesController = require('../controllers/rules')
 
 router.get('/:id?', rulesController.findById)
 
-router.get('/', rulesController.findAll)
-
 router.post('/', bodyParser.json(), rulesController.create)
 
 router.put('/:id', rulesController.update)
