@@ -11,10 +11,8 @@ deploy:
   run: ./db.sh
   services:
   - postgresql
-  env:
-    - NODE_ENV=test_travis
   before_script:
   - npm run build
   - sequelize db:create
   - sequelize db:migrate
-  script: npm test
+  script: NODE_ENV=test_travis npm test
