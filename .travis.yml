@@ -14,6 +14,7 @@ env:
 before_script:
 - psql -c "CREATE DATABASE test_travis;" -U postgres
 - mkdir config && cp database.travis.yml config/database.yml
+- sequelize db:drop
 - sequelize db:create
 - sequelize db:migrate
 script: 
