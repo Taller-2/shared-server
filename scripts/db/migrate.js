@@ -8,7 +8,7 @@ module.exports = async function migrate () {
     status = 0
   }).catch((err) => {
     console.log('*************************')
-    console.log('No migrations were executed, database schema was already up to date.')
+    console.log(err.message)
     status = 1
   })
   return status

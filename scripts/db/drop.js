@@ -5,11 +5,11 @@ module.exports = async function drop () {
   console.log('Drop running')
   await spawn('sequelize', ['db:drop']).then(() => {
     console.log('*************************')
-    console.log('Database ', process.env.NODE_ENV,' dropped')
+    console.log('Database ', process.env.NODE_ENV, ' dropped')
     status = 0
   }).catch((err) => {
     console.error('*************************')
-    console.error('ERROR: database ', process.env.NODE_ENV,' does not exist')
+    console.error('ERROR: database ', process.env.NODE_ENV, ' does not exist.', err.message)
     status = 1
   })
   return status

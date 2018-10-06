@@ -5,11 +5,11 @@ module.exports = async function create () {
   console.log('Create running')
   await spawn('sequelize', ['db:create']).then(() => {
     console.log('*************************')
-    console.log('Database ', process.env.NODE_ENV,' created.')
+    console.log('Database ', process.env.NODE_ENV, ' created.')
     status = 0
   }).catch((err) => {
     console.log('*************************')
-    console.log('ERROR: database ', process.env.NODE_ENV,' already exists')
+    console.log('ERROR: database ', process.env.NODE_ENV, ' already exists.', err.message)
     status = 1
   })
   return status
