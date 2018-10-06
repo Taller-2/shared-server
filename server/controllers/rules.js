@@ -7,12 +7,6 @@ module.exports.findById = function (request, response) {
     .catch(error => response.json({ success: false, error: error }))
 }
 
-module.exports.findAll = function (request, response) {
-  model.Rules.findAll()
-    .then(rules => response.json({ success: true, rules: rules }))
-    .catch(error => response.json({ success: false, error: error }))
-}
-
 module.exports.create = function (request, response, next) {
   request.getValidationResult() // to get the result of above validate fn
     .then(validationHandler())
