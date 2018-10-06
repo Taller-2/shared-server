@@ -4,7 +4,13 @@ node_js:
 services:
 - postgresql
 env:
-- NODE_ENV=test_travis DB_NAME="test" DB_USER="postgres" DB_PASS="postgres" DB_PORT="5432" DB_HOST="localhost"
+- NODE_ENV=test_travis 
+  DB_NAME="test" 
+  DB_USER="postgres" 
+  DB_PASS="postgres" 
+  DB_PORT="5432" 
+  DB_HOST="localhost"
+  DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/test_travis"
 before_script:
 - psql -c "CREATE DATABASE test_travis;" -U postgres
 - mkdir config && cp database.travis.yml config/database.yml
