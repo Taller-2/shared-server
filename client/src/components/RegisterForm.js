@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Col, ControlLabel, Form, FormControl, FormGroup, Grid, Row } from 'react-bootstrap'
+import { Button, Col, ControlLabel, Form, FormControl, FormGroup, Grid, Row, HelpBlock } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 export default class RegisterForm extends React.Component {
@@ -8,7 +8,8 @@ export default class RegisterForm extends React.Component {
     this.state = {
       name: '',
       mail: '',
-      pass: ''
+      pass: '',
+      passConfirmation: ''
     }
   }
 
@@ -19,7 +20,7 @@ export default class RegisterForm extends React.Component {
   }
 
   submit = (event) => {
-    event.preventDefault(); this.props.onClick(this.state.name, this.state.email, this.state.pass)
+    event.preventDefault(); this.props.onClick(this.state.name, this.state.email, this.state.pass, this.state.passConfirmation)
   }
 
   render () {
@@ -40,6 +41,9 @@ export default class RegisterForm extends React.Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl type="text" placeholder="Nombre" onChange={this.handleChange('name')}/>
+                  <HelpBlock>
+                    <p className="text-danger">{this.props.errors.name}</p>
+                  </HelpBlock>
                 </Col>
               </FormGroup>
 
@@ -49,15 +53,33 @@ export default class RegisterForm extends React.Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl type="email" placeholder="Email" onChange={this.handleChange('email')}/>
+                  <HelpBlock>
+                    <p className="text-danger">{this.props.errors.email}</p>
+                  </HelpBlock>
                 </Col>
               </FormGroup>
 
               <FormGroup controlId="pass">
                 <Col componentClass={ControlLabel} sm={2}>
-                  Password
+                  Contraseña
                 </Col>
                 <Col sm={10}>
-                  <FormControl type="password" placeholder="Password" onChange={this.handleChange('pass')}/>
+                  <FormControl type="password" placeholder="Contraseña" onChange={this.handleChange('pass')}/>
+                  <HelpBlock>
+                    <p className="text-danger">{this.props.errors.pass}</p>
+                  </HelpBlock>
+                </Col>
+              </FormGroup>
+
+              <FormGroup controlId="passConfirmation">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Confirmar
+                </Col>
+                <Col sm={10}>
+                  <FormControl type="passConfirmation" placeholder="Confirmar contraseña" onChange={this.handleChange('passConfirmation')}/>
+                  <HelpBlock>
+                    <p className="text-danger">{this.props.errors.passConfirmation}</p>
+                  </HelpBlock>
                 </Col>
               </FormGroup>
 
@@ -77,5 +99,6 @@ export default class RegisterForm extends React.Component {
 }
 
 RegisterForm.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  errors: PropTypes.object
 }
