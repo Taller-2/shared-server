@@ -3,14 +3,11 @@
 let Rule = require('json-rules-engine').Rule
 let Engine = require('json-rules-engine').Engine
 
-module.exports = function addRules (jsonRules) {
+module.exports = function addRules (rules) {
   let engine = new Engine()
-  let rules = []
-  for (const aRule in jsonRules) {
-    rules.push(new Rule(aRule))
-  }
-  for (const aRule in rules) {
-    engine.addRule(aRule)
+  const length = rules.length
+  for (var i = 0; i < length; i++) {
+    engine.addRule(new Rule(rules[i].json))
   }
   return engine
 }
