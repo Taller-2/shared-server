@@ -1,5 +1,5 @@
 postgresql: &postgresql
 adapter: postgresql
 username: postgres
-password: postgrews
+password: postgres
 database: test_travis
