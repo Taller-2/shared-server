@@ -45,6 +45,7 @@ describe('add simple rule', function () {
         setImmediate(done)
       })
   })
+  var id
   it('should get vector of rules', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
@@ -59,6 +60,23 @@ describe('add simple rule', function () {
         res.body.rules.should.have.length(1)
         res.body.rules[0].should.have.property('json')
         res.body.rules[0].json.should.equal(jsonRule)
+        id = res.body.rules[0].id
+        setImmediate(done)
+      })
+  })
+  it('should get a rule by id', function (done) {
+    let jsonRule = JSON.stringify(rule)
+    chai.request(server)
+      .get('/rules/' + id.toString())
+      .end(function (err, res) {
+        // expected: { success: true, rules: rules }
+        should.equal(err, null)
+        res.should.have.status(200)
+        res.body.should.have.property('success')
+        res.body.success.should.be.equal(true)
+        res.body.should.have.property('rules')
+        res.body.rules.should.have.property('json')
+        res.body.rules.json.should.equal(jsonRule)
         setImmediate(done)
       })
   })
