@@ -76,7 +76,7 @@ export default class RegisterForm extends React.Component {
                   Confirmar
                 </Col>
                 <Col sm={10}>
-                  <FormControl type="passConfirmation" placeholder="Confirmar contraseña" onChange={this.handleChange('passConfirmation')}/>
+                  <FormControl type="password" placeholder="Confirmar contraseña" onChange={this.handleChange('passConfirmation')}/>
                   <HelpBlock>
                     <p className="text-danger">{this.props.errors.passConfirmation}</p>
                   </HelpBlock>
