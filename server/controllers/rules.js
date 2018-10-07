@@ -3,12 +3,20 @@ const model = require('../models')
 module.exports.findById = function (request, response) {
   let scope = request.params.id ? { where: { id: request.params.id } } : {}
   model.Rules.findAll(scope)
-    .then(rules => response.json({ success: true, rules: rules }))
+    .then(rules => {
+      if (JSON.stringify(scope) === JSON.stringify({})) {
+        // here we return all the rules in a vector
+        response.json({ success: true, rules: rules })
+      } else {
+        // here we return only one rule
+        response.json({ success: true, rules: rules[0] })
+      }
+    })
     .catch(error => response.json({ success: false, error: error }))
 }
 
 module.exports.create = function (request, response, next) {
-  request.getValidationResult() // to get the result of above validate fn
+  request.getValidationResult()
     .then(validationHandler())
     .then(() => {
       const { json: aRule } = request.body
