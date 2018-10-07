@@ -1,6 +1,9 @@
 const router = require('express').Router()
 const bodyParser = require('body-parser')
 const engine = require('../rules/shipment_cost_rules')
+const authUtils = require('../middlewares/auth')
+
+router.use(authUtils.requireAuth)
 
 router.post('/', bodyParser.json(), function (req, res) {
   /*
