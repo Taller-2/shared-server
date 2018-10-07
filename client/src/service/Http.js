@@ -1,26 +1,26 @@
 import Auth from '../service/Auth'
 class Http {
-  async get (url) {
+  async get (url, callback) {
     const rawResponse = await fetch(url, { method: 'GET', headers: this.getHeaders() })
-    this.checkIfUnauthorized(rawResponse.status)
+    this.checkIfUnauthorized(rawResponse.status, callback)
     const content = await rawResponse.json()
     return content
   }
 
-  async delete (url, id) {
+  async delete (url, id, callback) {
     const rawResponse = await fetch(`${url}${id}/`, { method: 'DELETE', headers: this.getHeaders() })
-    this.checkIfUnauthorized(rawResponse.status)
+    this.checkIfUnauthorized(rawResponse.status, callback)
     const content = await rawResponse.json()
     return content
   }
 
-  async post (url, payload) {
+  async post (url, payload, callback) {
     const rawResponse = await fetch(url, {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify(payload)
     })
-    this.checkIfUnauthorized(rawResponse.status)
+    this.checkIfUnauthorized(rawResponse.status, callback)
     const content = await rawResponse.json()
     return {
       content,
@@ -28,9 +28,9 @@ class Http {
     }
   }
 
-  checkIfUnauthorized (status) {
+  checkIfUnauthorized (status, callback) {
     if (status === 401) {
-      Auth.logout()
+      Auth.logout(callback)
     }
   }
 
