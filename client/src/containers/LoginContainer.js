@@ -14,7 +14,7 @@ export default class LoginContainer extends React.Component {
   }
 
   handleClick (email, pass) {
-    Http.post('/session/', { email, pass })
+    Http.post('/session/', { email, pass }, () => {})
       .then(response => {
         if (response.status === 200 && response.content && response.content.token) {
           Auth.login(response.content.token)

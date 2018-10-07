@@ -18,11 +18,15 @@ class Auth {
     sessionStorage.setItem('auth', token)
   }
 
-  logout () {
+  logout (callback) {
     this.token = null
     sessionStorage.clear()
-    if (this.app) {
+    if (callback) {
+      callback()
+    } else {
       alert('Se ha cerrado su sesion')
+    }
+    if (this.app) {
       this.app.forceUpdate() // Hack para redirigir a login
     }
   }
