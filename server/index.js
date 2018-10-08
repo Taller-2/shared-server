@@ -16,6 +16,7 @@ app.use('/user', require('./routes/user'))
 app.use('/session', require('./routes/session'))
 app.use('/app-server', require('./routes/app_server'))
 app.use('/shipment-cost', require('./routes/shipment_cost'))
+app.use('/rules', require('./routes/rules'))
 
 app.use(authUtils.unauthorizedErrorHandler)
 

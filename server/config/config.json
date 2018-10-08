@@ -11,5 +11,18 @@
     "use_env_variable": "DATABASE_URL",
     "dialect": "postgres",
     "operatorsAliases": false
+  },
+  "test_travis": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "operatorsAliases": false
   }
 }
