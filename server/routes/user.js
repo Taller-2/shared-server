@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const userController = require('../controllers/user')
-const auth = require('../middlewares/auth')
-const requireAuth = auth.requireAuth
+const authUtils = require('../middlewares/auth')
+const requireAuth = authUtils.requireAuth
 
 router.post('/', userController.validateCreate(), userController.create)
 
