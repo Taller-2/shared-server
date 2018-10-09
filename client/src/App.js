@@ -9,6 +9,7 @@ import Auth from './service/Auth'
 
 import './App.css'
 import AppServerStatus from './components/app_server_status/AppServerStatus'
+import RulesContainer from './containers/rulesContainer'
 
 class App extends Component {
   constructor (props) {
@@ -39,6 +40,7 @@ class App extends Component {
               <Route path="/register" component={RegisterContainer} />
               <PrivateRoute exact path="/" component={Home} />
               <PrivateRoute path="/app-server-status" component={AppServerStatus} />
+              <PrivateRoute path="/rules" component={RulesContainer} />
             </div>
           </Router>
         </div>
