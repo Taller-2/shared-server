@@ -33,17 +33,6 @@ export default class RulesForm extends React.Component {
       'sum'
     ]
     this.state = {
-      /*
-      condition: {
-        fact: '',
-        value: '',
-        operator: ''
-      },
-      consequence: {
-        type: '',
-        params: ''
-      }
-      */
       fact: this.facts[0],
       value: '',
       operator: this.ops[0],
