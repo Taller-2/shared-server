@@ -5,17 +5,6 @@ import PropTypes from 'prop-types'
 export default class RulesForm extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      condition: {
-        fact: '',
-        value: '',
-        operator: ''
-      },
-      consequence: {
-        type: '',
-        params: ''
-      }
-    }
     this.facts = [
       'daytrips',
       'monthtrips',
@@ -43,6 +32,24 @@ export default class RulesForm extends React.Component {
       'factor',
       'sum'
     ]
+    this.state = {
+      /*
+      condition: {
+        fact: '',
+        value: '',
+        operator: ''
+      },
+      consequence: {
+        type: '',
+        params: ''
+      }
+      */
+      fact: this.facts[0],
+      value: '',
+      operator: this.ops[0],
+      type: this.type[0],
+      params: ''
+    }
   }
 
   handleChange = name => event => {
@@ -53,7 +60,7 @@ export default class RulesForm extends React.Component {
 
   submit = (event) => {
     event.preventDefault()
-    this.props.onClick(this.state.fact, this.state.value, this.state.operator)
+    this.props.onClick(this.state)
   }
 
   showOptions (options) {
