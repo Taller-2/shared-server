@@ -1,20 +1,39 @@
 import React from 'react'
-import RegisterForm from '../components/rulesForm'
-// import { Redirect } from 'react-router-dom'
+import RulesForm from '../components/rulesForm'
+import { Redirect } from 'react-router-dom'
 import Http from '../service/Http'
 
 export default class RulesContainer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      redirectToRules: false,
       errors: {}
     }
   }
 
-  handleClick (name, condition, consequence) {
-    Http.post('rules/', { name, condition, consequence })
+  handleClick (rulesValues) {
+    const { fact, value, operator, type, params } = rulesValues
+    console.log('state: ', rulesValues)
+    let rule = {
+      'conditions': {
+        'all': [{
+          'fact': fact,
+          'operator': operator,
+          'value': value
+        }]
+      },
+      'event': {
+        'type': type,
+        'params': {
+          'data': params
+        }
+      }
+    }
+    Http.post('rules/', { json: JSON.stringify(rule) })
       .then(response => {
         if (response.status === 201) {
+          this.setState({ redirectToRules: true })
           alert('Regla creada exitosamente')
         } else {
           let errors = {}
@@ -28,8 +47,12 @@ export default class RulesContainer extends React.Component {
   }
 
   render () {
+    const { redirectToRules, errors } = this.state
+    if (redirectToRules) {
+      return <Redirect to='/rulesList' />
+    }
     return (
-      <RegisterForm errors={this.state.errors} onClick={(name, condition, consequence) => this.handleClick(name, condition, consequence)} />
+      <RulesForm errors={errors} onClick={(rulesValues) => this.handleClick(rulesValues)}/>
     )
   }
 }
