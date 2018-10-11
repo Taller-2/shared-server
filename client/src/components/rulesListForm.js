@@ -50,10 +50,10 @@ export default class RulesListForm extends React.Component {
             const ruleTranslated = this.translateRule(aRule)
             const id = response.rules[i].id
             rulesVector.push(
-              { 
-                'rule': aRule, 
-                'coloquialRule': ruleTranslated, 
-                'id': id 
+              {
+                'rule': aRule,
+                'coloquialRule': ruleTranslated,
+                'id': id
               })
           }
           this.handleChange('rules', rulesVector)
@@ -89,9 +89,9 @@ export default class RulesListForm extends React.Component {
         { this.state.rules.map((aRule, idx) =>
           <div className="panel panel-default" key={idx}>
             <div className="panel-heading">{aRule.coloquialRule}</div>
-            <button 
-              class="btn btn-default" type="button" onClick={() => this.deleteRule(aRule) }
-              >Delete
+            <button
+              className="btn btn-default" type="button" onClick={() => this.deleteRule(aRule) }
+            >Delete
             </button>
           </div>
         )}
