@@ -56,6 +56,22 @@ let factorRule = {
   }
 }
 
+let minPriceRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'price',
+      'operator': 'lessThan',
+      'value': 50
+    }]
+  },
+  'event': {
+    'type': 'disabled',
+    'params': {
+      'data': null
+    }
+  }
+}
+
 function ruleCheck (err, res, jsonRule) {
   should.equal(err, null)
   res.should.have.status(201)
@@ -123,14 +139,10 @@ describe('shipment cost test', function () {
   it('Post a factor rule', function (done) {
     truncate('Rules')
     let jsonRule = JSON.stringify(factorRule)
-    chai.request(server)
-      .post('/rules')
-      .send({ json: jsonRule })
-      .end(function (err, res) {
-        // expected: { success: true, rule: rule }
-        ruleCheck(err, res, jsonRule)
-        setImmediate(done)
-      })
+    req.post((err, res) => {
+      ruleCheck(err, res, jsonRule)
+      setImmediate(done)
+    }, server, { json: jsonRule })
   })
   it('Should receive a shipment cost value multiple of the distance', function (done) {
     chai.request(server)
@@ -145,6 +157,31 @@ describe('shipment cost test', function () {
         res.body.cost.should.equal(525)
         res.body.should.have.property('status')
         res.body.status.should.equal('enabled')
+        setImmediate(done)
+      })
+  })
+
+  it('Post a minimun price rule', function (done) {
+    truncate('Rules')
+    let jsonRule = JSON.stringify(minPriceRule)
+    req.post((err, res) => {
+      ruleCheck(err, res, jsonRule)
+      setImmediate(done)
+    }, server, { json: jsonRule })
+  })
+  it('should receive disable answer', function (done) {
+    chai.request(server)
+      .post('/shipment-cost')
+      .send({ 'price': 35 })
+      .end(function (err, res) {
+        // expected: { status: enabled, cost: 15*35}
+        should.equal(err, null)
+        res.should.have.status(200)
+        console.log('RES: ', res.body)
+        res.body.should.have.property('cost')
+        should.equal(res.body.cost, null)
+        res.body.should.have.property('status')
+        res.body.status.should.equal('disabled')
         setImmediate(done)
       })
   })
