@@ -5,13 +5,64 @@ var multimethod = require('multimethod')
 
 var formula = multimethod().dispatch(function (event, data) { return event.type })
 formula.when('percentage', function (event, data) {
-  return event.params.data * data.price
+  return -event.params.data * data.price
 })
 formula.when('factor', function (event, data) {
-  return event.params.data * data[event.fact]
+  return {
+    status: 'enabled',
+    value: event.params.data * data[event.fact]
+  }
 })
 formula.when('sum', function (event, data) {
-  return event.params.data
+  return {
+    status: 'enabled',
+    value: event.params.data
+  }
+})
+formula.when('discount', function (event, data) {
+  return {
+    status: 'enabled',
+    value: -event.params.data
+  }
+})
+formula.when('surcharge', function (event, data) {
+  return {
+    status: 'enabled',
+    value: event.params.data
+  }
+})
+formula.when('free', function (event, data) {
+  return {
+    status: 'free',
+    value: event.params.data
+  }
+})
+
+function getStatus (array) {
+  var status = 'enabled'
+  array.map((res, idx) => {
+    if (res.status === 'free' && status !== 'disabled') {
+      status = res.status
+    } else if (res.status === 'disabled') {
+      status = res.status
+    }
+  })
+  return status
+}
+
+var getResult = multimethod().dispatch(function (array) { return getStatus(array) })
+getResult.when('free', function (array) {
+  return { status: 'free', cost: 0 }
+})
+getResult.when('disabled', function (array) {
+  return { status: 'disabled', cost: null }
+})
+getResult.when('enabled', function (array) {
+  var acum = 0
+  array.map((data, idx) => {
+    acum += data.value
+  })
+  return { status: 'enabled', cost: acum }
 })
 
 function addRules (rules) {
@@ -23,21 +74,13 @@ function addRules (rules) {
   return engine
 }
 
-function sum (array) {
-  var acum = 0
-  array.map((num, idx) => {
-    acum += num
-  })
-  return acum
-}
-
 function runRules (engine, facts, res) {
   let array
   engine.run(facts).then(triggeredEvents => {
     // engine returns a list of events with truthy conditions
     array = triggeredEvents.map(event => (formula(event, facts)))
-    res.send({ cost: sum(array) })
-  }).catch(() => res.send({ message: 'test_rule failed' }))
+    res.send(getResult(array))
+  }).catch(() => res.send({ message: 'failed' }))
 }
 
 module.exports.getCost = async function (req, res) {
