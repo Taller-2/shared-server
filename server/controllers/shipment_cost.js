@@ -10,7 +10,7 @@ formula.when('percentage', function (event, data) {
 formula.when('factor', function (event, data) {
   return {
     status: 'enabled',
-    value: event.params.data * data[event.fact]
+    value: event.params.data * data[event.params.fact]
   }
 })
 formula.when('sum', function (event, data) {
@@ -95,7 +95,7 @@ function runRules (engine, facts, res) {
     // engine returns a list of events with truthy conditions
     array = triggeredEvents.map(event => (formula(event, facts)))
     res.send(getResult(array))
-  }).catch((err) => res.send({ message: err }))
+  }).catch((err) => res.send({ message: 'ERROR: ' + err }))
 }
 
 module.exports.getCost = async function (req, res) {
