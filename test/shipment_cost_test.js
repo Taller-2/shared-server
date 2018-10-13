@@ -15,7 +15,7 @@ let rule = {
     }]
   },
   'event': {
-    'type': 'test',
+    'type': 'sum',
     'params': {
       'data': 0
     }
@@ -52,14 +52,13 @@ describe('shipment cost test', function () {
       .end(function (err, res) {
         should.equal(err, null)
         res.should.have.status(200)
-        res.body.should.have.length(1)
-        res.body[0].should.be.a('object')
-        res.body[0].should.have.property('message')
-        res.body[0].message.should.equal(0)
+        res.body.should.have.property('cost')
+        res.body.cost.should.equal(0)
         setImmediate(done)
       })
   })
   after(function (done) {
+    truncate('Rules')
     server.close()
     done()
   })
