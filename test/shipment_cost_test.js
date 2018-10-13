@@ -95,7 +95,7 @@ describe('shipment cost test', function () {
         setImmediate(done)
       })
   })
-  it('should receive a null shipment cost value', function (done) {
+  it('Negative score should receive a null shipment cost value', function (done) {
     chai.request(server)
       .post('/shipment-cost')
       .send({ 'userScore': -3 })
