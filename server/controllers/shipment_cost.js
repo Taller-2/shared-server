@@ -37,6 +37,12 @@ formula.when('free', function (event, data) {
     value: event.params.data
   }
 })
+formula.when('disabled', function (event, data) {
+  return {
+    status: 'disabled',
+    value: event.params.data
+  }
+})
 
 function getStatus (array) {
   var status = 'enabled'
@@ -65,8 +71,17 @@ getResult.when('enabled', function (array) {
   return { status: 'enabled', cost: acum }
 })
 
+function domainEqual (emailFact, value) {
+  const domain = '@' + emailFact.split('@')[1]
+  if (domain === value) {
+    return true
+  }
+  return false
+}
+
 function addRules (rules) {
   let engine = new Engine()
+  engine.addOperator('domainEqual', domainEqual)
   const length = rules.length
   for (var i = 0; i < length; i++) {
     engine.addRule(new Rule(rules[i].json))
@@ -80,7 +95,7 @@ function runRules (engine, facts, res) {
     // engine returns a list of events with truthy conditions
     array = triggeredEvents.map(event => (formula(event, facts)))
     res.send(getResult(array))
-  }).catch(() => res.send({ message: 'failed' }))
+  }).catch((err) => res.send({ message: err }))
 }
 
 module.exports.getCost = async function (req, res) {
