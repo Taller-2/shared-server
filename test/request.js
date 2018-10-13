@@ -2,19 +2,21 @@ const chai = require('chai')
 const chaihttp = require('chai-http')
 chai.use(chaihttp)
 
-module.exports.post = function (callback, server, data) {
-  chai.request(server)
-    .post('/rules')
+module.exports.post = async function (callback, server, data, endpoint) {
+  await chai.request(server)
+    .post(endpoint)
     .send(data)
-    .end(function (err, res) {
-      callback(err, res)
-    })
-}
-
-module.exports.get = function (callback, server, id) {
-  chai.request(server)
-    .get('/rules/' + id)
-    .end(function (err, res) {
+    .then(function (err, res) {
       if (callback) callback(err, res)
     })
+    .catch((err) => (err))
+}
+
+module.exports.get = async function (callback, server, id, endpoint) {
+  await chai.request(server)
+    .get(endpoint + id)
+    .then(function (err, res) {
+      if (callback) callback(err, res)
+    })
+    .catch((err) => (err))
 }
