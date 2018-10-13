@@ -6,71 +6,10 @@ var server = app.listen()
 chai.use(chaihttp)
 var truncate = require('../scripts/db/truncate')
 var req = require('./request')
-
-let freeRule = {
-  'conditions': {
-    'all': [{
-      'fact': 'email',
-      'operator': 'domainEqual',
-      'value': '@comprame.com'
-    }]
-  },
-  'event': {
-    'type': 'free',
-    'params': {
-      'data': 0
-    }
-  }
-}
-
-let disabledRule = {
-  'conditions': {
-    'all': [{
-      'fact': 'userScore',
-      'operator': 'lessThan',
-      'value': 0
-    }]
-  },
-  'event': {
-    'type': 'disabled',
-    'params': {
-      'data': null
-    }
-  }
-}
-
-let factorRule = {
-  'conditions': {
-    'all': [{
-      'fact': 'distance',
-      'operator': 'greaterThan',
-      'value': 30
-    }]
-  },
-  'event': {
-    'type': 'factor',
-    'params': {
-      'data': 15,
-      'fact': 'distance'
-    }
-  }
-}
-
-let minPriceRule = {
-  'conditions': {
-    'all': [{
-      'fact': 'price',
-      'operator': 'lessThan',
-      'value': 50
-    }]
-  },
-  'event': {
-    'type': 'disabled',
-    'params': {
-      'data': null
-    }
-  }
-}
+var freeRule = require('./dataDefinitions').freeRule
+var disabledRule = require('./dataDefinitions').disabledRule
+var factorRule = require('./dataDefinitions').factorRule
+var minPriceRule = require('./dataDefinitions').minPriceRule
 
 function ruleCheck (err, res, jsonRule) {
   should.equal(err, null)
@@ -83,107 +22,96 @@ function ruleCheck (err, res, jsonRule) {
   res.body.rule.json.should.equal(jsonRule)
 }
 
-describe('shipment cost test', function () {
-  before(function (done) {
-    truncate('Rules')
-    done()
-  })
+function costCheck (err, res, status, cost) {
+  should.equal(err, null)
+  res.should.have.status(200)
+  res.body.should.have.property('cost')
+  should.equal(res.body.cost, cost)
+  res.body.should.have.property('status')
+  res.body.status.should.equal(status)
+}
 
-  it('Post a free rule', function (done) {
-    let jsonRule = JSON.stringify(freeRule)
+function postRulesVector (rules, server) {
+  rules.map((aRule, idx) => {
+    let jsonRule = JSON.stringify(aRule)
     req.post((err, res) => {
       ruleCheck(err, res, jsonRule)
-      setImmediate(done)
-    }, server, { json: jsonRule })
+    }, server, { json: jsonRule }, '/rules')
+  })
+}
+
+describe('shipment cost test', function () {
+  // --------------------------------------------------------------------
+  it('Post a free rule', function (done) {
+    truncate('Rules')
+    postRulesVector([freeRule], server)
+    setImmediate(done)
   })
   it('should receive shipment cost value that is zero', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'email': 'jorge@comprame.com' })
-      .end(function (err, res) {
-        // expected: { status: status, cost: acum}
-        should.equal(err, null)
-        res.should.have.status(200)
-        res.body.should.have.property('cost')
-        res.body.cost.should.equal(0)
-        res.body.should.have.property('status')
-        res.body.status.should.equal('free')
-        setImmediate(done)
-      })
+    req.post((err, res) => {
+      // expected: { status: 'free', cost: 0}
+      costCheck(err, res, 'free', 0)
+    }, server, { 'email': 'jorge@comprame.com' }, '/shipment-cost')
+    setImmediate(done)
   })
-
+  // --------------------------------------------------------------------
   it('Post a disabled rule', function (done) {
     truncate('Rules')
-    let jsonRule = JSON.stringify(disabledRule)
-    req.post((err, res) => {
-      ruleCheck(err, res, jsonRule)
-      setImmediate(done)
-    }, server, { json: jsonRule })
+    postRulesVector([disabledRule], server)
+    setImmediate(done)
   })
   it('Negative score should receive a null shipment cost value', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'userScore': -3 })
-      .end(function (err, res) {
-        // expected: { status: status, cost: acum}
-        should.equal(err, null)
-        res.should.have.status(200)
-        res.body.should.have.property('cost')
-        should.equal(res.body.cost, null)
-        res.body.should.have.property('status')
-        res.body.status.should.equal('disabled')
-        setImmediate(done)
-      })
+    req.post((err, res) => {
+      // expected: { status: 'disabled', cost: null}
+      costCheck(err, res, 'disabled', null)
+    }, server, { 'userScore': -3 }, '/shipment-cost')
+    setImmediate(done)
   })
-
+  // --------------------------------------------------------------------
   it('Post a factor rule', function (done) {
     truncate('Rules')
-    let jsonRule = JSON.stringify(factorRule)
-    req.post((err, res) => {
-      ruleCheck(err, res, jsonRule)
-      setImmediate(done)
-    }, server, { json: jsonRule })
+    postRulesVector([factorRule], server)
+    setImmediate(done)
   })
   it('Should receive a shipment cost value multiple of the distance', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'distance': 35 })
-      .end(function (err, res) {
-        // expected: { status: enabled, cost: 15*35}
-        should.equal(err, null)
-        res.should.have.status(200)
-        console.log('RES: ', res.body)
-        res.body.should.have.property('cost')
-        res.body.cost.should.equal(525)
-        res.body.should.have.property('status')
-        res.body.status.should.equal('enabled')
-        setImmediate(done)
-      })
+    req.post((err, res) => {
+      // expected: { status: 'enabled', cost: 15*35}
+      costCheck(err, res, 'enabled', 525)
+    }, server, { 'distance': 35 }, '/shipment-cost')
+    setImmediate(done)
   })
-
+  // --------------------------------------------------------------------
   it('Post a minimun price rule', function (done) {
     truncate('Rules')
-    let jsonRule = JSON.stringify(minPriceRule)
-    req.post((err, res) => {
-      ruleCheck(err, res, jsonRule)
-      setImmediate(done)
-    }, server, { json: jsonRule })
+    postRulesVector([minPriceRule], server)
+    setImmediate(done)
   })
   it('should receive disable answer', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'price': 35 })
-      .end(function (err, res) {
-        // expected: { status: enabled, cost: 15*35}
-        should.equal(err, null)
-        res.should.have.status(200)
-        console.log('RES: ', res.body)
-        res.body.should.have.property('cost')
-        should.equal(res.body.cost, null)
-        res.body.should.have.property('status')
-        res.body.status.should.equal('disabled')
-        setImmediate(done)
-      })
+    req.post((err, res) => {
+      // expected: { status: 'disabled', cost: nul}
+      costCheck(err, res, 'disabled', null)
+    }, server, { 'price': 35 }, '/shipment-cost')
+    setImmediate(done)
+  })
+  // --------------------------------------------------------------------
+  it('Post several rules', function (done) {
+    truncate('Rules')
+    const rulesVector = [freeRule, disabledRule, factorRule, minPriceRule]
+    postRulesVector(rulesVector, server)
+    setImmediate(done)
+  })
+  it('Disable answer must prevail', function (done) {
+    const facts = {
+      'email': 'jorge@comprame.com',
+      'userScore': -3,
+      'distance': 35,
+      'price': 35
+    }
+    req.post((err, res) => {
+      // expected: { status: 'disabled', cost: null}
+      costCheck(err, res, 'disabled', null)
+    }, server, facts, '/shipment-cost')
+    setImmediate(done)
   })
   after(function (done) {
     truncate('Rules')
