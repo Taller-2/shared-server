@@ -50,10 +50,13 @@ describe('shipment cost test', function () {
       .post('/shipment-cost')
       .send({ 'test_rule': true })
       .end(function (err, res) {
+        // expected: { status: status, cost: acum}
         should.equal(err, null)
         res.should.have.status(200)
         res.body.should.have.property('cost')
         res.body.cost.should.equal(0)
+        res.body.should.have.property('status')
+        res.body.status.should.equal('enabled')
         setImmediate(done)
       })
   })
