@@ -13,35 +13,10 @@ const priorities = {
   'percentage': 1
 }
 
-var addPriority = multimethod().dispatch(function (rule) { return rule.event.type })
-addPriority.when('percentage', function (rule) {
-  rule.priority = priorities.percentage
+function addPriority (rule) {
+  rule.priority = priorities[rule.event.type]
   return rule
-})
-addPriority.when('factor', function (rule) {
-  rule.priority = priorities.factor
-  return rule
-})
-addPriority.when('sum', function (rule) {
-  rule.priority = priorities.sum
-  return rule
-})
-addPriority.when('discount', function (rule) {
-  rule.priority = priorities.discount
-  return rule
-})
-addPriority.when('surcharge', function (rule) {
-  rule.priority = priorities.surcharge
-  return rule
-})
-addPriority.when('free', function (rule) {
-  rule.priority = priorities.free
-  return rule
-})
-addPriority.when('disabled', function (rule) {
-  rule.priority = priorities.disabled
-  return rule
-})
+}
 
 var formula = multimethod().dispatch(function (event, data, cost) { return event.type })
 formula.when('percentage', function (event, data, cost) {
