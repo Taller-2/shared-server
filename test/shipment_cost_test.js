@@ -51,7 +51,6 @@ describe('shipment cost test', function () {
   })
   it('should receive shipment cost value that is zero', function (done) {
     req.post((err, res) => {
-      // expected: { status: 'free', cost: 0}
       costCheck(err, res, 'free', 0)
     }, server, { 'email': 'jorge@comprame.com' }, '/shipment-cost')
     setImmediate(done)
@@ -64,7 +63,6 @@ describe('shipment cost test', function () {
   })
   it('Negative score should receive a null shipment cost value', function (done) {
     req.post((err, res) => {
-      // expected: { status: 'disabled', cost: null}
       costCheck(err, res, 'disabled', null)
     }, server, { 'userScore': -3 }, '/shipment-cost')
     setImmediate(done)
@@ -77,7 +75,6 @@ describe('shipment cost test', function () {
   })
   it('Should receive a shipment cost value multiple of the distance', function (done) {
     req.post((err, res) => {
-      // expected: { status: 'enabled', cost: 15*35}
       costCheck(err, res, 'enabled', 525)
     }, server, { 'distance': 35 }, '/shipment-cost')
     setImmediate(done)
@@ -90,7 +87,6 @@ describe('shipment cost test', function () {
   })
   it('should receive disable answer', function (done) {
     req.post((err, res) => {
-      // expected: { status: 'disabled', cost: nul}
       costCheck(err, res, 'disabled', null)
     }, server, { 'price': 35 }, '/shipment-cost')
     setImmediate(done)
@@ -110,7 +106,6 @@ describe('shipment cost test', function () {
       'price': 35
     }
     req.post((err, res) => {
-      // expected: { status: 'disabled', cost: null}
       costCheck(err, res, 'disabled', null)
     }, server, facts, '/shipment-cost')
     setImmediate(done)
@@ -124,7 +119,6 @@ describe('shipment cost test', function () {
   })
   it('should receive free cost because of only percentage rule', function (done) {
     req.post((err, res) => {
-      // expected: { status: 'enabled', cost: 0 }
       costCheck(err, res, 'enabled', 0)
     }, server, { 'duration': 50 }, '/shipment-cost')
     setImmediate(done)
@@ -138,7 +132,6 @@ describe('shipment cost test', function () {
   })
   it('Factor rule should apply first because of mayor priority', function (done) {
     req.post((err, res) => {
-      // expected: { status: 'enabled', cost: 36 }
       costCheck(err, res, 'enabled', 36)
     }, server, { 'duration': 50, 'distance': 40 }, '/shipment-cost')
     setImmediate(done)
@@ -152,7 +145,6 @@ describe('shipment cost test', function () {
   })
   it('percentage and discount rules should apply in parallel', function (done) {
     req.post((err, res) => {
-      // expected: { status: 'enabled', cost: 26 }
       costCheck(err, res, 'enabled', 26)
     }, server, { 'duration': 50, 'distance': 40 }, '/shipment-cost')
     setImmediate(done)
