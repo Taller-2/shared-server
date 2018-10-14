@@ -3,41 +3,87 @@ let Engine = require('json-rules-engine').Engine
 var db = require('../models')
 var multimethod = require('multimethod')
 
-var formula = multimethod().dispatch(function (event, data) { return event.type })
-formula.when('percentage', function (event, data) {
-  return -event.params.data * data.price
+const priorities = {
+  'disabled': 6,
+  'free': 5,
+  'factor': 4,
+  'sum': 3,
+  'surcharge': 2,
+  'discount': 1,
+  'percentage': 1
+}
+
+var addPriority = multimethod().dispatch(function (rule) { return rule.event.type })
+addPriority.when('percentage', function (rule) {
+  rule.priority = priorities.percentage
+  return rule
 })
-formula.when('factor', function (event, data) {
+addPriority.when('factor', function (rule) {
+  rule.priority = priorities.factor
+  return rule
+})
+addPriority.when('sum', function (rule) {
+  rule.priority = priorities.sum
+  return rule
+})
+addPriority.when('discount', function (rule) {
+  rule.priority = priorities.discount
+  return rule
+})
+addPriority.when('surcharge', function (rule) {
+  rule.priority = priorities.surcharge
+  return rule
+})
+addPriority.when('free', function (rule) {
+  rule.priority = priorities.free
+  return rule
+})
+addPriority.when('disabled', function (rule) {
+  rule.priority = priorities.disabled
+  return rule
+})
+
+var formula = multimethod().dispatch(function (event, data, cost) { return event.type })
+formula.when('percentage', function (event, data, cost) {
+  return -event.params.data * (cost / 100)
+})
+formula.when('factor', function (event, data, cost) {
+  const factor = event.params.data * data[event.params.fact]
+  cost += factor
   return {
     status: 'enabled',
-    value: event.params.data * data[event.params.fact]
+    value: factor
   }
 })
-formula.when('sum', function (event, data) {
+formula.when('sum', function (event, data, cost) {
+  const sum = event.params.data
+  cost += sum
   return {
     status: 'enabled',
-    value: event.params.data
+    value: sum
   }
 })
-formula.when('discount', function (event, data) {
+formula.when('discount', function (event, data, cost) {
   return {
     status: 'enabled',
     value: -event.params.data
   }
 })
-formula.when('surcharge', function (event, data) {
+formula.when('surcharge', function (event, data, cost) {
+  const surcharge = event.params.data
+  cost += surcharge
   return {
     status: 'enabled',
-    value: event.params.data
+    value: surcharge
   }
 })
-formula.when('free', function (event, data) {
+formula.when('free', function (event, data, cost) {
   return {
     status: 'free',
     value: event.params.data
   }
 })
-formula.when('disabled', function (event, data) {
+formula.when('disabled', function (event, data, cost) {
   return {
     status: 'disabled',
     value: event.params.data
@@ -84,7 +130,10 @@ function addRules (rules) {
   engine.addOperator('domainEqual', domainEqual)
   const length = rules.length
   for (var i = 0; i < length; i++) {
-    engine.addRule(new Rule(rules[i].json))
+    var aRule = JSON.parse(rules[i].json)
+    aRule = addPriority(aRule)
+    aRule = JSON.stringify(aRule)
+    engine.addRule(new Rule(aRule))
   }
   return engine
 }
@@ -93,7 +142,8 @@ function runRules (engine, facts, res) {
   let array
   engine.run(facts).then(triggeredEvents => {
     // engine returns a list of events with truthy conditions
-    array = triggeredEvents.map(event => (formula(event, facts)))
+    var cost = 0
+    array = triggeredEvents.map(event => (formula(event, facts, cost)))
     res.send(getResult(array))
   }).catch((err) => res.send({ message: 'ERROR: ' + err }))
 }
