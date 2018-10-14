@@ -70,7 +70,7 @@ function getStatus (eventAnswers) {
   // regla aplicada (evento) devuelvo una respuesta con este formato:
   // { status: aState, value: aValue }
   var status = 'enabled'
-  eventAnswers.map((answer, idx) => {
+  eventAnswers.forEach((answer) => {
     if (answer.status === 'free' && status !== 'disabled') {
       status = answer.status
     } else if (answer.status === 'disabled') {
