@@ -89,7 +89,7 @@ getResult.when('disabled', function (array) {
 })
 getResult.when('enabled', function (array) {
   var acum = 0
-  array.map((data, idx) => {
+  array.forEach((data) => {
     acum += data.value
   })
   return { status: 'enabled', cost: acum }
