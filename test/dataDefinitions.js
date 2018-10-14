@@ -62,3 +62,35 @@ module.exports.minPriceRule = {
     }
   }
 }
+
+module.exports.percentageRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'duration',
+      'operator': 'equal',
+      'value': 50
+    }]
+  },
+  'event': {
+    'type': 'percentage',
+    'params': {
+      'data': 10
+    }
+  }
+}
+
+module.exports.discountRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'duration',
+      'operator': 'equal',
+      'value': 50
+    }]
+  },
+  'event': {
+    'type': 'percentage',
+    'params': {
+      'data': 10
+    }
+  }
+}

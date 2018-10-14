@@ -10,6 +10,8 @@ var freeRule = require('./dataDefinitions').freeRule
 var disabledRule = require('./dataDefinitions').disabledRule
 var factorRule = require('./dataDefinitions').factorRule
 var minPriceRule = require('./dataDefinitions').minPriceRule
+var percentageRule = require('./dataDefinitions').percentageRule
+var discountRule = require('./dataDefinitions').discountRule
 
 function ruleCheck (err, res, jsonRule) {
   should.equal(err, null)
@@ -113,6 +115,49 @@ describe('shipment cost test', function () {
     }, server, facts, '/shipment-cost')
     setImmediate(done)
   })
+  // --------------------------------------------------------------------
+  it('Post percentage rule', function (done) {
+    truncate('Rules')
+    const rulesVector = [percentageRule]
+    postRulesVector(rulesVector, server)
+    setImmediate(done)
+  })
+  it('should receive free cost because of only percentage rule', function (done) {
+    req.post((err, res) => {
+      // expected: { status: 'enabled', cost: 0 }
+      costCheck(err, res, 'enabled', 0)
+    }, server, { 'duration': 50 }, '/shipment-cost')
+    setImmediate(done)
+  })
+  // --------------------------------------------------------------------
+  it('Post percentage and factor rule', function (done) {
+    truncate('Rules')
+    const rulesVector = [percentageRule, factorRule]
+    postRulesVector(rulesVector, server)
+    setImmediate(done)
+  })
+  it('Factor rule should apply first because of mayor priority', function (done) {
+    req.post((err, res) => {
+      // expected: { status: 'enabled', cost: 36 }
+      costCheck(err, res, 'enabled', 36)
+    }, server, { 'duration': 50, 'distance': 40 }, '/shipment-cost')
+    setImmediate(done)
+  })
+  // --------------------------------------------------------------------
+  it('Post percentage, factor and discount rule', function (done) {
+    truncate('Rules')
+    const rulesVector = [percentageRule, factorRule, discountRule]
+    postRulesVector(rulesVector, server)
+    setImmediate(done)
+  })
+  it('percentage and discount rules should apply in parallel', function (done) {
+    req.post((err, res) => {
+      // expected: { status: 'enabled', cost: 26 }
+      costCheck(err, res, 'enabled', 26)
+    }, server, { 'duration': 50, 'distance': 40 }, '/shipment-cost')
+    setImmediate(done)
+  })
+  // --------------------------------------------------------------------
   after(function (done) {
     truncate('Rules')
     server.close()
