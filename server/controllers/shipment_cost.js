@@ -69,8 +69,8 @@ function getStatus (eventAnswers) {
   // Recibo una array de cada respuesta de cada evento. cuando aplico la formula por cada
   // regla aplicada (evento) devuelvo una respuesta con este formato:
   // { status: aState, value: aValue }
-  var eventAnswers = 'enabled'
-  array.map((answer, idx) => {
+  var status = 'enabled'
+  eventAnswers.map((answer, idx) => {
     if (answer.status === 'free' && status !== 'disabled') {
       status = answer.status
     } else if (answer.status === 'disabled') {
