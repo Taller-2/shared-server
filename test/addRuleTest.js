@@ -81,6 +81,7 @@ describe('add simple rule', function () {
       })
   })
   after(function (done) {
+    truncate('Rules')
     server.close()
     done()
   })

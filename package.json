@@ -23,6 +23,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "multimethod": "^0.1.0",
     "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
     "chai": "^4.1.2",

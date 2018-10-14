@@ -10,9 +10,11 @@ const {
     daytrips, // (int)
     monthtrips, // (int)
     antiquity  // (int)
+    email, // (string)
   },
   userScore,  // (float)
   paymentMethod, // (string)
+  price, // (float)
   shippingCharacteristics: {
     duration,  // (float)
     distance,  // (float)
