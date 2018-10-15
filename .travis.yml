@@ -17,6 +17,7 @@ before_script:
 - node scripts/db/liftDb.js
 script: 
 - npm test
+after_success: npm run coverage
 deploy:
   provider: heroku
   app: taller2-shared-server
