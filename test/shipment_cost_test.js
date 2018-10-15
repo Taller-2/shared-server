@@ -4,6 +4,7 @@ const app = require('../server/index')
 const server = app.listen()
 const truncate = require('../scripts/db/truncate')
 const req = require('./request')
+const httpStatus = require('http-status-codes')
 const {
   freeRule,
   disabledRule,
@@ -16,7 +17,7 @@ chai.use(require('chai-http'))
 
 function ruleCheck (err, res, jsonRule) {
   should.equal(err, null)
-  res.should.have.status(201)
+  res.should.have.status(httpStatus.CREATED)
   res.body.should.be.a('object')
   res.body.should.have.property('success')
   res.body.success.should.be.equal(true)
@@ -27,7 +28,7 @@ function ruleCheck (err, res, jsonRule) {
 
 function costCheck (err, res, status, cost) {
   should.equal(err, null)
-  res.should.have.status(200)
+  res.should.have.status(httpStatus.OK)
   res.body.should.have.property('cost')
   should.equal(res.body.cost, cost)
   res.body.should.have.property('status')

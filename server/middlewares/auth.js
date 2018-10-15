@@ -1,11 +1,12 @@
-var jwt = require('express-jwt')
+const jwt = require('express-jwt')
 const secret = require('../secrets')
+const httpStatus = require('http-status-codes')
 
-function errorHandler (error, req, res, next) {
+function errorHandler (error, req, res) {
   if (error.name === 'UnauthorizedError') {
-    res.status(401).json(error)
+    res.status(httpStatus.UNAUTHORIZED).json(error)
   } else {
-    res.status(400).json(JSON.parse(error.message))
+    res.status(httpStatus.BAD_REQUEST).json(JSON.parse(error.message))
   }
 }
 

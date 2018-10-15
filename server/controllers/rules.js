@@ -1,4 +1,5 @@
 const model = require('../models')
+const httpStatus = require('http-status-codes')
 
 module.exports.findById = function (request, response) {
   let scope = request.params.id ? { where: { id: request.params.id } } : {}
@@ -24,7 +25,7 @@ module.exports.create = function (request, response, next) {
         json: aRule,
         enabled: false
       })
-        .then(rule => response.status(201).json({ success: true, rule: rule }))
+        .then(rule => response.status(httpStatus.CREATED).json({ success: true, rule: rule }))
     })
     .catch(next)
 }
@@ -35,13 +36,13 @@ module.exports.update = function (request, response) {
     { json: json },
     { where: { id: request.params.id } }
   )
-    .then(rule => response.status(201).json({ success: true, rule: rule }))
+    .then(rule => response.status(httpStatus.CREATED).json({ success: true, rule: rule }))
     .catch(error => response.json({ success: false, error: error }))
 }
 
 module.exports.delete = function (request, response) {
   model.Rules.destroy({ where: { id: request.params.id } })
-    .then(() => response.status(201).json({ success: true }))
+    .then(() => response.status(httpStatus.CREATED).json({ success: true }))
     .catch(error => response.json({ success: false, error: error }))
 }
 
@@ -50,7 +51,7 @@ module.exports.deleteAll = function (request, response) {
     where: {},
     force: true
   })
-    .then(() => response.status(201).json({ success: true }))
+    .then(() => response.status(httpStatus.CREATED).json({ success: true }))
     .catch(error => response.json({ success: false, error: error }))
 }
 
