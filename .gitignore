@@ -65,3 +65,5 @@ typings/
 client/node_modules/
 
 .idea
+
+package-lock.json

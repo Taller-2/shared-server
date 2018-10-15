@@ -1,10 +1,10 @@
 const chai = require('chai')
-const chaihttp = require('chai-http')
-var should = require('should')
-var app = require('../server/index')
-var server = app.listen()
-var truncate = require('../scripts/db/truncate')
-chai.use(chaihttp)
+const should = require('should')
+const app = require('../server/index')
+const server = app.listen()
+const truncate = require('../scripts/db/truncate')
+const httpStatus = require('http-status-codes')
+chai.use(require('chai-http'))
 
 let rule = {
   'conditions': {
@@ -27,6 +27,7 @@ describe('add simple rule', function () {
     truncate('Rules')
     done()
   })
+
   it('should save a rule in data base and receive success message', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
@@ -35,7 +36,7 @@ describe('add simple rule', function () {
       .end(function (err, res) {
         // expected: { success: true, rule: rule }
         should.equal(err, null)
-        res.should.have.status(201)
+        res.should.have.status(httpStatus.CREATED)
         res.body.should.be.a('object')
         res.body.should.have.property('success')
         res.body.success.should.be.equal(true)
@@ -45,7 +46,8 @@ describe('add simple rule', function () {
         setImmediate(done)
       })
   })
-  var id
+
+  let id
   it('should get vector of rules', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
@@ -53,7 +55,7 @@ describe('add simple rule', function () {
       .end(function (err, res) {
         // expected: { success: true, rules: rules }
         should.equal(err, null)
-        res.should.have.status(200)
+        res.should.have.status(httpStatus.OK)
         res.body.should.have.property('success')
         res.body.success.should.be.equal(true)
         res.body.should.have.property('rules')
@@ -64,6 +66,7 @@ describe('add simple rule', function () {
         setImmediate(done)
       })
   })
+
   it('should get a rule by id', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
@@ -71,7 +74,7 @@ describe('add simple rule', function () {
       .end(function (err, res) {
         // expected: { success: true, rules: rules }
         should.equal(err, null)
-        res.should.have.status(200)
+        res.should.have.status(httpStatus.OK)
         res.body.should.have.property('success')
         res.body.success.should.be.equal(true)
         res.body.should.have.property('rules')
@@ -80,6 +83,7 @@ describe('add simple rule', function () {
         setImmediate(done)
       })
   })
+
   after(function (done) {
     truncate('Rules')
     server.close()
