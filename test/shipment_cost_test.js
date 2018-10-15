@@ -1,17 +1,18 @@
 const chai = require('chai')
-const chaihttp = require('chai-http')
-var should = require('should')
-var app = require('../server/index')
-var server = app.listen()
-chai.use(chaihttp)
-var truncate = require('../scripts/db/truncate')
-var req = require('./request')
-var freeRule = require('./dataDefinitions').freeRule
-var disabledRule = require('./dataDefinitions').disabledRule
-var factorRule = require('./dataDefinitions').factorRule
-var minPriceRule = require('./dataDefinitions').minPriceRule
-var percentageRule = require('./dataDefinitions').percentageRule
-var discountRule = require('./dataDefinitions').discountRule
+const should = require('should')
+const app = require('../server/index')
+const server = app.listen()
+const truncate = require('../scripts/db/truncate')
+const req = require('./request')
+const {
+  freeRule,
+  disabledRule,
+  factorRule,
+  minPriceRule,
+  percentageRule,
+  discountRule
+} = require('./data_definitions')
+chai.use(require('chai-http'))
 
 function ruleCheck (err, res, jsonRule) {
   should.equal(err, null)

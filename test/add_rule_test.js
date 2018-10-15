@@ -1,10 +1,9 @@
 const chai = require('chai')
-const chaihttp = require('chai-http')
-var should = require('should')
-var app = require('../server/index')
-var server = app.listen()
-var truncate = require('../scripts/db/truncate')
-chai.use(chaihttp)
+const should = require('should')
+const app = require('../server/index')
+const server = app.listen()
+const truncate = require('../scripts/db/truncate')
+chai.use(require('chai-http'))
 
 let rule = {
   'conditions': {
@@ -45,7 +44,7 @@ describe('add simple rule', function () {
         setImmediate(done)
       })
   })
-  var id
+  let id
   it('should get vector of rules', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
