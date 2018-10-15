@@ -27,6 +27,7 @@ describe('add simple rule', function () {
     truncate('Rules')
     done()
   })
+
   it('should save a rule in data base and receive success message', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
@@ -45,6 +46,7 @@ describe('add simple rule', function () {
         setImmediate(done)
       })
   })
+
   let id
   it('should get vector of rules', function (done) {
     let jsonRule = JSON.stringify(rule)
@@ -64,6 +66,7 @@ describe('add simple rule', function () {
         setImmediate(done)
       })
   })
+
   it('should get a rule by id', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
@@ -80,6 +83,7 @@ describe('add simple rule', function () {
         setImmediate(done)
       })
   })
+
   after(function (done) {
     truncate('Rules')
     server.close()
