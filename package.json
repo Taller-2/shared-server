@@ -69,5 +69,17 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/Taller-2/shared-server.git"
+  },
+  "nyc": {
+    "exclude": [
+      "coverage/**",
+      "test/**",
+      "test{,-*}.js",
+      "**/*.test.js",
+      "**/node_modules/**",
+      "server/middlewares/auth.js",
+      "server/controllers/session.js",
+      "scripts/**"
+    ]
   }
 }
