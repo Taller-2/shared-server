@@ -25,12 +25,18 @@ export default class RulesForm extends React.Component {
       'equal',
       'greaterThanInclusive',
       'lessThanInclusive',
-      'greaterThan'
+      'greaterThan',
+      'domainEqual',
+      'lessThan'
     ]
     this.type = [
       'percentage',
       'factor',
-      'sum'
+      'sum',
+      'discount',
+      'surcharge',
+      'free',
+      'disabled'
     ]
     this.state = {
       fact: this.facts[0],
