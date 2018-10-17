@@ -2,6 +2,7 @@ import React from 'react'
 import { Col, Form, Grid, Row } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Http from '../service/Http'
+import RuleTranslator from '../service/ruleTranslator'
 
 export default class RulesListForm extends React.Component {
   constructor (props) {
@@ -28,44 +29,6 @@ export default class RulesListForm extends React.Component {
     this.props.onClick(this.state)
   }
 
-  getTranslation (aCondition) {
-    var coloquialRule = ''
-    const fact = aCondition.fact
-    const op = aCondition.operator
-    const value = aCondition.value
-    coloquialRule += 'if ' + fact + ' is ' + op + ' to ' + value
-    return '(' + coloquialRule + ')'
-  }
-
-  translateOp (op) {
-    if (op === 'all') {
-      return 'and'
-    }
-    return 'or'
-  }
-
-  translateCondition (conditions) {
-    const booleanOp = Object.keys(conditions)[0]
-    if (booleanOp === 'all' || booleanOp === 'any') {
-      var coloquialRule = ''
-      conditions[booleanOp].forEach((aCondition, idx) => {
-        coloquialRule += this.translateCondition(aCondition)
-        if (idx < (conditions[booleanOp].length - 1)) {
-          coloquialRule += ' ' + this.translateOp(booleanOp) + ' '
-        }
-      })
-      return coloquialRule
-    }
-    return this.getTranslation(conditions)
-  }
-
-  translateRule (aRule) {
-    const rule = JSON.parse(aRule)
-    const type = rule.event.type
-    const params = rule.event.params.data
-    return this.translateCondition(rule.conditions) + ' then ' + type + ': ' + params
-  }
-
   handleClick = () => {
     if (this.state.haveTheRules) return
     var rulesVector = []
@@ -76,7 +39,7 @@ export default class RulesListForm extends React.Component {
           const length = response.rules.length
           for (var i = 0; i < length; i++) {
             const aRule = response.rules[i].json
-            const ruleTranslated = this.translateRule(aRule)
+            const ruleTranslated = RuleTranslator.translateRule(aRule)
             const id = response.rules[i].id
             rulesVector.push(
               {

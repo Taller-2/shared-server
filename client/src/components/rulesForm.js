@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Col, ControlLabel, Form, FormControl, FormGroup, Grid, Row, HelpBlock } from 'react-bootstrap'
 import PropTypes from 'prop-types'
+import RuleTranslator from '../service/ruleTranslator'
 
 export default class RulesForm extends React.Component {
   constructor (props) {
@@ -124,17 +125,10 @@ export default class RulesForm extends React.Component {
     )
   }
 
-  translateCondition (rule) {
-    const fact = rule.fact
-    const op = rule.operator
-    const value = rule.value
-    return 'if ' + fact + ' is ' + op + ' to ' + value
-  }
-
   listConditions () {
     var translatedConditions = []
     this.state.conditions.forEach((aCondition) => {
-      translatedConditions.push(this.translateCondition(aCondition))
+      translatedConditions.push(RuleTranslator.getCondition(aCondition))
     })
     return (
       <FormGroup controlId="condition">
