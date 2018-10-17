@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const model = require('../models')
+const httpStatus = require('http-status-codes')
 const { body } = require('express-validator/check')
 
 module.exports.findById = function (request, response) {
@@ -21,7 +22,7 @@ module.exports.create = function (request, response, next) {
         password: bcrypt.hashSync(pass, 10),
         enabled: false
       })
-        .then(user => response.status(201).json({ success: true, user: user }))
+        .then(user => response.status(httpStatus.CREATED).json({ success: true, user: user }))
     })
     .catch(next)
 }
@@ -32,13 +33,13 @@ module.exports.update = function (request, response) {
     { name: name, email: email },
     { where: { id: request.params.id } }
   )
-    .then(user => response.status(201).json({ success: true, user: user }))
+    .then(user => response.status(httpStatus.CREATED).json({ success: true, user: user }))
     .catch(error => response.json({ success: false, error: error }))
 }
 
 module.exports.delete = function (request, response) {
   model.User.destroy({ where: { id: request.params.id } })
-    .then(() => response.status(201).json({ success: true }))
+    .then(() => response.status(httpStatus.CREATED).json({ success: true }))
     .catch(error => response.json({ success: false, error: error }))
 }
 
