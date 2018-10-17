@@ -20,7 +20,9 @@ export default class RulesForm extends React.Component {
       'time',
       'serverId',
       'tripDate',
-      'tripTime'
+      'tripTime',
+      'email',
+      'price'
     ]
     this.ops = [
       'equal',
