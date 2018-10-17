@@ -2,6 +2,7 @@ import React from 'react'
 import { Col, Form, Grid, Row } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Http from '../service/Http'
+import RuleTranslator from '../service/ruleTranslator'
 
 export default class RulesListForm extends React.Component {
   constructor (props) {
@@ -12,7 +13,8 @@ export default class RulesListForm extends React.Component {
         'coloquialRule': '',
         'id': ''
       }],
-      haveTheRules: false
+      haveTheRules: false,
+      refresh: false
     }
   }
 
@@ -27,16 +29,6 @@ export default class RulesListForm extends React.Component {
     this.props.onClick(this.state)
   }
 
-  translateRule (aRule) {
-    const rule = JSON.parse(aRule)
-    const fact = rule.conditions.all[0].fact
-    const op = rule.conditions.all[0].operator
-    const value = rule.conditions.all[0].value
-    const type = rule.event.type
-    const params = rule.event.params.data
-    return 'if ' + fact + ' is ' + op + ' to ' + value + ' then ' + type + ': ' + params
-  }
-
   handleClick = () => {
     if (this.state.haveTheRules) return
     var rulesVector = []
@@ -47,7 +39,7 @@ export default class RulesListForm extends React.Component {
           const length = response.rules.length
           for (var i = 0; i < length; i++) {
             const aRule = response.rules[i].json
-            const ruleTranslated = this.translateRule(aRule)
+            const ruleTranslated = RuleTranslator.translateRule(aRule)
             const id = response.rules[i].id
             rulesVector.push(
               {
@@ -72,6 +64,7 @@ export default class RulesListForm extends React.Component {
       .then(response => {
         // expected: { success: true }
         if (response.success) {
+          this.setState({ 'refresh': true })
           alert('The deletion succeded')
         } else {
           alert('The deletion did not succeded')
@@ -90,7 +83,7 @@ export default class RulesListForm extends React.Component {
           <div className="panel panel-default" key={idx}>
             <div className="panel-heading">{aRule.coloquialRule}</div>
             <button
-              className="btn btn-default" type="button" onClick={() => this.deleteRule(aRule) }
+              className="btn btn-default" type="submit" onClick={() => this.deleteRule(aRule) }
             >Delete
             </button>
           </div>
