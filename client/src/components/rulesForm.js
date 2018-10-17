@@ -39,6 +39,7 @@ export default class RulesForm extends React.Component {
       'disabled'
     ]
     this.state = {
+      conditions: [],
       fact: this.facts[0],
       value: '',
       operator: this.ops[0],
@@ -66,6 +67,17 @@ export default class RulesForm extends React.Component {
     )
   }
 
+  addCondition = () => {
+    this.state.conditions.push({
+      fact: this.state.fact,
+      operator: this.state.operator,
+      value: this.state.value
+    })
+    this.setState({
+      'conditions': this.state.conditions
+    })
+  }
+
   condition () {
     return (
       <FormGroup controlId="condition">
@@ -83,6 +95,11 @@ export default class RulesForm extends React.Component {
           <HelpBlock>
             <p className="text-danger">{this.props.errors.value}</p>
           </HelpBlock>
+        </Col>
+        <Col smOffset={12} sm={10}>
+          <Button type="" onClick={ this.addCondition }>
+            +
+          </Button>
         </Col>
       </FormGroup>
     )
@@ -107,6 +124,27 @@ export default class RulesForm extends React.Component {
     )
   }
 
+  translateCondition (rule) {
+    const fact = rule.fact
+    const op = rule.operator
+    const value = rule.value
+    return 'if ' + fact + ' is ' + op + ' to ' + value
+  }
+
+  listConditions () {
+    var translatedConditions = []
+    this.state.conditions.forEach((aCondition) => {
+      translatedConditions.push(this.translateCondition(aCondition))
+    })
+    return (
+      <FormGroup controlId="condition">
+        <Col sm={10}>
+          { this.showOptions(translatedConditions) }
+        </Col>
+      </FormGroup>
+    )
+  }
+
   accept () {
     return (
       <FormGroup>
@@ -125,6 +163,14 @@ export default class RulesForm extends React.Component {
         <Row className="show-grid">
           <Col xs={12} md={6} mdOffset={3}>
             <h1 style={{ textAlign: 'center' }} > Agregado de reglas para el calculo del costo de envio </h1>
+          </Col>
+        </Row>
+
+        <Row className="show-grid">
+          <Col xs={12} md={4} mdOffset={9}>
+            <Form horizontal>
+              { this.listConditions() }
+            </Form>
           </Col>
         </Row>
 
