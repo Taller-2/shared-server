@@ -12,7 +12,8 @@ export default class RulesListForm extends React.Component {
         'coloquialRule': '',
         'id': ''
       }],
-      haveTheRules: false
+      haveTheRules: false,
+      refresh: false
     }
   }
 
@@ -72,6 +73,7 @@ export default class RulesListForm extends React.Component {
       .then(response => {
         // expected: { success: true }
         if (response.success) {
+          this.setState({ 'refresh': true })
           alert('The deletion succeded')
         } else {
           alert('The deletion did not succeded')
@@ -90,7 +92,7 @@ export default class RulesListForm extends React.Component {
           <div className="panel panel-default" key={idx}>
             <div className="panel-heading">{aRule.coloquialRule}</div>
             <button
-              className="btn btn-default" type="button" onClick={() => this.deleteRule(aRule) }
+              className="btn btn-default" type="submit" onClick={() => this.deleteRule(aRule) }
             >Delete
             </button>
           </div>
