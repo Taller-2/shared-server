@@ -28,14 +28,42 @@ export default class RulesListForm extends React.Component {
     this.props.onClick(this.state)
   }
 
+  getTranslation (aCondition) {
+    var coloquialRule = ''
+    const fact = aCondition.fact
+    const op = aCondition.operator
+    const value = aCondition.value
+    coloquialRule += 'if ' + fact + ' is ' + op + ' to ' + value
+    return '(' + coloquialRule + ')'
+  }
+
+  translateOp (op) {
+    if (op === 'all') {
+      return 'and'
+    }
+    return 'or'
+  }
+
+  translateCondition (conditions) {
+    const booleanOp = Object.keys(conditions)[0]
+    if (booleanOp === 'all' || booleanOp === 'any') {
+      var coloquialRule = ''
+      conditions[booleanOp].forEach((aCondition, idx) => {
+        coloquialRule += this.translateCondition(aCondition)
+        if (idx < (conditions[booleanOp].length - 1)) {
+          coloquialRule += ' ' + this.translateOp(booleanOp) + ' '
+        }
+      })
+      return coloquialRule
+    }
+    return this.getTranslation(conditions)
+  }
+
   translateRule (aRule) {
     const rule = JSON.parse(aRule)
-    const fact = rule.conditions.all[0].fact
-    const op = rule.conditions.all[0].operator
-    const value = rule.conditions.all[0].value
     const type = rule.event.type
     const params = rule.event.params.data
-    return 'if ' + fact + ' is ' + op + ' to ' + value + ' then ' + type + ': ' + params
+    return this.translateCondition(rule.conditions) + ' then ' + type + ': ' + params
   }
 
   handleClick = () => {
