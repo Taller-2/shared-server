@@ -14,9 +14,12 @@ const {
   },
   userScore,  // (float)
   paymentMethod, // (string)
-  geographicalPosition: {
-    latitud,  // (float)
-    longitud // (float)
+  shippingCharacteristics: {
+    distance,  // (float)
+    geographicalPosition: {
+      latitude,  // (float)
+      longitude // (float)
+    }
   },
   tripDate, // (string: YYYY/MM/DD)
   tripTime // (string: HH:MM)
