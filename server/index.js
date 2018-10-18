@@ -3,6 +3,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const authUtils = require('./middlewares/auth')
+const errorHandler = require('./middlewares/error_handler')
 const app = express()
 const port = process.env.PORT || 5000
 
@@ -18,8 +19,6 @@ app.use('/app-server', require('./routes/app_server'))
 app.use('/shipment-cost', require('./routes/shipment_cost'))
 app.use('/rules', require('./routes/rules'))
 
-app.use(authUtils.unauthorizedErrorHandler)
-
 // Production-specific setup
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
@@ -33,5 +32,9 @@ if (process.env.NODE_ENV === 'production') {
 if (!module.parent) {
   app.listen(port, () => console.log(`Listening on port ${port}`))
 }
+
+app.use(authUtils.unauthorizedErrorHandler)
+// Add any custom error handler here
+app.use(errorHandler.globalErrorHandler)
 
 module.exports = app
