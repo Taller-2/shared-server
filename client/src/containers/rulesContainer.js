@@ -12,16 +12,11 @@ export default class RulesContainer extends React.Component {
     }
   }
 
-  handleClick (rulesValues) {
-    const { fact, value, operator, type, params } = rulesValues
-    console.log('state: ', rulesValues)
+  buildRule (rulesValues) {
+    const { conditions, type, params } = rulesValues
     let rule = {
       'conditions': {
-        'all': [{
-          'fact': fact,
-          'operator': operator,
-          'value': value
-        }]
+        'all': []
       },
       'event': {
         'type': type,
@@ -30,6 +25,19 @@ export default class RulesContainer extends React.Component {
         }
       }
     }
+    conditions.forEach((aCondition) => {
+      rule.conditions.all.push({
+        'fact': aCondition.fact,
+        'operator': aCondition.operator,
+        'value': aCondition.value
+      })
+    })
+    return rule
+  }
+
+  handleClick (rulesValues) {
+    let rule = this.buildRule(rulesValues)
+    console.log('RULE: ', rule)
     Http.post('rules/', { json: JSON.stringify(rule) })
       .then(response => {
         if (response.status === 201) {

@@ -2,13 +2,12 @@ const jwt = require('express-jwt')
 const secret = require('../secrets')
 const httpStatus = require('http-status-codes')
 
-function errorHandler (error, req, res) {
-  let status = httpStatus.UNAUTHORIZED
-  if (error.name !== 'UnauthorizedError') {
-    status = httpStatus.BAD_REQUEST
-    error = JSON.parse(error.message)
+function errorHandler (error, req, res, next) {
+  if (error.name === 'UnauthorizedError') {
+    res.status(httpStatus.UNAUTHORIZED).json({ message: error.message })
+  } else {
+    next(error)
   }
-  res.status(status).json(error)
 }
 
 // Skip authorization middleware if the app is being used for running tests
