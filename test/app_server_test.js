@@ -64,5 +64,6 @@ describe('App server controller', function () {
             done()
           })
       })
+      .catch((err) => (err))
   })
 })
