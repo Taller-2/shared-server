@@ -13,9 +13,9 @@ const {
     email, // (string)
   },
   userScore,  // (float)
-  paymentMethod, // (string)
+  paymentMethod, // (string) [debit, credit, cash]
   shippingCharacteristics: {
-    distance,  // (float)
+    distance,  // (float) (KM)
     geographicalPosition: {
       latitude,  // (float)
       longitude // (float)
