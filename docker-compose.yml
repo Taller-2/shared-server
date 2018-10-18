@@ -6,7 +6,7 @@ services:
       - "${DB_PORT}:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_DB: postman_dev
+      POSTGRES_DB: development
   web:
     build: .
     command: npm run ${ENV}
@@ -15,8 +15,7 @@ services:
       - "${WEB_PORT}:3000"
     volumes:
       - .:/app
-      - /app/node_modules
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgres://postgres@db
+      DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/development
