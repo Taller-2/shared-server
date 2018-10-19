@@ -16,6 +16,7 @@
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "create": "sequelize db:create",
     "migrate": "sequelize db:migrate",
+    "drop": "sequelize db:drop",
     "test": "npm run beforetest && nyc mocha --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "beforetest": "eslint .",
