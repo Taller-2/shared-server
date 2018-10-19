@@ -63,6 +63,7 @@ describe('App server controller', function () {
             servers.length.should.equal(instances.length)
             done()
           })
+          .catch((err) => (err))
       })
       .catch((err) => (err))
   })

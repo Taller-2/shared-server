@@ -1,22 +1,38 @@
 version: '2'
 services:
-  db:
-    image: postgres:latest
-    ports:
-      - "${DB_PORT}:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postman_dev
   web:
     build: .
-    command: npm run ${ENV}
+    command: npm run dev
     image: shared-server-img
+    container_name: "webServer"
     ports:
-      - "${WEB_PORT}:3000"
+      - 3000:3000
     volumes:
       - .:/app
-      - /app/node_modules
+    depends_on:
+      - db
+      - migration
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/production
+      NODE_ENV: production
+  db:
+    image: postgres:latest
+    container_name: "postgresdb"
+    volumes:
+      - ./data/db:/usr/data/db
+    ports:
+      - 5434:5432
+    environment:
+      NODE_ENV: production
+      POSTGRES_USER: postgres
+  migration:
+    image: shared-server-img
+    container_name: "migrations"
+    command: ["./wait-for-it/wait-for-it.sh", "db:5432", "--", "node", "scripts/db/create_and_migrate.js"]
+    volumes:
+      - .:/app
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgres://postgres@db
+      DATABASE_URL: postgres://postgres:postgres@db:5432/production
+      NODE_ENV: production
