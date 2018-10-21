@@ -1,15 +1,16 @@
 import React from 'react'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify'
 import Http from '../service/Http'
 import PrivateRoute from '../components/PrivateRoute'
 import PaymentForm from '../components/payments/PaymentForm'
 import PaymentList from '../components/payments/PaymentList'
+import PropTypes from 'prop-types'
 
 export default class PaymentContainer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      match: this.props.match,
+      match: props.match,
       redirectToLogin: false,
       payments: [],
       errors: {},
@@ -153,4 +154,14 @@ export default class PaymentContainer extends React.Component {
       </div>
     )
   }
+}
+
+PaymentContainer.propTypes = {
+  match: PropTypes.shape({
+    isExact: PropTypes.bool
+  }),
+  history: PropTypes.object,
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  })
 }
