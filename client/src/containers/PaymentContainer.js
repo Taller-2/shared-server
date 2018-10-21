@@ -13,11 +13,10 @@ export default class PaymentContainer extends React.Component {
       redirectToLogin: false,
       payments: [],
       errors: {},
-      statusList: [{ id: 'pending', description: 'Pendiente' }, { id: 'approved', description: 'Aprobado' }, { id: 'rejected', description: 'Rechazado' }],
-      paymentMethodList: [{ id: 'cash', description: 'Efectivo' }, { id: 'creditCard', description: 'Tarjeta de Crédito' }],
       currencyList: [{ id: 'ARS', description: 'Pesos' }, { id: 'USD', description: 'Dolares' }],
       statusDesc: { pending: 'Pendiente', approved: 'Aprobado', rejected: 'Rechazado' },
-      methodsDesc: { cash: 'Efectivo', creditCard: 'Tarjeta de Crédito' }
+      methodsDesc: { cash: 'Efectivo', creditCard: 'Tarjeta de Crédito' },
+      currencyDesc: { ARS: 'Pesos', USD: 'Dolares' }
     }
     this.getPaymentById = this.getPaymentById.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -28,7 +27,7 @@ export default class PaymentContainer extends React.Component {
   }
 
   fetchPayments () {
-    Http.get('')
+    Http.get('/payments/')
       .then(response => {
         if (response.success) {
           console.log(response.payments)
@@ -98,7 +97,8 @@ export default class PaymentContainer extends React.Component {
         .then(response => {
           if (response.status === 201) {
             toast('Pago creado exitosamente!')
-            this.setState({ payments: [...this.state.payments, payment] })
+            this.setState({ errors: {} })
+            this.fetchPayments()
             this.goBack()
           } else {
             toast('No se pudo crear el pago')
@@ -141,14 +141,14 @@ export default class PaymentContainer extends React.Component {
   }
 
   render () {
-    const { match, payments, errors, statusList, paymentMethodList, currencyList, statusDesc, methodsDesc } = this.state
+    const { match, payments, errors, statusList, statusDesc, methodsDesc, currencyDesc } = this.state
     return (
       <div>
         <ToastContainer />
-        <PrivateRoute exact path={ match.path } component={ PaymentList } payments={ payments }
+        <PrivateRoute exact path={ match.path } component={ PaymentList } payments={ payments } currencyDesc={currencyDesc}
           updateStatus={ this.updateStatus } statusDesc={ statusDesc } methodsDesc={ methodsDesc }/>
         <PrivateRoute exact path={ `${match.path}/new` } component={ PaymentForm } errors={errors}
-          statusList={statusList} paymentMethodList={paymentMethodList} currencyList={currencyList}
+          statusList={statusList} currencyDesc={currencyDesc} methodsDesc={ methodsDesc } statusDesc={ statusDesc }
           handleChange={this.handleChange} submit={this.submitNewPayment} goBack={this.goBack} title='Nuevo Pago'/>
       </div>
     )

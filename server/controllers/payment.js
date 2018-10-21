@@ -52,11 +52,12 @@ module.exports.delete = function (request, response, next) {
 
 exports.validateCreate = () => {
   return [
-    body('transactionId', 'El identificador de transaccion es requerido').exists().trim().not().isEmpty(),
+    body('transactionId', 'El identificador de transacción es requerido').exists().trim().not().isEmpty(),
+    body('transactionId', 'El identificador de transacción debe ser numérico').isInt(),
     body('transactionId').custom(value => {
       return Payments.findById(value).then(payment => {
         if (payment) {
-          return Promise.reject(new Error('El identificador de transaccion ya esta ingresado'))
+          return Promise.reject(new Error('Este identificador de transacción ya fue ingresado'))
         }
       })
     }),

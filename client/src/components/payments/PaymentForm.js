@@ -18,9 +18,11 @@ const PaymentForm = (props) => (
               #
             </Col>
             <Col sm={10}>
-              <FormControl type="text" placeholder="Numero de Transacción" onChange={props.handleChange('transactionId')}/>
+              <FormControl type="number" placeholder="Numero de Transacción" onChange={props.handleChange('transactionId')}/>
               <HelpBlock>
-                <p className="text-danger">{ props.errors.transactionId ? 'Este campo es requerido' : '' }</p>
+                <p className="text-danger">{ props.errors.transactionId
+                  ? (typeof props.errors.transactionId === 'string' ? props.errors.transactionId : 'Este campo es requerido')
+                  : '' }</p>
               </HelpBlock>
             </Col>
           </FormGroup>
@@ -32,7 +34,7 @@ const PaymentForm = (props) => (
             <Col sm={10}>
               <FormControl componentClass="select" placeholder="Seleccionar" onChange={props.handleChange('currency')}>
                 <option value="">Seleccionar</option>
-                { props.currencyList.map(c => <option key={c.id} value={c.id}>{c.description}</option>) }
+                { Object.keys(props.currencyDesc).map(c => <option key={c} value={c}>{props.currencyDesc[c]}</option>) }
               </FormControl>
               <HelpBlock>
                 <p className="text-danger">{ props.errors.currency ? 'Este campo es requerido' : '' }</p>
@@ -59,7 +61,7 @@ const PaymentForm = (props) => (
             <Col sm={10}>
               <FormControl componentClass="select" placeholder="Seleccionar" onChange={props.handleChange('paymentMethod')}>
                 <option value="">Seleccionar</option>
-                { props.paymentMethodList.map(p => <option key={p.id} value={p.id}>{p.description}</option>) }
+                { Object.keys(props.methodsDesc).map(c => <option key={c} value={c}>{props.methodsDesc[c]}</option>) }
               </FormControl>
               <HelpBlock>
                 <p className="text-danger">{ props.errors.paymentMethod ? 'Este campo es requerido' : '' }</p>
@@ -74,7 +76,7 @@ const PaymentForm = (props) => (
             <Col sm={10}>
               <FormControl componentClass="select" placeholder="Seleccionar" onChange={props.handleChange('status')}>
                 <option value="">Seleccionar</option>
-                { props.statusList.map(s => <option key={s.id} value={s.id}>{s.description}</option>) }
+                { Object.keys(props.statusDesc).map(c => <option key={c} value={c}>{props.statusDesc[c]}</option>) }
               </FormControl>
               <HelpBlock>
                 <p className="text-danger">{ props.errors.status ? 'Este campo es requerido' : '' }</p>
@@ -103,20 +105,11 @@ export default PaymentForm
 PaymentForm.propTypes = {
   onClick: PropTypes.func,
   errors: PropTypes.object,
-  statusList: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
-  })).isRequired,
-  paymentMethodList: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
-  })).isRequired,
-  currencyList: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
-  })).isRequired,
   handleChange: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  currencyDesc: PropTypes.object,
+  methodsDesc: PropTypes.object,
+  statusDesc: PropTypes.object
 }

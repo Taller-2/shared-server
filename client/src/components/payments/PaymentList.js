@@ -27,7 +27,7 @@ const PaymentList = (props) => (
         { props.payments.map(p => (
           <tr key={p.id}>
             <td>{ p.transactionId }</td>
-            <td>{ p.currency }</td>
+            <td>{ props.statusDesc[p.currency] }</td>
             <td>{ p.amount }</td>
             <td>{ props.methodsDesc[p.paymentMethod] }</td>
             <td>{ props.statusDesc[p.status] }</td>
@@ -57,6 +57,7 @@ PaymentList.propTypes = {
   payments: PropTypes.array,
   path: PropTypes.string,
   updateStatus: PropTypes.func.isRequired,
+  currencyDesc: PropTypes.object,
   statusDesc: PropTypes.object.isRequired,
   methodsDesc: PropTypes.object.isRequired
 }
