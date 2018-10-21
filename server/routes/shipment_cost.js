@@ -13,23 +13,19 @@ const {
     email, // (string)
   },
   userScore,  // (float)
-  paymentMethod, // (string)
-  price, // (float)
+  paymentMethod, // (string) [debit, credit, cash]
   shippingCharacteristics: {
-    duration,  // (float)
-    distance,  // (float)
+    distance,  // (float) (KM)
     geographicalPosition: {
-      latitud,  // (float)
-      longitud // (float)
-    },
-    date, // (string: YYYY/MM/DD)
-    time // (string: HH:MM)
+      latitude,  // (float)
+      longitude // (float)
+    }
   },
-  serverId, // (int)
   tripDate, // (string: YYYY/MM/DD)
   tripTime // (string: HH:MM)
 } = req.body
-  */
+see also: https://github.com/Taller-2/shared-server/wiki/Development#explicacion-de-que-tipo-de-datos-recibe-el-endpoint-shipment-cost
+*/
 
 router.post('/', bodyParser.json(), shipmentCostController.getCost)
 
