@@ -10,23 +10,38 @@ const currencies = ['ARS', 'USD']
 module.exports.findAll = function (request, response, next) {
   Payments.findAll()
     .then(payments => response.json({ success: true, payments: payments }))
-    .catch(error => response.json({ success: false, error: error }))
+    .catch(error => {
+      response.json({ success: false, error: error })
+    })
 }
 
 module.exports.create = function (request, response, next) {
   request.getValidationResult() // to get the result of above validate fn
     .then(validationUtil.validationHandler())
     .then(() => {
-      const { transactionId, currency, value, paymentMethod, status } = request.body
+      const { transactionId, currency, amount, paymentMethod, status } = request.body
       Payments
-        .create({ transactionId, currency, value, paymentMethod, status })
+        .create({ transactionId, currency, amount, paymentMethod, status })
         .then(user => response.status(201).json({ success: true, user: user }))
     })
     .catch(next)
 }
 
 module.exports.update = function (request, response, next) {
-  throw new Error('Not implemented') // TODO implement
+  console.log(request.params)
+  request.getValidationResult() // to get the result of above validate fn
+    .then(validationUtil.validationHandler())
+    .then(() => {
+      const { transactionId, status } = request.body
+      Payments.update(
+        { status: status },
+        { where: { transactionId: transactionId } }
+      ).then(() => {
+        Payments.findAll()
+          .then(payments => response.status(200).json({ success: true, payments: payments }))
+      })
+    })
+    .catch(next)
 }
 
 module.exports.delete = function (request, response, next) {
@@ -38,21 +53,24 @@ module.exports.delete = function (request, response, next) {
 exports.validateCreate = () => {
   return [
     body('transactionId', 'El identificador de transaccion es requerido').exists().trim().not().isEmpty(),
+    body('transactionId').custom(value => {
+      return Payments.findById(value).then(payment => {
+        if (payment) {
+          return Promise.reject(new Error('El identificador de transaccion ya esta ingresado'))
+        }
+      })
+    }),
     body('currency', 'Moneda invalida').exists().trim().custom((value) => currencies.includes(value)),
     body('paymentMethod', 'Metodo de pago invalido').exists().trim().custom((value) => paymentMethods.includes(value)),
-    body('value', 'Monto invalido').exists().isDecimal(),
+    body('amount', 'Monto invalido').exists().isDecimal(),
     body('status', 'Estado del pago invalido').exists().trim().custom((value) => paymentStatus.includes(value))
   ]
 }
 
 exports.validateUpdate = () => {
   return [
-    body('id', 'El identificador requerido').trim().not().isEmpty(),
-    body('transactionId', 'El identificador de transaccion es requerido').trim().not().isEmpty(),
-    body('currency', 'Moneda invalida').trim().custom((value) => currencies.includes(value)),
-    body('paymentMethod', 'Metodo de pago invalido').trim().custom((value) => paymentMethods.includes(value)),
-    body('value', 'Monto invalido').isDecimal(),
-    body('status', 'Estado del pago invalido').trim().custom((value) => paymentStatus.includes(value))
+    body('transactionId', 'El identificador de transaccion es requerido').exists().trim().not().isEmpty(),
+    body('status', 'Estado del pago invalido').exists().trim().custom((value) => paymentStatus.includes(value))
   ]
 }
 

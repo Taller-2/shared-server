@@ -2,19 +2,16 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Payments', {
-      id: {
+      transactionId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      transactionId: {
-        type: Sequelize.STRING
-      },
       currency: {
         type: Sequelize.STRING
       },
-      value: {
+      amount: {
         type: Sequelize.FLOAT
       },
       paymentMethod: {

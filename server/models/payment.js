@@ -1,9 +1,14 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
   const Payment = sequelize.define('Payment', {
-    transactionId: DataTypes.STRING,
+    transactionId: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     currency: DataTypes.STRING,
-    value: DataTypes.FLOAT,
+    amount: DataTypes.FLOAT,
     paymentMethod: DataTypes.STRING,
     status: DataTypes.STRING
   }, {})

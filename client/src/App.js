@@ -6,11 +6,14 @@ import GuestNavbar from './components/GuestNavbar'
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Auth from './service/Auth'
+import 'react-toastify/dist/ReactToastify.css'
 
 import './App.css'
 import AppServerStatus from './components/app_server_status/AppServerStatus'
+import PrivateRoute from './components/PrivateRoute'
 import RulesContainer from './containers/rulesContainer'
 import RulesListContainer from './containers/rulesListContainer'
+import PaymentsContainer from './containers/PaymentContainer'
 
 class App extends Component {
   constructor (props) {
@@ -43,6 +46,7 @@ class App extends Component {
               <PrivateRoute path="/app-server-status" component={AppServerStatus} />
               <PrivateRoute path="/addRules" component={RulesContainer} />
               <PrivateRoute path="/rulesList" component={RulesListContainer} />
+              <PrivateRoute path="/payments" component={PaymentsContainer} />
             </div>
           </Router>
         </div>
@@ -50,24 +54,6 @@ class App extends Component {
     )
   }
 }
-
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      Auth.getToken() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/login',
-            state: { from: props.location }
-          }}
-        />
-      )
-    }
-  />
-)
 
 const Logout = (props) => {
   Auth.logout()
