@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const authUtils = require('./middlewares/auth')
 const errorHandler = require('./middlewares/error_handler')
+
 const app = express()
 const port = process.env.PORT || 5000
 
@@ -11,7 +12,6 @@ const port = process.env.PORT || 5000
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressValidator())
-
 // Routes
 app.use('/user', require('./routes/user'))
 app.use('/session', require('./routes/session'))

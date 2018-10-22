@@ -11,20 +11,15 @@ module.exports.findById = function (request, response) {
 }
 
 module.exports.create = function (request, response, next) {
-  request.getValidationResult() // to get the result of above validate fn
-    .then(validationHandler())
-    .then(() => {
-      const { name, email, pass } = request.body
+  const { name, email, pass } = request.body
 
-      model.User.create({
-        name: name,
-        email: email,
-        password: bcrypt.hashSync(pass, 10),
-        enabled: false
-      })
-        .then(user => response.status(httpStatus.CREATED).json({ success: true, user: user }))
-    })
-    .catch(next)
+  model.User.create({
+    name: name,
+    email: email,
+    password: bcrypt.hashSync(pass, 10),
+    enabled: false
+  })
+    .then(user => response.status(httpStatus.CREATED).json({ success: true, user: user }))
 }
 
 module.exports.update = function (request, response) {
@@ -55,13 +50,4 @@ exports.validateCreate = () => {
     }),
     body('pass', 'La contraseña es muy corta').isLength({ min: 6 })
   ]
-}
-
-const validationHandler = next => result => {
-  if (result.isEmpty()) return
-  if (!next) {
-    throw new Error(JSON.stringify(result.array()))
-  } else {
-    return next(new Error(JSON.stringify(result.array())))
-  }
 }

@@ -103,9 +103,7 @@ export default class PaymentContainer extends React.Component {
             this.goBack()
           } else {
             toast('No se pudo crear el pago')
-            let errors = {}
-            response.content.forEach(e => { errors[e.param] = e.msg })
-            this.setState({ errors: errors })
+            this.setState({ errors: response.content.errors })
           }
         })
         .catch(err => {
@@ -130,9 +128,7 @@ export default class PaymentContainer extends React.Component {
             this.setState({ payments: response.content.payments })
           } else {
             toast('No se pudo actualizar el pago')
-            let errors = {}
-            response.content.forEach(e => { errors[e.param] = e.msg })
-            this.setState({ errors: errors })
+            this.setState({ errors: response.content.errors })
           }
         })
         .catch(err => {

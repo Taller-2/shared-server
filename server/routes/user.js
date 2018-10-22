@@ -1,9 +1,10 @@
 const router = require('express').Router()
 const userController = require('../controllers/user')
 const authUtils = require('../middlewares/auth')
+const validation = require('../middlewares/validation')
 const requireAuth = authUtils.requireAuth
 
-router.post('/', userController.validateCreate(), userController.create)
+router.post('/', userController.validateCreate(), validation.validationHandler, userController.create)
 
 router.get('/:id?', requireAuth, userController.findById)
 

@@ -1,6 +1,6 @@
 const model = require('../models')
 const { body } = require('express-validator/check')
-const validationUtil = require('../utils/validation')
+const httpStatus = require('http-status-codes')
 
 const Payments = model.Payment
 const paymentMethods = ['cash', 'creditCard']
@@ -16,32 +16,21 @@ module.exports.findAll = function (request, response, next) {
 }
 
 module.exports.create = function (request, response, next) {
-  request.getValidationResult() // to get the result of above validate fn
-    .then(validationUtil.validationHandler())
-    .then(() => {
-      const { transactionId, currency, amount, paymentMethod, status } = request.body
-      Payments
-        .create({ transactionId, currency, amount, paymentMethod, status })
-        .then(user => response.status(201).json({ success: true, user: user }))
-    })
-    .catch(next)
+  const { transactionId, currency, amount, paymentMethod, status } = request.body
+  Payments
+    .create({ transactionId, currency, amount, paymentMethod, status })
+    .then(payment => response.status(httpStatus.CREATED).json({ success: true, payment: payment }))
 }
 
 module.exports.update = function (request, response, next) {
-  console.log(request.params)
-  request.getValidationResult() // to get the result of above validate fn
-    .then(validationUtil.validationHandler())
-    .then(() => {
-      const { transactionId, status } = request.body
-      Payments.update(
-        { status: status },
-        { where: { transactionId: transactionId } }
-      ).then(() => {
-        Payments.findAll()
-          .then(payments => response.status(200).json({ success: true, payments: payments }))
-      })
-    })
-    .catch(next)
+  const { transactionId, status } = request.body
+  Payments.update(
+    { status: status },
+    { where: { transactionId: transactionId } }
+  ).then(() => {
+    Payments.findAll()
+      .then(payments => response.status(httpStatus.OK).json({ success: true, payments: payments }))
+  })
 }
 
 module.exports.delete = function (request, response, next) {
@@ -71,6 +60,13 @@ exports.validateCreate = () => {
 exports.validateUpdate = () => {
   return [
     body('transactionId', 'El identificador de transaccion es requerido').exists().trim().not().isEmpty(),
+    body('transactionId').custom(value => {
+      return Payments.findById(value).then(payment => {
+        if (!payment) {
+          return Promise.reject(new Error('El pago no existe'))
+        }
+      })
+    }),
     body('status', 'Estado del pago invalido').exists().trim().custom((value) => paymentStatus.includes(value))
   ]
 }
