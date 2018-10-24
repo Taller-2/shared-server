@@ -107,7 +107,8 @@ export default class PaymentContainer extends React.Component {
           }
         })
         .catch(err => {
-          console.log('Error al crear usuario' + err) // TODO hacer algo
+          console.log(err) // TODO hacer algo
+          toast('No se pudo actualizar el pago')
         })
     }
   }
@@ -127,12 +128,17 @@ export default class PaymentContainer extends React.Component {
             toast('Pago actualizado exitosamente!')
             this.setState({ payments: response.content.payments })
           } else {
-            toast('No se pudo actualizar el pago')
-            this.setState({ errors: response.content.errors })
+            if (response.content && response.content.error && response.content.error.transactionId) {
+              toast(response.content.error.transactionId)
+              this.setState({ errors: response.content.errors.transactionId })
+            } else {
+              toast('No se pudo actualizar el pago')
+            }
           }
         })
         .catch(err => {
-          console.log('Error al crear usuario' + err) // TODO hacer algo
+          console.log(err) // TODO hacer algo
+          toast('No se pudo actualizar el pago')
         })
     }
   }

@@ -1,18 +1,16 @@
 const model = require('../models')
-const { body } = require('express-validator/check')
+const { body, param } = require('express-validator/check')
 const httpStatus = require('http-status-codes')
 
 const Payments = model.Payment
-const paymentMethods = ['cash', 'creditCard']
-const paymentStatus = ['pending', 'approved', 'rejected']
-const currencies = ['ARS', 'USD']
+const paymentMethods = require('../enums/payment_method')
+const paymentStatus = require('../enums/payment_status')
+const currencies = require('../enums/currency')
 
 module.exports.findAll = function (request, response, next) {
   Payments.findAll()
     .then(payments => response.json({ success: true, payments: payments }))
-    .catch(error => {
-      response.json({ success: false, error: error })
-    })
+    .catch(error => { response.json({ success: false, error: error }) })
 }
 
 module.exports.create = function (request, response, next) {
@@ -34,9 +32,9 @@ module.exports.update = function (request, response, next) {
 }
 
 module.exports.delete = function (request, response, next) {
-  Payments.destroy({ where: { id: request.params.id } })
-    .then(() => response.status(201).json({ success: true }))
-    .catch(error => response.json({ success: false, error: error }))
+  Payments.destroy({ where: { transactionId: request.params.transactionId } })
+    .then((amount) => response.status(httpStatus.OK).json({ success: (amount > 0) }))
+    .catch(error => response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error }))
 }
 
 exports.validateCreate = () => {
@@ -59,8 +57,8 @@ exports.validateCreate = () => {
 
 exports.validateUpdate = () => {
   return [
-    body('transactionId', 'El identificador de transaccion es requerido').exists().trim().not().isEmpty(),
-    body('transactionId').custom(value => {
+    param('transactionId', 'El identificador de transaccion es requerido').exists().trim().not().isEmpty(),
+    param('transactionId').custom(value => {
       return Payments.findById(value).then(payment => {
         if (!payment) {
           return Promise.reject(new Error('El pago no existe'))
@@ -71,14 +69,6 @@ exports.validateUpdate = () => {
   ]
 }
 
-module.exports.getPaymentMethods = function (request, response, next) {
-  response.status(200).json({ success: true, paymentMethods: paymentMethods })
-}
-
-module.exports.getCurrencies = function (request, response, next) {
-  response.status(200).json({ success: true, currencies: currencies })
-}
-
-module.exports.getPaymentStatus = function (request, response, next) {
-  response.status(200).json({ success: true, paymentStatus: paymentStatus })
+module.exports.getUIEnums = function (request, response, next) {
+  response.status(httpStatus.OK).json({ success: true, paymentMethods: paymentMethods, currencies: currencies, paymentStatus: paymentStatus })
 }

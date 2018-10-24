@@ -9,14 +9,10 @@ router.post('/', paymentController.validateCreate(), validation.validationHandle
 
 router.get('/', paymentController.findAll)
 
-router.put('/:id', paymentController.validateUpdate(), validation.validationHandler, paymentController.update)
+router.put('/:transactionId', paymentController.validateUpdate(), validation.validationHandler, paymentController.update)
 
-router.delete('/:id', paymentController.delete)
+router.delete('/:transactionId', paymentController.delete)
 
-router.get('/paymentMethods/', paymentController.getPaymentMethods)
-
-router.get('/currencies/', paymentController.getCurrencies)
-
-router.get('/status/', paymentController.getPaymentStatus)
+router.get('/ui-enums/', paymentController.getUIEnums)
 
 module.exports = router
