@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Button, ButtonToolbar } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import messages from '../../i18n'
 
 const PaymentList = (props) => (
   <div style={{ width: '80%', margin: 'auto' }}>
@@ -27,10 +28,10 @@ const PaymentList = (props) => (
         { props.payments.map(p => (
           <tr key={p.id}>
             <td>{ p.transactionId }</td>
-            <td>{ props.statusDesc[p.currency] }</td>
+            <td>{ messages.currencies[p.currency] }</td>
             <td>{ p.amount }</td>
-            <td>{ props.methodsDesc[p.paymentMethod] }</td>
-            <td>{ props.statusDesc[p.status] }</td>
+            <td>{ messages.payment.methods[p.paymentMethod] }</td>
+            <td>{ messages.payment.status[p.status] }</td>
             <td>
               { p.status === 'pending' ? (
                 <ButtonToolbar>
@@ -56,8 +57,5 @@ export default PaymentList
 PaymentList.propTypes = {
   payments: PropTypes.array,
   path: PropTypes.string,
-  updateStatus: PropTypes.func.isRequired,
-  currencyDesc: PropTypes.object,
-  statusDesc: PropTypes.object.isRequired,
-  methodsDesc: PropTypes.object.isRequired
+  updateStatus: PropTypes.func.isRequired
 }

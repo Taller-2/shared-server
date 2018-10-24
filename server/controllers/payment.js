@@ -37,6 +37,10 @@ module.exports.delete = function (request, response, next) {
     .catch(error => response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error }))
 }
 
+module.exports.getUIEnums = function (request, response, next) {
+  response.status(httpStatus.OK).json({ success: true, paymentMethods: paymentMethods, currencies: currencies, paymentStatus: paymentStatus })
+}
+
 exports.validateCreate = () => {
   return [
     body('transactionId', 'El identificador de transacción es requerido').exists().trim().not().isEmpty(),
@@ -67,8 +71,4 @@ exports.validateUpdate = () => {
     }),
     body('status', 'Estado del pago invalido').exists().trim().custom((value) => paymentStatus.includes(value))
   ]
-}
-
-module.exports.getUIEnums = function (request, response, next) {
-  response.status(httpStatus.OK).json({ success: true, paymentMethods: paymentMethods, currencies: currencies, paymentStatus: paymentStatus })
 }

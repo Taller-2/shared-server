@@ -1,10 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { ToastContainer, toast } from 'react-toastify'
 import Http from '../service/Http'
 import PrivateRoute from '../components/PrivateRoute'
 import PaymentForm from '../components/payments/PaymentForm'
 import PaymentList from '../components/payments/PaymentList'
-import PropTypes from 'prop-types'
 
 export default class PaymentContainer extends React.Component {
   constructor (props) {
@@ -14,10 +14,9 @@ export default class PaymentContainer extends React.Component {
       redirectToLogin: false,
       payments: [],
       errors: {},
-      currencyList: [{ id: 'ARS', description: 'Pesos' }, { id: 'USD', description: 'Dolares' }],
-      statusDesc: { pending: 'Pendiente', approved: 'Aprobado', rejected: 'Rechazado' },
-      methodsDesc: { cash: 'Efectivo', creditCard: 'Tarjeta de Crédito' },
-      currencyDesc: { ARS: 'Pesos', USD: 'Dolares' }
+      paymentStatus: [],
+      currencies: [],
+      paymentMethods: []
     }
     this.getPaymentById = this.getPaymentById.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -25,13 +24,13 @@ export default class PaymentContainer extends React.Component {
     this.goBack = this.goBack.bind(this)
     this.validate = this.validate.bind(this)
     this.updateStatus = this.updateStatus.bind(this)
+    this.fetchEnums = this.fetchEnums.bind(this)
   }
 
   fetchPayments () {
     Http.get('/payments/')
       .then(response => {
         if (response.success) {
-          console.log(response.payments)
           this.setState({ payments: response.payments })
         } else {
           toast('Error buscando pagos')
@@ -43,10 +42,29 @@ export default class PaymentContainer extends React.Component {
       })
   }
 
+  fetchEnums () {
+    Http.get('/payments/ui-enums/')
+      .then(response => {
+        if (response.success) {
+          this.setState({
+            paymentStatus: response.paymentStatus,
+            currencies: response.currencies,
+            paymentMethods: response.paymentMethods
+          })
+        } else {
+          toast('Ocurrió un error al conectarse con el servidor')
+          setTimeout(() => this.fetchEnums, 10000)
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        toast('Ocurrió un error al conectarse con el servidor')
+      })
+  }
+
   componentDidMount () {
-    if (this.props.match.isExact) {
-      this.fetchPayments()
-    }
+    this.fetchPayments()
+    this.fetchEnums()
   }
 
   getPaymentById () {
@@ -144,15 +162,15 @@ export default class PaymentContainer extends React.Component {
   }
 
   render () {
-    const { match, payments, errors, statusList, statusDesc, methodsDesc, currencyDesc } = this.state
+    const { match, payments, errors, paymentStatus, currencies, paymentMethods } = this.state
     return (
       <div>
         <ToastContainer />
-        <PrivateRoute exact path={ match.path } component={ PaymentList } payments={ payments } currencyDesc={currencyDesc}
-          updateStatus={ this.updateStatus } statusDesc={ statusDesc } methodsDesc={ methodsDesc }/>
+        <PrivateRoute exact path={ match.path } component={ PaymentList } payments={ payments }
+          updateStatus={ this.updateStatus }/>
         <PrivateRoute exact path={ `${match.path}/new` } component={ PaymentForm } errors={errors}
-          statusList={statusList} currencyDesc={currencyDesc} methodsDesc={ methodsDesc } statusDesc={ statusDesc }
-          handleChange={this.handleChange} submit={this.submitNewPayment} goBack={this.goBack} title='Nuevo Pago'/>
+          paymentStatus={paymentStatus} handleChange={this.handleChange} submit={this.submitNewPayment}
+          goBack={this.goBack} title='Nuevo Pago' currencies={currencies} paymentMethods={paymentMethods} />
       </div>
     )
   }
