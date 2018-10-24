@@ -1,0 +1,1 @@
+module.exports = ['cash', 'creditCard']
