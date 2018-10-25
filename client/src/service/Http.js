@@ -28,6 +28,20 @@ class Http {
     }
   }
 
+  async put (url, payload, callback) {
+    const rawResponse = await fetch(url, {
+      method: 'PUT',
+      headers: this.getHeaders(),
+      body: JSON.stringify(payload)
+    })
+    this.checkIfUnauthorized(rawResponse.status, callback)
+    const content = await rawResponse.json()
+    return {
+      content,
+      status: rawResponse.status
+    }
+  }
+
   checkIfUnauthorized (status, callback) {
     if (status === 401) {
       Auth.logout(callback)
