@@ -18,6 +18,9 @@ const LoggedNavbar = function () {
         <LinkContainer to="/rulesList">
           <NavItem eventKey={2}>Lista de reglas</NavItem>
         </LinkContainer>
+        <LinkContainer to="/appServerGraphs">
+          <NavItem eventKey={2}>App Server Graphics</NavItem>
+        </LinkContainer>
         <LinkContainer to="/logout">
           <NavItem eventKey={2}>Salir</NavItem>
         </LinkContainer>
