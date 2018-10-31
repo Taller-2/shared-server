@@ -88,7 +88,7 @@ module.exports.discountRule = {
     }]
   },
   'event': {
-    'type': 'percentage',
+    'type': 'discount',
     'params': {
       'data': 10
     }

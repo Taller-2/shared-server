@@ -2,12 +2,7 @@ const chai = require('chai')
 const should = require('should')
 const app = require('../server/index')
 const port = process.env.PORT || 5000
-const server = app.listen(port, () => {
-  console.log("Calling app.listen's callback function.")
-  var host = server.address().address
-  var port = server.address().port
-  console.log('Example app listening at http://%s:%s', host, port)
-})
+var server = startConection(port, app)
 const truncate = require('../scripts/db/truncate')
 const httpStatus = require('http-status-codes')
 const {
@@ -19,6 +14,19 @@ const {
   discountRule
 } = require('./shipment_cost_definitions')
 chai.use(require('chai-http'))
+
+function startConection (port, app) {
+  server = app.listen(port, 'localhost', () => {
+    console.log('++++++++++++++++++++++++++++++++++++++++++++++')
+    console.log("Calling app.listen's callback function.")
+    var host = server.address().address
+    var port = server.address().port
+    console.log('Example app listening at http://%s:%s', host, port)
+    console.log('enviroment: ', app.settings.env)
+    console.log('++++++++++++++++++++++++++++++++++++++++++++++')
+  })
+  return server
+}
 
 function ruleCheck (err, res, jsonRule) {
   should.equal(err, null)
@@ -34,7 +42,7 @@ function ruleCheck (err, res, jsonRule) {
 function checkCost (err, res, expectedResult) {
   if (err !== null) {
     console.log('++++++++++++++++++++++++++++++++++++++++++++++')
-    console.log('ERROR: ', err.message)
+    console.log('ERROR: ', err)
     console.log('++++++++++++++++++++++++++++++++++++++++++++++')
   }
   should.equal(err, null)
@@ -43,7 +51,7 @@ function checkCost (err, res, expectedResult) {
 }
 
 function postRulesVector (rules, server, done) {
-  rules.forEach((aRule) => {
+  rules.forEach((aRule, idx) => {
     let jsonRule = JSON.stringify(aRule)
     chai.request(server)
       // { success: true, rule: rule }
@@ -51,9 +59,11 @@ function postRulesVector (rules, server, done) {
       .send({ json: jsonRule })
       .end(function (err, res) {
         ruleCheck(err, res, jsonRule)
+        if (idx === rules.length - 1) {
+          setImmediate(done)
+        }
       })
   })
-  setImmediate(done)
 }
 
 describe('shipment cost test', function () {
@@ -175,7 +185,7 @@ describe('shipment cost test', function () {
       .post('/shipment-cost')
       .send({ 'duration': 50, 'distance': 40 })
       .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 480 })
+        checkCost(err, res, { status: 'enabled', cost: 531 })
         setImmediate(done)
       })
   })
