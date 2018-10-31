@@ -21,8 +21,8 @@ function addPriority (rule) {
 
 var formula = multimethod().dispatch(function (event, data, cost) { return event.type })
 formula.when('percentage', function (event, data, cost) {
-  const val = -(event.params.data * (cost.cost / 100))
-  cost.cost -= (event.params.data * (cost.cost / 100))
+  const val = (event.params.data * (cost.cost / 100))
+  cost.cost -= val
   return {
     status: 'enabled',
     value: val
