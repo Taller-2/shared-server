@@ -21,55 +21,33 @@ function addPriority (rule) {
 
 var formula = multimethod().dispatch(function (event, data, cost) { return event.type })
 formula.when('percentage', function (event, data, cost) {
-  const val = (event.params.data * (cost.cost / 100))
-  cost.cost -= val
-  return {
-    status: 'enabled',
-    value: val
-  }
+  cost.cost -= (event.params.data * (cost.cost / 100))
+  return 'enabled'
 })
 formula.when('factor', function (event, data, cost) {
   const factor = event.params.data * data[event.params.fact]
   cost.cost += factor
-  return {
-    status: 'enabled',
-    value: factor
-  }
+  return 'enabled'
 })
 formula.when('sum', function (event, data, cost) {
   const sum = event.params.data
   cost.cost += sum
-  return {
-    status: 'enabled',
-    value: sum
-  }
+  return 'enabled'
 })
 formula.when('discount', function (event, data, cost) {
   cost.cost -= event.params.data
-  return {
-    status: 'enabled',
-    value: -event.params.data
-  }
+  return 'enabled'
 })
 formula.when('surcharge', function (event, data, cost) {
   const surcharge = event.params.data
   cost.cost += surcharge
-  return {
-    status: 'enabled',
-    value: surcharge
-  }
+  return 'enabled'
 })
 formula.when('free', function (event, data, cost) {
-  return {
-    status: 'free',
-    value: event.params.data
-  }
+  return 'free'
 })
 formula.when('disabled', function (event, data, cost) {
-  return {
-    status: 'disabled',
-    value: event.params.data
-  }
+  return 'disabled'
 })
 
 function getStatus (eventAnswers) {
@@ -77,11 +55,11 @@ function getStatus (eventAnswers) {
   // regla aplicada (evento) devuelvo una respuesta con este formato:
   // { status: aState, value: aValue }
   var status = 'enabled'
-  eventAnswers.forEach((answer) => {
-    if (answer.status === 'free' && status !== 'disabled') {
-      status = answer.status
-    } else if (answer.status === 'disabled') {
-      status = answer.status
+  eventAnswers.forEach((aStatus) => {
+    if (aStatus === 'free' && status !== 'disabled') {
+      status = aStatus
+    } else if (aStatus === 'disabled') {
+      status = aStatus
     }
   })
   return status
