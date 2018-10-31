@@ -1,7 +1,7 @@
 let Rule = require('json-rules-engine').Rule
 let Engine = require('json-rules-engine').Engine
-var db = require('../models')
-var multimethod = require('multimethod')
+let db = require('../models')
+let multimethod = require('multimethod')
 const httpStatus = require('http-status-codes')
 
 const priorities = {
@@ -19,7 +19,7 @@ function addPriority (rule) {
   return rule
 }
 
-var formula = multimethod().dispatch(function (event, data, cost) { return event.type })
+let formula = multimethod().dispatch(function (event, data, cost) { return event.type })
 formula.when('percentage', function (event, data, cost) {
   cost.cost -= (event.params.data * (cost.cost / 100))
   return 'enabled'
@@ -54,7 +54,7 @@ function getStatus (eventAnswers) {
   // Recibo una array de cada respuesta de cada evento. cuando aplico la formula por cada
   // regla aplicada (evento) devuelvo una respuesta con este formato:
   // { status: aState, value: aValue }
-  var status = 'enabled'
+  let status = 'enabled'
   eventAnswers.forEach((aStatus) => {
     if (aStatus === 'free' && status !== 'disabled') {
       status = aStatus
@@ -65,7 +65,7 @@ function getStatus (eventAnswers) {
   return status
 }
 
-var getResult = multimethod().dispatch(function (array, cost) { return getStatus(array) })
+let getResult = multimethod().dispatch(function (array, cost) { return getStatus(array) })
 getResult.when('free', function (array, cost) {
   return { status: 'free', cost: 0 }
 })
@@ -88,8 +88,8 @@ function addRules (rules) {
   let engine = new Engine()
   engine.addOperator('domainEqual', domainEqual)
   const length = rules.length
-  for (var i = 0; i < length; i++) {
-    var aRule = JSON.parse(rules[i].json)
+  for (let i = 0; i < length; i++) {
+    let aRule = JSON.parse(rules[i].json)
     aRule = addPriority(aRule)
     aRule = JSON.stringify(aRule)
     engine.addRule(new Rule(aRule))
@@ -101,7 +101,7 @@ function runRules (engine, facts, res) {
   let array
   engine.run(facts).then(triggeredEvents => {
     // engine returns a list of events with truthy conditions
-    var cost = { cost: 0 }
+    let cost = { cost: 0 }
     array = triggeredEvents.map(event => (formula(event, facts, cost)))
     res.status(httpStatus.OK)
     res.send(getResult(array, cost.cost))

@@ -2,7 +2,7 @@ const chai = require('chai')
 const should = require('should')
 const app = require('../server/index')
 const port = process.env.PORT || 5000
-var server = startConection(port, app)
+let server = startConection(port, app)
 const truncate = require('../scripts/db/truncate')
 const httpStatus = require('http-status-codes')
 const {
@@ -16,11 +16,11 @@ const {
 chai.use(require('chai-http'))
 
 function startConection (port, app) {
-  server = app.listen(port, 'localhost', () => {
+  let server = app.listen(port, 'localhost', () => {
     console.log('++++++++++++++++++++++++++++++++++++++++++++++')
     console.log("Calling app.listen's callback function.")
-    var host = server.address().address
-    var port = server.address().port
+    let host = server.address().address
+    let port = server.address().port
     console.log('Example app listening at http://%s:%s', host, port)
     console.log('enviroment: ', app.settings.env)
     console.log('++++++++++++++++++++++++++++++++++++++++++++++')

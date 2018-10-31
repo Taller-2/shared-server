@@ -1,7 +1,7 @@
-var exec = require('child-process-promise').exec
+let exec = require('child-process-promise').exec
 
 module.exports = async function migrate () {
-  var status
+  let status
   await exec('sequelize db:migrate').then(() => {
     console.log('*************************')
     console.log('Migration successful')

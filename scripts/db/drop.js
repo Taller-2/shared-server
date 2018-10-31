@@ -1,7 +1,7 @@
-var spawn = require('child-process-promise').spawn
+let spawn = require('child-process-promise').spawn
 
 module.exports = async function drop () {
-  var status
+  let status
   console.log('Drop running')
   await spawn('sequelize', ['db:drop']).then(() => {
     console.log('*************************')

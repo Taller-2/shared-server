@@ -31,13 +31,13 @@ export default class RulesListForm extends React.Component {
 
   handleClick = () => {
     if (this.state.haveTheRules) return
-    var rulesVector = []
+    let rulesVector = []
     Http.get('/rules/')
       .then(response => {
         // expected: { success: true, rules: rules }
         if (response.success) {
           const length = response.rules.length
-          for (var i = 0; i < length; i++) {
+          for (let i = 0; i < length; i++) {
             const aRule = response.rules[i].json
             const ruleTranslated = RuleTranslator.translateRule(aRule)
             const id = response.rules[i].id

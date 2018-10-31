@@ -1,7 +1,7 @@
-var spawn = require('child-process-promise').spawn
+let spawn = require('child-process-promise').spawn
 
 module.exports = async function create () {
-  var status
+  let status
   console.log('Create running')
   await spawn('sequelize', ['db:create']).then(() => {
     console.log('*************************')
