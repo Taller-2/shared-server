@@ -9,8 +9,7 @@ const truncate = require('../scripts/db/truncate')
 
 describe('App server controller', function () {
   beforeEach(function (done) {
-    truncate('AppServer')
-    setImmediate(done)
+    truncate('AppServer').then(setImmediate(done))
   })
 
   const baseURL = '/app-server'
