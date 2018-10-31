@@ -2,6 +2,7 @@ let Rule = require('json-rules-engine').Rule
 let Engine = require('json-rules-engine').Engine
 var db = require('../models')
 var multimethod = require('multimethod')
+const httpStatus = require('http-status-codes')
 
 const priorities = {
   'disabled': 6,
@@ -20,11 +21,15 @@ function addPriority (rule) {
 
 var formula = multimethod().dispatch(function (event, data, cost) { return event.type })
 formula.when('percentage', function (event, data, cost) {
-  return -event.params.data * (cost / 100)
+  const val = -(event.params.data * (cost.cost / 100))
+  return {
+    status: 'enabled',
+    value: val
+  }
 })
 formula.when('factor', function (event, data, cost) {
   const factor = event.params.data * data[event.params.fact]
-  cost += factor
+  cost.cost += factor
   return {
     status: 'enabled',
     value: factor
@@ -32,7 +37,7 @@ formula.when('factor', function (event, data, cost) {
 })
 formula.when('sum', function (event, data, cost) {
   const sum = event.params.data
-  cost += sum
+  cost.cost += sum
   return {
     status: 'enabled',
     value: sum
@@ -46,7 +51,7 @@ formula.when('discount', function (event, data, cost) {
 })
 formula.when('surcharge', function (event, data, cost) {
   const surcharge = event.params.data
-  cost += surcharge
+  cost.cost += surcharge
   return {
     status: 'enabled',
     value: surcharge
@@ -120,8 +125,9 @@ function runRules (engine, facts, res) {
   let array
   engine.run(facts).then(triggeredEvents => {
     // engine returns a list of events with truthy conditions
-    var cost = 0
+    var cost = { cost: 0 }
     array = triggeredEvents.map(event => (formula(event, facts, cost)))
+    res.status(httpStatus.OK)
     res.send(getResult(array))
   }).catch((err) => res.send({ message: 'ERROR: ' + err }))
 }
