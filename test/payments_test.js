@@ -11,7 +11,8 @@ chai.use(require('chai-http'))
 describe('Payments controller', function () {
   beforeEach(function (done) {
     truncate('Payment')
-    model.Payment.create(dummyPayment).then(done())
+    model.Payment.create(dummyPayment)
+    setImmediate(done)
   })
 
   const baseURL = '/payments'
