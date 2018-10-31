@@ -28,7 +28,7 @@ describe('User controller', function () {
         success.should.be.equal(true)
         user.name.should.be.equal(requestBody.name)
         user.email.should.be.equal(requestBody.email)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -45,7 +45,7 @@ describe('User controller', function () {
             should.equal(err, null)
             res.should.have.status(httpStatus.CREATED)
             res.body.success.should.be.equal(true)
-            done()
+            setImmediate(done)
           })
       })
   })

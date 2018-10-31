@@ -34,7 +34,7 @@ describe('Payments controller', function () {
         payment.amount.should.be.equal(other.amount)
         payment.paymentMethod.should.be.equal(other.paymentMethod)
         payment.status.should.be.equal(other.status)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -47,7 +47,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
         res.body.success.should.be.equal(false)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -60,7 +60,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
         res.body.success.should.be.equal(true)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -73,7 +73,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
         res.body.success.should.be.equal(false)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -84,7 +84,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
         res.body.success.should.be.equal(true)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -95,7 +95,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
         res.body.success.should.be.equal(true)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -106,7 +106,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
         res.body.success.should.be.equal(false)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -120,7 +120,7 @@ describe('Payments controller', function () {
         chai.expect(res.body.payments).to.be.an('array')
         chai.expect(res.body.payments).to.have.length(1)
         chai.expect(res.body.payments[0].transactionId).to.equal(dummyPayment.transactionId)
-        done()
+        setImmediate(done)
       })
   })
 })
