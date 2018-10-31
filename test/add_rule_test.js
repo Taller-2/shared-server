@@ -23,8 +23,8 @@ let rule = {
 }
 
 describe('add simple rule', function () {
-  before(async () => { truncate('Rules') })
-  after(async () => { truncate('Rules') })
+  before(async () => { return truncate('Rules') })
+  after(async () => { return truncate('Rules') })
 
   it('should save a rule in data base and receive success message', function (done) {
     let jsonRule = JSON.stringify(rule)

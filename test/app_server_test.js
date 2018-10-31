@@ -8,7 +8,7 @@ chai.use(require('chai-http'))
 const truncate = require('../scripts/db/truncate')
 
 describe('App server controller', function () {
-  beforeEach(async () => { truncate('AppServer') })
+  beforeEach(async () => { return truncate('AppServer') })
 
   const baseURL = '/app-server'
 
