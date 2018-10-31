@@ -5,12 +5,12 @@ var multimethod = require('multimethod')
 const httpStatus = require('http-status-codes')
 
 const priorities = {
-  'disabled': 6,
-  'free': 5,
-  'factor': 4,
-  'sum': 3,
-  'surcharge': 2,
-  'discount': 1,
+  'disabled': 7,
+  'free': 6,
+  'factor': 5,
+  'sum': 4,
+  'surcharge': 3,
+  'discount': 2,
   'percentage': 1
 }
 
@@ -22,6 +22,7 @@ function addPriority (rule) {
 var formula = multimethod().dispatch(function (event, data, cost) { return event.type })
 formula.when('percentage', function (event, data, cost) {
   const val = -(event.params.data * (cost.cost / 100))
+  cost.cost -= (event.params.data * (cost.cost / 100))
   return {
     status: 'enabled',
     value: val
@@ -44,6 +45,7 @@ formula.when('sum', function (event, data, cost) {
   }
 })
 formula.when('discount', function (event, data, cost) {
+  cost.cost -= event.params.data
   return {
     status: 'enabled',
     value: -event.params.data
@@ -85,19 +87,15 @@ function getStatus (eventAnswers) {
   return status
 }
 
-var getResult = multimethod().dispatch(function (array) { return getStatus(array) })
-getResult.when('free', function (array) {
+var getResult = multimethod().dispatch(function (array, cost) { return getStatus(array) })
+getResult.when('free', function (array, cost) {
   return { status: 'free', cost: 0 }
 })
-getResult.when('disabled', function (array) {
+getResult.when('disabled', function (array, cost) {
   return { status: 'disabled', cost: null }
 })
-getResult.when('enabled', function (array) {
-  var acum = 0
-  array.forEach((data) => {
-    acum += data.value
-  })
-  return { status: 'enabled', cost: acum }
+getResult.when('enabled', function (array, cost) {
+  return { status: 'enabled', cost: cost }
 })
 
 function domainEqual (emailFact, value) {
@@ -128,7 +126,7 @@ function runRules (engine, facts, res) {
     var cost = { cost: 0 }
     array = triggeredEvents.map(event => (formula(event, facts, cost)))
     res.status(httpStatus.OK)
-    res.send(getResult(array))
+    res.send(getResult(array, cost.cost))
   }).catch((err) => res.send({ message: 'ERROR: ' + err }))
 }
 
