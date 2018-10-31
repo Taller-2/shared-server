@@ -28,7 +28,7 @@ describe('App server controller', function () {
         success.should.be.equal(true)
         server.name.should.be.equal(requestBody.name)
         server.url.should.be.equal(requestBody.url)
-        done()
+        setImmediate(done)
       })
   })
 
@@ -43,7 +43,7 @@ describe('App server controller', function () {
             should.equal(err, null)
             res.should.have.status(httpStatus.OK)
             res.body.success.should.be.equal(true)
-            done()
+            setImmediate(done)
           })
       })
   })
@@ -66,7 +66,7 @@ describe('App server controller', function () {
             const { success, servers } = res.body
             success.should.be.equal(true)
             servers.length.should.equal(instances.length)
-            done()
+            setImmediate(done)
           })
       })
       .catch((err) => (err))
