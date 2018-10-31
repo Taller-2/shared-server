@@ -36,7 +36,7 @@ export default class AppServerGraphsContainer extends React.Component {
 
   createChart (currentOption) {
     // if (this.state.wasShown || currentOption === '') return
-    var aTittle = 'none'
+    let aTittle = 'none'
     if (currentOption === 'graph1') {
       aTittle = 'Fruit Consumption'
     } else {

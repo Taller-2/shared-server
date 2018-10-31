@@ -20,7 +20,7 @@ class RuleTranslator {
   translateCondition (conditions) {
     const booleanOp = Object.keys(conditions)[0]
     if (booleanOp === 'all' || booleanOp === 'any') {
-      var coloquialRule = ''
+      let coloquialRule = ''
       conditions[booleanOp].forEach((aCondition, idx) => {
         coloquialRule += this.translateCondition(aCondition)
         if (idx < (conditions[booleanOp].length - 1)) {

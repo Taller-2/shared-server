@@ -1,7 +1,7 @@
 let Rule = require('json-rules-engine').Rule
 let Engine = require('json-rules-engine').Engine
-var db = require('../models')
-var multimethod = require('multimethod')
+let db = require('../models')
+let multimethod = require('multimethod')
 
 const priorities = {
   'disabled': 6,
@@ -18,7 +18,7 @@ function addPriority (rule) {
   return rule
 }
 
-var formula = multimethod().dispatch(function (event, data, cost) { return event.type })
+let formula = multimethod().dispatch(function (event, data, cost) { return event.type })
 formula.when('percentage', function (event, data, cost) {
   return -event.params.data * (cost / 100)
 })
@@ -69,7 +69,7 @@ function getStatus (eventAnswers) {
   // Recibo una array de cada respuesta de cada evento. cuando aplico la formula por cada
   // regla aplicada (evento) devuelvo una respuesta con este formato:
   // { status: aState, value: aValue }
-  var status = 'enabled'
+  let status = 'enabled'
   eventAnswers.forEach((answer) => {
     if (answer.status === 'free' && status !== 'disabled') {
       status = answer.status
@@ -80,7 +80,7 @@ function getStatus (eventAnswers) {
   return status
 }
 
-var getResult = multimethod().dispatch(function (array) { return getStatus(array) })
+let getResult = multimethod().dispatch(function (array) { return getStatus(array) })
 getResult.when('free', function (array) {
   return { status: 'free', cost: 0 }
 })
@@ -88,7 +88,7 @@ getResult.when('disabled', function (array) {
   return { status: 'disabled', cost: null }
 })
 getResult.when('enabled', function (array) {
-  var acum = 0
+  let acum = 0
   array.forEach((data) => {
     acum += data.value
   })
@@ -107,8 +107,8 @@ function addRules (rules) {
   let engine = new Engine()
   engine.addOperator('domainEqual', domainEqual)
   const length = rules.length
-  for (var i = 0; i < length; i++) {
-    var aRule = JSON.parse(rules[i].json)
+  for (let i = 0; i < length; i++) {
+    let aRule = JSON.parse(rules[i].json)
     aRule = addPriority(aRule)
     aRule = JSON.stringify(aRule)
     engine.addRule(new Rule(aRule))
@@ -120,7 +120,7 @@ function runRules (engine, facts, res) {
   let array
   engine.run(facts).then(triggeredEvents => {
     // engine returns a list of events with truthy conditions
-    var cost = 0
+    let cost = 0
     array = triggeredEvents.map(event => (formula(event, facts, cost)))
     res.send(getResult(array))
   }).catch((err) => res.send({ message: 'ERROR: ' + err }))

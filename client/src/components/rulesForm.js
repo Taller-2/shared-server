@@ -128,7 +128,7 @@ export default class RulesForm extends React.Component {
   }
 
   listConditions () {
-    var translatedConditions = []
+    let translatedConditions = []
     this.state.conditions.forEach((aCondition) => {
       translatedConditions.push(RuleTranslator.getCondition(aCondition))
     })
