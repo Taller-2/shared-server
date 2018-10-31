@@ -2,6 +2,7 @@ const app = require('../server/index')
 const server = app.listen()
 const httpStatus = require('http-status-codes')
 const chai = require('chai')
+const should = require('should')
 const model = require('../server/models')
 chai.use(require('chai-http'))
 const truncate = require('../scripts/db/truncate')
@@ -20,7 +21,8 @@ describe('App server controller', function () {
       .request(server)
       .post(baseURL)
       .send(requestBody)
-      .then((res) => {
+      .end((err, res) => {
+        should.equal(err, null)
         res.should.have.status(httpStatus.CREATED)
         const { success, server } = res.body
         success.should.be.equal(true)
@@ -37,7 +39,8 @@ describe('App server controller', function () {
         chai
           .request(server)
           .delete(`${baseURL}/${instance.id}/`)
-          .then((res) => {
+          .end((err, res) => {
+            should.equal(err, null)
             res.should.have.status(httpStatus.OK)
             res.body.success.should.be.equal(true)
             done()
@@ -57,14 +60,14 @@ describe('App server controller', function () {
         chai
           .request(server)
           .get(baseURL)
-          .then((res) => {
+          .end((err, res) => {
+            should.equal(err, null)
             res.should.have.status(httpStatus.OK)
             const { success, servers } = res.body
             success.should.be.equal(true)
             servers.length.should.equal(instances.length)
             done()
           })
-          .catch((err) => (err))
       })
       .catch((err) => (err))
   })

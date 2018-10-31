@@ -2,6 +2,7 @@ const app = require('../server/index')
 const server = app.listen()
 const httpStatus = require('http-status-codes')
 const chai = require('chai')
+const should = require('should')
 const model = require('../server/models')
 chai.use(require('chai-http'))
 const truncate = require('../scripts/db/truncate')
@@ -20,7 +21,8 @@ describe('User controller', function () {
       .request(server)
       .post(baseURL)
       .send(requestBody)
-      .then((res) => {
+      .end((err, res) => {
+        should.equal(err, null)
         res.should.have.status(httpStatus.CREATED)
         const { success, user } = res.body
         success.should.be.equal(true)
@@ -39,7 +41,8 @@ describe('User controller', function () {
           .request(server)
           .put(`${baseURL}/${instance.id}`)
           .send(requestBody)
-          .then((res) => {
+          .end((err, res) => {
+            should.equal(err, null)
             res.should.have.status(httpStatus.CREATED)
             res.body.success.should.be.equal(true)
             done()
