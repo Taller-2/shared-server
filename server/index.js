@@ -19,6 +19,7 @@ app.use('/app-server', require('./routes/app_server'))
 app.use('/shipment-cost', require('./routes/shipment_cost'))
 app.use('/payments', require('./routes/payments'))
 app.use('/rules', require('./routes/rules'))
+app.use('/app-server-logged-data', require('./routes/app_server_logged_data'))
 
 // Production-specific setup
 if (process.env.NODE_ENV === 'production') {
