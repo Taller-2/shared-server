@@ -8,10 +8,7 @@ chai.use(require('chai-http'))
 const truncate = require('../scripts/db/truncate')
 
 describe('User controller', function () {
-  beforeEach(function (done) {
-    truncate('User')
-    done()
-  })
+  beforeEach(async () => { return truncate('User') })
 
   const baseURL = '/user'
 
@@ -28,7 +25,7 @@ describe('User controller', function () {
         success.should.be.equal(true)
         user.name.should.be.equal(requestBody.name)
         user.email.should.be.equal(requestBody.email)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -45,7 +42,7 @@ describe('User controller', function () {
             should.equal(err, null)
             res.should.have.status(httpStatus.CREATED)
             res.body.success.should.be.equal(true)
-            setImmediate(done)
+            done()
           })
       })
   })

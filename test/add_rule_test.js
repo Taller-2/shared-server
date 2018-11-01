@@ -23,10 +23,8 @@ let rule = {
 }
 
 describe('add simple rule', function () {
-  before(function (done) {
-    truncate('Rules')
-    done()
-  })
+  before(async () => { return truncate('Rules') })
+  after(async () => { return truncate('Rules') })
 
   it('should save a rule in data base and receive success message', function (done) {
     let jsonRule = JSON.stringify(rule)
@@ -43,7 +41,7 @@ describe('add simple rule', function () {
         res.body.should.have.property('rule')
         res.body.rule.should.have.property('json')
         res.body.rule.json.should.equal(jsonRule)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -63,7 +61,7 @@ describe('add simple rule', function () {
         res.body.rules[0].should.have.property('json')
         res.body.rules[0].json.should.equal(jsonRule)
         id = res.body.rules[0].id
-        setImmediate(done)
+        done()
       })
   })
 
@@ -80,13 +78,7 @@ describe('add simple rule', function () {
         res.body.should.have.property('rules')
         res.body.rules.should.have.property('json')
         res.body.rules.json.should.equal(jsonRule)
-        setImmediate(done)
+        done()
       })
-  })
-
-  after(function (done) {
-    truncate('Rules')
-    server.close()
-    done()
   })
 })
