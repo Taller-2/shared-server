@@ -8,9 +8,7 @@ chai.use(require('chai-http'))
 const truncate = require('../scripts/db/truncate')
 
 describe('App server controller', function () {
-  beforeEach(function (done) {
-    truncate('AppServer').then(setImmediate(done))
-  })
+  beforeEach(async () => { return truncate('AppServer') })
 
   const baseURL = '/app-server'
 
@@ -27,7 +25,7 @@ describe('App server controller', function () {
         success.should.be.equal(true)
         server.name.should.be.equal(requestBody.name)
         server.url.should.be.equal(requestBody.url)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -42,7 +40,7 @@ describe('App server controller', function () {
             should.equal(err, null)
             res.should.have.status(httpStatus.OK)
             res.body.success.should.be.equal(true)
-            setImmediate(done)
+            done()
           })
       })
   })
@@ -65,7 +63,7 @@ describe('App server controller', function () {
             const { success, servers } = res.body
             success.should.be.equal(true)
             servers.length.should.equal(instances.length)
-            setImmediate(done)
+            done()
           })
       })
       .catch((err) => (err))

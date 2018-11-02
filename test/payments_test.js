@@ -9,9 +9,10 @@ const truncate = require('../scripts/db/truncate')
 chai.use(require('chai-http'))
 
 describe('Payments controller', function () {
-  beforeEach(function (done) {
-    truncate('Payment')
-    model.Payment.create(dummyPayment).then(setImmediate(done))
+  beforeEach(async () => {
+    return truncate('Payment').then(() => {
+      model.Payment.create(dummyPayment)
+    })
   })
 
   const baseURL = '/payments'
@@ -34,7 +35,7 @@ describe('Payments controller', function () {
         payment.amount.should.be.equal(other.amount)
         payment.paymentMethod.should.be.equal(other.paymentMethod)
         payment.status.should.be.equal(other.status)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -47,7 +48,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
         res.body.success.should.be.equal(false)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -60,7 +61,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
         res.body.success.should.be.equal(true)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -73,7 +74,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
         res.body.success.should.be.equal(false)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -84,7 +85,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
         res.body.success.should.be.equal(true)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -95,7 +96,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
         res.body.success.should.be.equal(true)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -106,7 +107,7 @@ describe('Payments controller', function () {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
         res.body.success.should.be.equal(false)
-        setImmediate(done)
+        done()
       })
   })
 
@@ -120,7 +121,7 @@ describe('Payments controller', function () {
         chai.expect(res.body.payments).to.be.an('array')
         chai.expect(res.body.payments).to.have.length(1)
         chai.expect(res.body.payments[0].transactionId).to.equal(dummyPayment.transactionId)
-        setImmediate(done)
+        done()
       })
   })
 })
