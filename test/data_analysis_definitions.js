@@ -101,6 +101,6 @@ module.exports.expectedDataAnalysis = {
     ],
     yAxis: [3, 1, 2, 1],
     title: 'Number of articles published as a function of time',
-    yAxis_title: 'number of articles'
+    yAxisTitle: 'number of articles'
   }
 }
