@@ -7,13 +7,8 @@ import HighchartsReact from 'highcharts-react-official'
 export default class AppServerGraphsForm extends React.Component {
   constructor (props) {
     super(props)
-    this.optionsDescription = [
-      'graph1',
-      'graph2'
-    ]
     this.state = {
-      options: {},
-      currentOption: this.optionsDescription[0]
+      currentOption: ''
     }
   }
 
@@ -44,7 +39,7 @@ export default class AppServerGraphsForm extends React.Component {
         </Col>
         <Col sm={10}>
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('currentOption')}>
-            { this.showOptions(this.optionsDescription) }
+            { this.showOptions(this.props.graphTitles) }
           </FormControl>
           <HelpBlock>
             <p className="text-danger">{this.props.errors.value}</p>
@@ -81,7 +76,7 @@ export default class AppServerGraphsForm extends React.Component {
           <HighchartsReact
             highcharts={Highcharts}
             constructorType={'stockChart'}
-            options={this.props.options}
+            options={ this.props.options }
           />
         </div>
       </Grid>
@@ -92,5 +87,6 @@ export default class AppServerGraphsForm extends React.Component {
 AppServerGraphsForm.propTypes = {
   onClick: PropTypes.func,
   errors: PropTypes.object,
-  options: PropTypes.object
+  options: PropTypes.object,
+  graphTitles: PropTypes.array
 }
