@@ -23,7 +23,7 @@ function numberOfArticlesPublishedAsAFunctionOfTime (data) {
     xAxis: timestamp,
     yAxis: numberOfArticles,
     title: 'Number of articles published as a function of time',
-    yAxis_title: 'number of articles'
+    yAxisTitle: 'number of articles'
   }
 }
 
