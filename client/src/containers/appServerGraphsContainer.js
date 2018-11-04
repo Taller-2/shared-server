@@ -49,7 +49,6 @@ export default class AppServerGraphsContainer extends React.Component {
     Http.get('/app-server-logged-data')
       .then(response => {
         if (response.success) {
-          // { success: true, analysis: analysis }
           let graphName = currentOption
           if (JSON.stringify(response.analysis) === JSON.stringify({})) {
             return
