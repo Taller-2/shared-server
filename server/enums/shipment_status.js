@@ -1,1 +1,1 @@
-module.exports = ['pending', 'shipped', 'canceled']
+module.exports = ['pending', 'shipped', 'cancelled']

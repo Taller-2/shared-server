@@ -12,61 +12,51 @@ module.exports.findAll = function (request, response, next) {
 }
 
 module.exports.create = function (request, response, next) {
-  const { transactionId, currency, amount, paymentMethod, status } = request.body
+  const { address, transactionId, status } = request.body
   Shipment
-    .create({ ??? })
+    .create({ address, transactionId, status })
     .then(shipments => response.status(httpStatus.CREATED).json({ success: true, shipments: shipments }))
 }
 
 module.exports.update = function (request, response, next) {
-  const { transactionId, status } = request.body
-  Payments.update(
+  const { id, status } = request.body
+  Shipment.update(
     { status: status },
-    { where: { transactionId: transactionId } }
+    { where: { id: id } }
   ).then(() => {
-    Payments.findAll()
-      .then(payments => response.status(httpStatus.OK).json({ success: true, payments: payments }))
+    Shipment.findAll()
+      .then(shipments => response.status(httpStatus.OK).json({ success: true, shipments: shipments }))
   })
 }
 
 module.exports.delete = function (request, response, next) {
-  Payments.destroy({ where: { transactionId: request.params.transactionId } })
+  Shipment.destroy({ where: { id: request.params.id } })
     .then((amount) => response.status(httpStatus.OK).json({ success: (amount > 0) }))
     .catch(error => response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error }))
 }
 
 module.exports.getUIEnums = function (request, response, next) {
-  response.status(httpStatus.OK).json({ success: true, paymentMethods: paymentMethods, currencies: currencies, paymentStatus: paymentStatus })
+  response.status(httpStatus.OK).json({ success: true, shipmentStatus: shipmentStatus })
 }
 
 exports.validateCreate = () => {
   return [
-    body('transactionId', 'El identificador de transacción es requerido').exists().trim().not().isEmpty(),
-    body('transactionId', 'El identificador de transacción debe ser numérico').isInt(),
-    body('transactionId').custom(value => {
-      return Payments.findById(value).then(payment => {
-        if (payment) {
-          return Promise.reject(new Error('Este identificador de transacción ya fue ingresado'))
-        }
-      })
-    }),
-    body('currency', 'Moneda invalida').exists().trim().custom((value) => currencies.includes(value)),
-    body('paymentMethod', 'Metodo de pago invalido').exists().trim().custom((value) => paymentMethods.includes(value)),
-    body('amount', 'Monto invalido').exists().isDecimal(),
-    body('status', 'Estado del pago invalido').exists().trim().custom((value) => paymentStatus.includes(value))
+    body('transactionId', 'El identificador de envío debe ser numérico').isInt(),
+    body('address', 'La direccion es requerida').exists().trim(),
+    body('status', 'Estado del envío invalido').exists().trim().custom((value) => shipmentStatus.includes(value))
   ]
 }
 
 exports.validateUpdate = () => {
   return [
-    param('transactionId', 'El identificador de transaccion es requerido').exists().trim().not().isEmpty(),
-    param('transactionId').custom(value => {
-      return Payments.findById(value).then(payment => {
-        if (!payment) {
-          return Promise.reject(new Error('El pago no existe'))
+    param('id', 'El identificador de envío es requerido').exists().trim().not().isEmpty(),
+    param('id').custom(value => {
+      return Shipment.findById(value).then(shipment => {
+        if (!shipment) {
+          return Promise.reject(new Error('El envío no existe'))
         }
       })
     }),
-    body('status', 'Estado del pago invalido').exists().trim().custom((value) => paymentStatus.includes(value))
+    body('status', 'Estado del envío invalido').exists().trim().custom((value) => shipmentStatus.includes(value))
   ]
 }
