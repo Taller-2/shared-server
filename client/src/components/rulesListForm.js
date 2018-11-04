@@ -98,12 +98,6 @@ export default class RulesListForm extends React.Component {
       <Grid>
         <Row className="show-grid">
           <Col xs={12} md={6} mdOffset={3}>
-            <h1 style={{ textAlign: 'center' }} > Agregado de reglas para el calculo del costo de envio </h1>
-          </Col>
-        </Row>
-
-        <Row className="show-grid">
-          <Col xs={12} md={6} mdOffset={3}>
             <Form horizontal>
               { this.showList() }
             </Form>

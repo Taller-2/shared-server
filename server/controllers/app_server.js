@@ -16,9 +16,9 @@ module.exports.delete = function (request, response) {
 }
 
 module.exports.create = function (request, response) {
-  const { name, url } = request.body
+  const { name, secret, url } = request.body
   model.AppServer
-    .create({ name: name, url: url })
+    .create({ name: name, secret: secret, url: url })
     .then(server => response.status(httpStatus.CREATED).json({ success: true, server: server }))
     .catch(error => response.json({ success: false, error: error }))
 }

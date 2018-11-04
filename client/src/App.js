@@ -13,6 +13,7 @@ import AppServerStatus from './components/app_server_status/AppServerStatus'
 import PrivateRoute from './components/PrivateRoute'
 import RulesContainer from './containers/rulesContainer'
 import RulesListContainer from './containers/rulesListContainer'
+import AppServerGraphsContainer from './containers/appServerGraphsContainer'
 import PaymentsContainer from './containers/PaymentContainer'
 
 class App extends Component {
@@ -46,6 +47,7 @@ class App extends Component {
               <PrivateRoute path="/app-server-status" component={AppServerStatus} />
               <PrivateRoute path="/addRules" component={RulesContainer} />
               <PrivateRoute path="/rulesList" component={RulesListContainer} />
+              <PrivateRoute path="/appServerGraphs" component={AppServerGraphsContainer} />
               <PrivateRoute path="/payments" component={PaymentsContainer} />
             </div>
           </Router>

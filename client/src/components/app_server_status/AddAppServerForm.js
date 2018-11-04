@@ -17,7 +17,7 @@ export default class AddAppServerForm extends React.Component {
     return (
       <Grid>
         <Row>
-          <Col md={5}>
+          <Col md={2}>
             <FormControl
               type="text"
               placeholder="Nombre"
@@ -25,7 +25,15 @@ export default class AddAppServerForm extends React.Component {
               value={this.state.name}
             />
           </Col>
-          <Col md={5}>
+          <Col md={4}>
+            <FormControl
+              type="text"
+              placeholder="Clave"
+              onChange={this.handleChange('secret')}
+              value={this.state.secret}
+            />
+          </Col>
+          <Col md={4}>
             <FormControl
               type="text"
               placeholder="URL"
@@ -38,7 +46,7 @@ export default class AddAppServerForm extends React.Component {
               type="button"
               onClick={ this.submit.bind(this) }
               disabled={!this.state.enabled}>
-              Agregar servidor
+              Agregar
             </Button>
           </Col>
         </Row>
