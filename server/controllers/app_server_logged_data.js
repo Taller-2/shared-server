@@ -4,10 +4,7 @@ const getAnalysis = require('./data_analysis').getAnalysis
 const httpStatus = require('http-status-codes')
 
 module.exports.makeAnalysis = function (req, res, next) {
-  // const loggedData = require('../../test/data_analysis_definitions').mixedArtcilesLoggedData
-  // const analysis = getAnalysis(loggedData)
-  // res.status(httpStatus.OK).json({ success: true, analysis: analysis })
-  HttpService.get(API_URL + '/article_stats')
+  HttpService.get(API_URL + '/article_stats/')
     .then(response => {
       // {"ok": True, "data": data}
       if (response.body.ok) {

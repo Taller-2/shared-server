@@ -67,15 +67,9 @@ function buildAnalysisResponse (analyisis) {
 }
 
 module.exports.getAnalysis = function (data) {
-  // console.log('++++++++++++++++++++++++++++++++++++++++++++++++++')
   const graph1 = numberOfArticlesPublishedAsAFunctionOfTime(data)
-  // console.log('numberOfArticlesPublishedAsAFunctionOfTime: ', graph1)
   const graph2 = numberOfArticlesConsultedAsAFunctionOfTime(data)
-  // console.log('numberOfArticlesConsultedAsAFunctionOfTime: ', graph2)
   const graph3 = numberOfArticlesDeletedAsAFunctionOfTime(data)
-  // console.log('numberOfArticlesDeletedAsAFunctionOfTime: ', graph3)
   const graph4 = numberOfArticlesUpdatedAsAFunctionOfTime(data)
-  // console.log('numberOfArticlesUpdatedAsAFunctionOfTime: ', graph4)
-  // console.log('++++++++++++++++++++++++++++++++++++++++++++++++++')
   return buildAnalysisResponse([graph1, graph2, graph3, graph4])
 }
