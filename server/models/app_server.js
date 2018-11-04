@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const AppServer = sequelize.define('AppServer', {
     name: DataTypes.STRING,
+    secret: DataTypes.STRING,
     url: DataTypes.STRING
   }, {})
   AppServer.associate = function (models) {
