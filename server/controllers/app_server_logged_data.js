@@ -10,10 +10,10 @@ module.exports.makeAnalysis = function (req, res, next) {
       if (response.body.ok) {
         res.status(httpStatus.OK).json({ success: true, analysis: getAnalysis(req.body) })
       } else {
-        res.status(httpStatus.BAD_REQUEST).json({ success: true, error: 'response was not ok' })
+        res.status(httpStatus.BAD_REQUEST).json({ success: false, error: 'response was not ok' })
       }
     })
     .catch(err => {
-      res.status(httpStatus.BAD_GATEWAY).json({ success: true, error: err })
+      res.status(httpStatus.BAD_GATEWAY).json({ success: false, error: err })
     })
 }
