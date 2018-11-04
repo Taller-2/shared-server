@@ -25,7 +25,7 @@ export default class AppServerGraphsContainer extends React.Component {
       },
       series: [
         {
-          type: 'line',
+          type: 'bar',
           data: []
         }
       ]
@@ -37,18 +37,29 @@ export default class AppServerGraphsContainer extends React.Component {
     }
   }
 
+  getGraphNames (analysis) {
+    let names = []
+    for (let graph in analysis) {
+      names.push(analysis[graph].title)
+    }
+    return names
+  }
+
   getGraph (currentOption) {
     Http.get('/app-server-logged-data')
       .then(response => {
         if (response.success) {
           // { success: true, analysis: analysis }
           let graphName = currentOption
+          if (JSON.stringify(response.analysis) === JSON.stringify({})) {
+            return
+          }
           if (!(currentOption in response.analysis)) {
             graphName = Object.keys(response.analysis)[0]
           }
           let newOptions = this.createChart(response.analysis[graphName])
           this.setState({
-            graphTitles: Object.keys(response.analysis),
+            graphTitles: this.getGraphNames(response.analysis),
             options: newOptions
           })
         } else {
@@ -72,6 +83,7 @@ export default class AppServerGraphsContainer extends React.Component {
 
   render () {
     const { errors, options, graphTitles } = this.state
+    // this.getGraph('')
     return (
       <AppServerGraphsForm
         errors={errors}
