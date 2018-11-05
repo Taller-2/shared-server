@@ -15,7 +15,7 @@ module.exports.create = function (request, response, next) {
   const { address, transactionId, status } = request.body
   Shipment
     .create({ address, transactionId, status })
-    .then(shipments => response.status(httpStatus.CREATED).json({ success: true, shipments: shipments }))
+    .then(shipment => response.status(httpStatus.CREATED).json({ success: true, shipment: shipment }))
 }
 
 module.exports.update = function (request, response, next) {
