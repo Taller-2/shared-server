@@ -9,15 +9,21 @@ const currencies = require('../enums/currency')
 
 module.exports.findAll = function (request, response, next) {
   Payments.findAll()
-    .then(payments => response.json({ success: true, payments: payments }))
-    .catch(error => { response.json({ success: false, error: error }) })
+    .then(payments => {
+      response.status(httpStatus.OK).json({ success: true, payments: payments })
+    })
+    .catch(error => {
+      response.status(httpStatus.BAD_GATEWAY).json({ success: false, error: error })
+    })
 }
 
 module.exports.create = function (request, response, next) {
   const { transactionId, currency, amount, paymentMethod, status } = request.body
   Payments
     .create({ transactionId, currency, amount, paymentMethod, status })
-    .then(payment => response.status(httpStatus.CREATED).json({ success: true, payment: payment }))
+    .then(payment => {
+      response.status(httpStatus.CREATED).json({ success: true, payment: payment })
+    })
 }
 
 module.exports.update = function (request, response, next) {
@@ -27,14 +33,20 @@ module.exports.update = function (request, response, next) {
     { where: { transactionId: transactionId } }
   ).then(() => {
     Payments.findAll()
-      .then(payments => response.status(httpStatus.OK).json({ success: true, payments: payments }))
+      .then(payments => {
+        response.status(httpStatus.OK).json({ success: true, payments: payments })
+      })
   })
 }
 
 module.exports.delete = function (request, response, next) {
   Payments.destroy({ where: { transactionId: request.params.transactionId } })
-    .then((amount) => response.status(httpStatus.OK).json({ success: (amount > 0) }))
-    .catch(error => response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error }))
+    .then((amount) => {
+      response.status(httpStatus.OK).json({ success: (amount > 0) })
+    })
+    .catch(error => {
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
+    })
 }
 
 module.exports.getUIEnums = function (request, response, next) {
