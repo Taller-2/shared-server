@@ -8,7 +8,7 @@ module.exports.findAll = function (request, response) {
       response.status(httpStatus.OK).json({ success: true, servers: servers })
     })
     .catch(error => {
-      response.status(httpStatus.BAD_GATEWAY).json({ success: false, error: error })
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
     })
 }
 
@@ -17,7 +17,7 @@ module.exports.delete = function (request, response) {
     .destroy({ where: { id: request.params.id } })
     .then(() => response.status(httpStatus.OK).json({ success: true }))
     .catch(error => {
-      response.status(httpStatus.BAD_GATEWAY).json({ success: false, error: error })
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
     })
 }
 
@@ -27,6 +27,6 @@ module.exports.create = function (request, response) {
     .create({ name: name, secret: secret, url: url })
     .then(server => response.status(httpStatus.CREATED).json({ success: true, server: server }))
     .catch(error => {
-      response.status(httpStatus.BAD_GATEWAY).json({ success: false, error: error })
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
     })
 }

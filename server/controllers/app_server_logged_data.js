@@ -14,6 +14,6 @@ module.exports.makeAnalysis = function (req, res, next) {
       }
     })
     .catch(err => {
-      res.status(httpStatus.BAD_GATEWAY).json({ success: false, error: err })
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: err })
     })
 }

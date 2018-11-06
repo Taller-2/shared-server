@@ -13,7 +13,7 @@ module.exports.findAll = function (request, response, next) {
       response.status(httpStatus.OK).json({ success: true, payments: payments })
     })
     .catch(error => {
-      response.status(httpStatus.BAD_GATEWAY).json({ success: false, error: error })
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
     })
 }
 
@@ -23,6 +23,9 @@ module.exports.create = function (request, response, next) {
     .create({ transactionId, currency, amount, paymentMethod, status })
     .then(payment => {
       response.status(httpStatus.CREATED).json({ success: true, payment: payment })
+    })
+    .catch(error => {
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
     })
 }
 
@@ -35,6 +38,9 @@ module.exports.update = function (request, response, next) {
     Payments.findAll()
       .then(payments => {
         response.status(httpStatus.OK).json({ success: true, payments: payments })
+      })
+      .catch(error => {
+        response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
       })
   })
 }
