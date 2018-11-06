@@ -46,7 +46,6 @@ describe('App server controller', function () {
   })
 
   it('Lists all servers', (done) => {
-    this.timeout(2500)
     let instances = [
       { name: 'example1', url: 'example1.com' },
       { name: 'example2', url: 'example2.com' }
