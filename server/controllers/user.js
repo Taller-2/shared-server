@@ -6,8 +6,12 @@ const { body } = require('express-validator/check')
 module.exports.findById = function (request, response) {
   let scope = request.params.id ? { where: { id: request.params.id } } : {}
   model.User.findAll(scope)
-    .then(users => response.json({ success: true, users: users }))
-    .catch(error => response.json({ success: false, error: error }))
+    .then(users => {
+      response.status(httpStatus.OK).json({ success: true, users: users })
+    })
+    .catch(error => {
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
+    })
 }
 
 module.exports.create = function (request, response, next) {
@@ -20,6 +24,9 @@ module.exports.create = function (request, response, next) {
     enabled: false
   })
     .then(user => response.status(httpStatus.CREATED).json({ success: true, user: user }))
+    .catch(error => {
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
+    })
 }
 
 module.exports.update = function (request, response) {
@@ -29,13 +36,17 @@ module.exports.update = function (request, response) {
     { where: { id: request.params.id } }
   )
     .then(user => response.status(httpStatus.CREATED).json({ success: true, user: user }))
-    .catch(error => response.json({ success: false, error: error }))
+    .catch(error => {
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
+    })
 }
 
 module.exports.delete = function (request, response) {
   model.User.destroy({ where: { id: request.params.id } })
     .then(() => response.status(httpStatus.CREATED).json({ success: true }))
-    .catch(error => response.json({ success: false, error: error }))
+    .catch(error => {
+      response.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error })
+    })
 }
 
 exports.validateCreate = () => {
