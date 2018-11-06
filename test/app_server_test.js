@@ -13,7 +13,7 @@ describe('App server controller', function () {
   const baseURL = '/app-server'
 
   it('Creates a server', (done) => {
-    const requestBody = { name: 'example', url: 'example.com' }
+    const requestBody = { name: 'example', secret: '', url: 'example.com' }
     chai
       .request(server)
       .post(baseURL)
@@ -31,7 +31,7 @@ describe('App server controller', function () {
 
   it('Destroys a server', (done) => {
     model.AppServer
-      .create({ name: 'example', url: 'example.com' })
+      .create({ name: 'example', secret: '', url: 'example.com' })
       .then(instance => {
         chai
           .request(server)
@@ -47,8 +47,8 @@ describe('App server controller', function () {
 
   it('Lists all servers', (done) => {
     let instances = [
-      { name: 'example1', url: 'example1.com' },
-      { name: 'example2', url: 'example2.com' }
+      { name: 'example1', secret: '', url: 'example1.com' },
+      { name: 'example2', secret: '', url: 'example2.com' }
     ]
     model.AppServer
       .bulkCreate(instances)
