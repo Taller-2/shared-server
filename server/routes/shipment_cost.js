@@ -1,8 +1,6 @@
 const router = require('express').Router()
 const bodyParser = require('body-parser')
 const shipmentCostController = require('../controllers/shipment_cost')
-const authUtils = require('../middlewares/auth')
-router.use(authUtils.requireAuth)
 
 /*
 const {
