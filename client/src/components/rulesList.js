@@ -21,7 +21,6 @@ export default class RulesListForm extends React.Component {
   showList () {
     return (
       <div>
-        <h2></h2>
         { this.props.rules.map((aRule, idx) =>
           <div className="panel panel-default" key={idx}>
             <div className="panel-heading">{aRule.coloquialRule}</div>
