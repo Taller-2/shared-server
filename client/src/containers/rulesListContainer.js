@@ -33,12 +33,12 @@ export default class RulesContainer extends React.Component {
           const length = response.rules.length
           for (let i = 0; i < length; i++) {
             const aRule = response.rules[i].json
-            const ruleTranslated = RuleTranslator.translateRule(aRule)
+            const translatedRule = RuleTranslator.translateRule(aRule)
             const id = response.rules[i].id
             rulesVector.push(
               {
                 'rule': aRule,
-                'coloquialRule': ruleTranslated,
+                'coloquialRule': translatedRule,
                 'id': id
               })
           }
