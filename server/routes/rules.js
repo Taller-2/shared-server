@@ -10,6 +10,4 @@ router.put('/:id', rulesController.update)
 
 router.delete('/:id', rulesController.delete)
 
-router.delete('/', rulesController.deleteAll)
-
 module.exports = router
