@@ -8,7 +8,6 @@ export default class RulesContainer extends React.Component {
     super(props)
     this.state = {
       errors: {},
-      haveTheRules: false,
       refresh: false,
       rules: [{
         'rule': [],
