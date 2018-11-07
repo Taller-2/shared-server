@@ -59,9 +59,9 @@ export default class RulesContainer extends React.Component {
         // expected: { success: true }
         if (response.success) {
           this.setState({ 'refresh': true })
-          alert('The deletion succeded')
+          alert('The deletion succeed')
         } else {
-          alert('The deletion did not succeded')
+          alert('The deletion did not succeed')
         }
       })
       .catch(err => {
