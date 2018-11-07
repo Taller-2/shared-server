@@ -8,12 +8,18 @@ module.exports.makeAnalysis = function (req, res, next) {
     .then(response => {
       // {"ok": True, "data": data}
       if (response.ok) {
-        res.status(httpStatus.OK).json({ success: true, analysis: getAnalysis(response.data) })
+        res
+          .status(httpStatus.OK)
+          .json({ success: true, analysis: getAnalysis(response.data) })
       } else {
-        res.status(httpStatus.BAD_REQUEST).json({ success: false, error: 'response was not ok' })
+        res
+          .status(httpStatus.BAD_REQUEST)
+          .json({ success: false, error: 'response was not ok' })
       }
     })
     .catch(err => {
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: err })
+      res
+        .status(httpStatus.INTERNAL_SERVER_ERROR)
+        .json({ success: false, error: err })
     })
 }

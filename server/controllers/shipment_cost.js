@@ -82,7 +82,8 @@ function domainEqual (emailFact, value) {
 }
 
 function addRules (rules) {
-  let engine = new Engine()
+  let options = { allowUndefinedFacts: true }
+  let engine = new Engine([], options)
   engine.addOperator('domainEqual', domainEqual)
   const length = rules.length
   for (let i = 0; i < length; i++) {
