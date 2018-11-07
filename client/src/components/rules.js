@@ -59,7 +59,7 @@ export default class Rules extends React.Component {
     this.state = {
       conditions: [],
       fact: this.facts[0],
-      value: '',
+      value: 10,
       operator: this.ops[0],
       type: this.type[0],
       params: 10
@@ -121,7 +121,7 @@ export default class Rules extends React.Component {
           </HelpBlock>
         </Col>
         <Col smOffset={12} sm={10}>
-          <Button type="" onClick={ this.addCondition }>
+          <Button type="button" onClick={ this.addCondition }>
             +
           </Button>
         </Col>
