@@ -73,7 +73,7 @@ export default class RulesContainer extends React.Component {
   render () {
     const { errors, rules } = this.state
     return (
-      <RulesList 
+      <RulesList
         errors={errors}
         rules={rules}
         getRules={(rules) => this.getRules(rules)}

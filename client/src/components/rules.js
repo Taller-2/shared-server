@@ -74,7 +74,10 @@ export default class Rules extends React.Component {
 
   submit = (event) => {
     if (this.state.conditions.length === 0) {
-      this.state.conditions = [this.defaultCondition]
+      this.state.conditions.push(this.defaultCondition)
+      this.setState({
+        conditions: this.state.conditions
+      })
     }
     event.preventDefault()
     this.props.onClick(this.state)
