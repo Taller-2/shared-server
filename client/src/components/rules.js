@@ -1,9 +1,19 @@
 import React from 'react'
-import { Button, Col, ControlLabel, Form, FormControl, FormGroup, Grid, Row, HelpBlock } from 'react-bootstrap'
+import {
+  Button,
+  Col,
+  ControlLabel,
+  Form,
+  FormControl,
+  FormGroup,
+  Grid,
+  Row,
+  HelpBlock
+} from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import RuleTranslator from '../service/ruleTranslator'
 
-export default class RulesForm extends React.Component {
+export default class Rules extends React.Component {
   constructor (props) {
     super(props)
     this.facts = [
@@ -186,7 +196,7 @@ export default class RulesForm extends React.Component {
   }
 }
 
-RulesForm.propTypes = {
+Rules.propTypes = {
   onClick: PropTypes.func,
   errors: PropTypes.object
 }
