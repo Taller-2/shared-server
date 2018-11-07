@@ -94,3 +94,35 @@ module.exports.discountRule = {
     }
   }
 }
+
+module.exports.surchargeRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'duration',
+      'operator': 'equal',
+      'value': 50
+    }]
+  },
+  'event': {
+    'type': 'surcharge',
+    'params': {
+      'data': 10
+    }
+  }
+}
+
+module.exports.sumRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'monthtrips',
+      'operator': 'lessThan',
+      'value': 15
+    }]
+  },
+  'event': {
+    'type': 'sum',
+    'params': {
+      'data': 20
+    }
+  }
+}

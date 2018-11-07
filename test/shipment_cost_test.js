@@ -10,7 +10,9 @@ const {
   factorRule,
   minPriceRule,
   percentageRule,
-  discountRule
+  discountRule,
+  surchargeRule,
+  sumRule
 } = require('./shipment_cost_definitions')
 chai.use(require('chai-http'))
 
@@ -193,6 +195,67 @@ describe('shipment cost test', function () {
       .send(facts)
       .end(function (err, res) {
         checkCost(err, res, { status: 'enabled', cost: 600 })
+        setImmediate(done)
+      })
+  })
+  // --------------------------------------------------------------------
+  it('Post a surcharge rule', function (done) {
+    truncate('Rules')
+    const rulesVector = [surchargeRule]
+    postRulesVector(rulesVector, server, done)
+  })
+  it('should get a surcharge', function (done) {
+    const facts = {
+      'email': 'jorge@comprame.com',
+      'userScore': -3,
+      'duration': 50,
+      'price': 35
+    }
+    chai.request(server)
+      .post('/shipment-cost')
+      .send(facts)
+      .end(function (err, res) {
+        checkCost(err, res, { status: 'enabled', cost: 10 })
+        setImmediate(done)
+      })
+  })
+  // --------------------------------------------------------------------
+  it('Post a sum rule', function (done) {
+    truncate('Rules')
+    const rulesVector = [sumRule]
+    postRulesVector(rulesVector, server, done)
+  })
+  it('should get a sum', function (done) {
+    const facts = {
+      'email': 'jorge@comprame.com',
+      'userScore': -3,
+      'monthtrips': 12
+    }
+    chai.request(server)
+      .post('/shipment-cost')
+      .send(facts)
+      .end(function (err, res) {
+        checkCost(err, res, { status: 'enabled', cost: 20 })
+        setImmediate(done)
+      })
+  })
+  // --------------------------------------------------------------------
+  it('post unused rules', function (done) {
+    truncate('Rules')
+    const rulesVector = [sumRule, surchargeRule, minPriceRule]
+    postRulesVector(rulesVector, server, done)
+  })
+  it('should apply only rules that match with facts', function (done) {
+    const facts = {
+      'email': 'jorge@comprame.com',
+      'userScore': -3,
+      'monthtrips': 12
+    }
+    chai.request(server)
+      .post('/shipment-cost')
+      .send(facts)
+      .end(function (err, res) {
+        checkCost(err, res, { status: 'enabled', cost: 20 })
         setImmediate(done)
       })
   })
