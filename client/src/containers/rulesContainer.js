@@ -1,5 +1,5 @@
 import React from 'react'
-import RulesForm from '../components/rulesForm'
+import RulesForm from '../components/rules'
 import { Redirect } from 'react-router-dom'
 import Http from '../service/Http'
 

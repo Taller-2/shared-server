@@ -41,13 +41,18 @@ export default class RulesForm extends React.Component {
       'free',
       'disabled'
     ]
+    this.defaultCondition = {
+      fact: this.facts[0],
+      operator: this.ops[0],
+      value: 10
+    }
     this.state = {
       conditions: [],
       fact: this.facts[0],
       value: '',
       operator: this.ops[0],
       type: this.type[0],
-      params: ''
+      params: 10
     }
   }
 
@@ -58,6 +63,9 @@ export default class RulesForm extends React.Component {
   }
 
   submit = (event) => {
+    if (this.state.conditions.length === 0) {
+      this.state.conditions = [this.defaultCondition]
+    }
     event.preventDefault()
     this.props.onClick(this.state)
   }
