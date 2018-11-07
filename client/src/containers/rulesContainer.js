@@ -1,5 +1,5 @@
 import React from 'react'
-import RulesForm from '../components/rules'
+import Rules from '../components/rules'
 import { Redirect } from 'react-router-dom'
 import Http from '../service/Http'
 
@@ -60,7 +60,7 @@ export default class RulesContainer extends React.Component {
       return <Redirect to='/rulesList' />
     }
     return (
-      <RulesForm errors={errors} onClick={(rulesValues) => this.handleClick(rulesValues)}/>
+      <Rules errors={errors} onClick={(rulesValues) => this.handleClick(rulesValues)}/>
     )
   }
 }
