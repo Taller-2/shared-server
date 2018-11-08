@@ -58,11 +58,11 @@ export default class Rules extends React.Component {
     }
     this.state = {
       conditions: [],
-      fact: null,
-      value: null,
-      operator: null,
-      type: null,
-      params: null
+      fact: this.facts[0],
+      value: 10,
+      operator: this.ops[0],
+      type: this.type[0],
+      params: 10
     }
   }
 
@@ -96,6 +96,13 @@ export default class Rules extends React.Component {
     })
   }
 
+  removeCondition = () => {
+    this.state.conditions.pop()
+    this.setState({
+      'conditions': this.state.conditions
+    })
+  }
+
   condition () {
     return (
       <FormGroup controlId="condition">
@@ -109,7 +116,7 @@ export default class Rules extends React.Component {
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('operator')}>
             { this.showOptions(this.ops) }
           </FormControl>
-          <FormControl type="text" placeholder="value" onChange={this.handleChange('value')}/>
+          <FormControl type="text" placeholder="10" onChange={this.handleChange('value')}/>
           <HelpBlock>
             <p className="text-danger">{this.props.errors.message}</p>
           </HelpBlock>
@@ -117,6 +124,11 @@ export default class Rules extends React.Component {
         <Col smOffset={12} sm={10}>
           <Button type="button" onClick={ this.addCondition }>
             +
+          </Button>
+        </Col>
+        <Col smOffset={12} sm={10}>
+          <Button type="button" onClick={ this.removeCondition }>
+            -
           </Button>
         </Col>
       </FormGroup>
@@ -133,7 +145,7 @@ export default class Rules extends React.Component {
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('type')}>
             { this.showOptions(this.type) }
           </FormControl>
-          <FormControl type="text" placeholder="value" onChange={this.handleChange('params')}/>
+          <FormControl type="text" placeholder="10" onChange={this.handleChange('params')}/>
           <HelpBlock>
             <p className="text-danger">{this.props.errors.message}</p>
           </HelpBlock>
@@ -174,11 +186,11 @@ export default class Rules extends React.Component {
     }
     this.setState({
       conditions: [],
-      fact: null,
-      value: null,
-      operator: null,
-      type: null,
-      params: null
+      fact: this.facts[0],
+      value: 10,
+      operator: this.ops[0],
+      type: this.type[0],
+      params: 10
     })
     this.props.desactivateRefresh()
   }
