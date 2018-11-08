@@ -44,7 +44,7 @@ module.exports.create = function (request, response, next) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
+        .json({ success: false, error: error.message })
     })
 }
 
