@@ -9,9 +9,11 @@ const truncate = require('../scripts/db/truncate')
 chai.use(require('chai-http'))
 
 describe('Payments controller', function () {
-  beforeEach(async () => {
-    return truncate('Payment').then(() => {
-      model.Payment.create(dummyPayment)
+  beforeEach((done) => {
+    truncate('Payment').then(() => {
+      model.Payment.create(dummyPayment).then(() => {
+        done()
+      })
     })
   })
 

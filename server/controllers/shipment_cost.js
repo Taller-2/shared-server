@@ -78,14 +78,12 @@ getResult.when('enabled', function (array, cost) {
 
 function domainEqual (emailFact, value) {
   const domain = '@' + emailFact.split('@')[1]
-  if (domain === value) {
-    return true
-  }
-  return false
+  return domain === value
 }
 
 function addRules (rules) {
-  let engine = new Engine()
+  let options = { allowUndefinedFacts: true }
+  let engine = new Engine([], options)
   engine.addOperator('domainEqual', domainEqual)
   const length = rules.length
   for (let i = 0; i < length; i++) {
