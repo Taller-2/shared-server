@@ -51,11 +51,7 @@ export default class Rules extends React.Component {
       'free',
       'disabled'
     ]
-    this.defaultCondition = {
-      fact: this.facts[0],
-      operator: this.ops[0],
-      value: 10
-    }
+    this.defaultValue = '10'
     this.state = {
       conditions: [],
       fact: this.facts[0],
@@ -116,7 +112,7 @@ export default class Rules extends React.Component {
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('operator')}>
             { this.showOptions(this.ops) }
           </FormControl>
-          <FormControl type="text" placeholder="10" onChange={this.handleChange('value')}/>
+          <FormControl type="text" placeholder={this.defaultValue} onChange={this.handleChange('value')}/>
           <HelpBlock>
             <p className="text-danger">{this.props.errors.message}</p>
           </HelpBlock>
@@ -145,7 +141,7 @@ export default class Rules extends React.Component {
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('type')}>
             { this.showOptions(this.type) }
           </FormControl>
-          <FormControl type="text" placeholder="10" onChange={this.handleChange('params')}/>
+          <FormControl type="text" placeholder={this.defaultValue} onChange={this.handleChange('params')}/>
           <HelpBlock>
             <p className="text-danger">{this.props.errors.message}</p>
           </HelpBlock>
