@@ -9,7 +9,8 @@ chai.use(require('chai-http'))
 const {
   normalRule,
   emptyConditionRule,
-  missingConditionRule
+  missingConditionRule,
+  multipleConditionsRule
 } = require('./rules_definitions')
 
 const baseURL = '/rules'
@@ -192,6 +193,21 @@ describe('add simple rule', function () {
       .end((err, res) => {
         should.equal(err, null)
         res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.body.success.should.be.equal(false)
+        done()
+      })
+  })
+  it('post multiple conditions rule', (done) => {
+    let jsonRule = JSON.stringify(multipleConditionsRule)
+    chai.request(server)
+      .post(baseURL)
+      .send({ json: jsonRule })
+      .end(function (err, res) {
+        // expected: { success: true, rule: rule }
+        should.equal(err, null)
+        res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.body.should.be.a('object')
+        res.body.should.have.property('success')
         res.body.success.should.be.equal(false)
         done()
       })

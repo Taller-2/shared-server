@@ -41,3 +41,41 @@ module.exports.missingConditionRule = {
     }
   }
 }
+
+module.exports.multipleConditionsRule = {
+  'conditions': {
+    'all': [
+      {
+        'fact': 'daytrips',
+        'operator': 'equal',
+        'value': 10
+      },
+      {
+        'fact': 'daytrips',
+        'operator': 'equal',
+        'value': 10
+      },
+      {
+        'fact': 'daytrips',
+        'operator': 'equal',
+        'value': 10
+      },
+      {
+        'fact': 'daytrips',
+        'operator': 'equal',
+        'value': 10
+      },
+      {
+        'fact': 'daytrips',
+        'operator': 'equal',
+        'value': 10
+      }
+    ]
+  },
+  'event': {
+    'type': 'percentage',
+    'params': {
+      'data': 10
+    }
+  }
+}
