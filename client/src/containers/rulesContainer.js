@@ -46,7 +46,7 @@ export default class RulesContainer extends React.Component {
           this.setState({ redirectToRules: true })
           alert('Regla creada exitosamente')
         } else {
-          toast('ERROR: DO NO LEAVE A RULE EMPTY')
+          toast(JSON.stringify(response.content.error))
           this.setState({
             errors: response.content.error,
             refresh: true
@@ -54,7 +54,7 @@ export default class RulesContainer extends React.Component {
         }
       })
       .catch(err => {
-        alert('Error al agregar la regla' + err) // TODO hacer algo
+        toast('Error al agregar la regla' + err)
       })
   }
 
