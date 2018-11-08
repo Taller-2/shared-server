@@ -1,8 +1,7 @@
 const chai = require('chai')
 const should = require('should')
 const app = require('../server/index')
-const port = process.env.PORT || 5000
-let server = startConection(port, app)
+const server = app.listen()
 const truncate = require('../scripts/db/truncate')
 const httpStatus = require('http-status-codes')
 const {
@@ -11,22 +10,11 @@ const {
   factorRule,
   minPriceRule,
   percentageRule,
-  discountRule
+  discountRule,
+  surchargeRule,
+  sumRule
 } = require('./shipment_cost_definitions')
 chai.use(require('chai-http'))
-
-function startConection (port, app) {
-  let server = app.listen(port, 'localhost', () => {
-    console.log('++++++++++++++++++++++++++++++++++++++++++++++')
-    console.log("Calling app.listen's callback function.")
-    let host = server.address().address
-    let port = server.address().port
-    console.log('Example app listening at http://%s:%s', host, port)
-    console.log('enviroment: ', app.settings.env)
-    console.log('++++++++++++++++++++++++++++++++++++++++++++++')
-  })
-  return server
-}
 
 function ruleCheck (err, res, jsonRule) {
   should.equal(err, null)
@@ -207,6 +195,67 @@ describe('shipment cost test', function () {
       .send(facts)
       .end(function (err, res) {
         checkCost(err, res, { status: 'enabled', cost: 600 })
+        setImmediate(done)
+      })
+  })
+  // --------------------------------------------------------------------
+  it('Post a surcharge rule', function (done) {
+    truncate('Rules')
+    const rulesVector = [surchargeRule]
+    postRulesVector(rulesVector, server, done)
+  })
+  it('should get a surcharge', function (done) {
+    const facts = {
+      'email': 'jorge@comprame.com',
+      'userScore': -3,
+      'duration': 50,
+      'price': 35
+    }
+    chai.request(server)
+      .post('/shipment-cost')
+      .send(facts)
+      .end(function (err, res) {
+        checkCost(err, res, { status: 'enabled', cost: 10 })
+        setImmediate(done)
+      })
+  })
+  // --------------------------------------------------------------------
+  it('Post a sum rule', function (done) {
+    truncate('Rules')
+    const rulesVector = [sumRule]
+    postRulesVector(rulesVector, server, done)
+  })
+  it('should get a sum', function (done) {
+    const facts = {
+      'email': 'jorge@comprame.com',
+      'userScore': -3,
+      'monthtrips': 12
+    }
+    chai.request(server)
+      .post('/shipment-cost')
+      .send(facts)
+      .end(function (err, res) {
+        checkCost(err, res, { status: 'enabled', cost: 20 })
+        setImmediate(done)
+      })
+  })
+  // --------------------------------------------------------------------
+  it('post unused rules', function (done) {
+    truncate('Rules')
+    const rulesVector = [sumRule, surchargeRule, minPriceRule]
+    postRulesVector(rulesVector, server, done)
+  })
+  it('should apply only rules that match with facts', function (done) {
+    const facts = {
+      'email': 'jorge@comprame.com',
+      'userScore': -3,
+      'monthtrips': 12
+    }
+    chai.request(server)
+      .post('/shipment-cost')
+      .send(facts)
+      .end(function (err, res) {
+        checkCost(err, res, { status: 'enabled', cost: 20 })
         setImmediate(done)
       })
   })

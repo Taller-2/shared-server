@@ -4,6 +4,7 @@ const app = require('../server/index')
 const server = app.listen()
 const truncate = require('../scripts/db/truncate')
 const httpStatus = require('http-status-codes')
+const model = require('../server/models')
 chai.use(require('chai-http'))
 
 let rule = {
@@ -22,6 +23,8 @@ let rule = {
   }
 }
 
+const baseURL = '/rules'
+
 describe('add simple rule', function () {
   before(async () => { return truncate('Rules') })
   after(async () => { return truncate('Rules') })
@@ -29,7 +32,7 @@ describe('add simple rule', function () {
   it('should save a rule in data base and receive success message', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
-      .post('/rules')
+      .post(baseURL)
       .send({ json: jsonRule })
       .end(function (err, res) {
         // expected: { success: true, rule: rule }
@@ -49,7 +52,7 @@ describe('add simple rule', function () {
   it('should get vector of rules', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
-      .get('/rules')
+      .get(baseURL)
       .end(function (err, res) {
         // expected: { success: true, rules: rules }
         should.equal(err, null)
@@ -68,7 +71,7 @@ describe('add simple rule', function () {
   it('should get a rule by id', function (done) {
     let jsonRule = JSON.stringify(rule)
     chai.request(server)
-      .get('/rules/' + id.toString())
+      .get(`${baseURL}/${id}`)
       .end(function (err, res) {
         // expected: { success: true, rules: rules }
         should.equal(err, null)
@@ -78,6 +81,98 @@ describe('add simple rule', function () {
         res.body.should.have.property('rules')
         res.body.rules.should.have.property('json')
         res.body.rules.json.should.equal(jsonRule)
+        done()
+      })
+  })
+
+  it('should get error by requesting invalid id', function (done) {
+    chai.request(server)
+      .get(`${baseURL}/${'invalid'}`)
+      .end(function (err, res) {
+        // expected: { success: true, rules: rules }
+        should.equal(err, null)
+        res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.body.should.have.property('success')
+        res.body.should.have.property('error')
+        const { success } = res.body
+        success.should.be.equal(false)
+        done()
+      })
+  })
+
+  it('delete rule', function (done) {
+    const aRule = { json: JSON.stringify(rule) }
+    model.Rules
+      .create(aRule)
+      .then(instance => {
+        chai
+          .request(server)
+          .delete(`${baseURL}/${instance.id}`)
+          .end((err, res) => {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.CREATED)
+            res.body.should.have.property('success')
+            const { success } = res.body
+            success.should.be.equal(true)
+            done()
+          })
+      })
+  })
+  it('delete invalid id rule', function (done) {
+    chai
+      .request(server)
+      .delete(`${baseURL}/${'invalid'}`)
+      .end((err, res) => {
+        should.equal(err, null)
+        res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.body.should.have.property('success')
+        res.body.should.have.property('error')
+        const { success } = res.body
+        success.should.be.equal(false)
+        done()
+      })
+  })
+  it('add empty rule', function (done) {
+    chai
+      .request(server)
+      .post(baseURL)
+      .send({})
+      .end((err, res) => {
+        should.equal(err, null)
+        res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.body.should.have.property('success')
+        res.body.should.have.property('error')
+        const { success } = res.body
+        success.should.be.equal(false)
+        done()
+      })
+  })
+  it('Updates a rule', (done) => {
+    const body = { json: JSON.stringify(rule) }
+    model.Rules
+      .create(body)
+      .then(instance => {
+        chai
+          .request(server)
+          .put(`${baseURL}/${instance.id}`)
+          .send(body)
+          .end((err, res) => {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.CREATED)
+            res.body.success.should.be.equal(true)
+            done()
+          })
+      })
+  })
+  it('should get error by updating an invalid id rule', (done) => {
+    chai
+      .request(server)
+      .put(`${baseURL}/${'invalid'}`)
+      .send({ json: JSON.stringify(rule) })
+      .end((err, res) => {
+        should.equal(err, null)
+        res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.body.success.should.be.equal(false)
         done()
       })
   })

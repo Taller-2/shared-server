@@ -1,3 +1,5 @@
+const fetch = require('node-fetch')
+
 class HttpService {
   async get (url) {
     const rawResponse = await fetch(url, { method: 'GET', headers: this.getHeaders() })
