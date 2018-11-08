@@ -5,29 +5,18 @@ const server = app.listen()
 const truncate = require('../scripts/db/truncate')
 const httpStatus = require('http-status-codes')
 chai.use(require('chai-http'))
-
-let rule = {
-  'conditions': {
-    'all': [{
-      'fact': 'test_rule',
-      'operator': 'equal',
-      'value': true
-    }]
-  },
-  'event': {
-    'type': 'test',
-    'params': {
-      'data': 0
-    }
-  }
-}
+const {
+  normalRule,
+  emptyConditionRule,
+  missingConditionRule
+} = require('./rules_definitions')
 
 describe('add simple rule', function () {
   before(async () => { return truncate('Rules') })
   after(async () => { return truncate('Rules') })
 
   it('should save a rule in data base and receive success message', function (done) {
-    let jsonRule = JSON.stringify(rule)
+    let jsonRule = JSON.stringify(normalRule)
     chai.request(server)
       .post('/rules')
       .send({ json: jsonRule })
@@ -47,7 +36,7 @@ describe('add simple rule', function () {
 
   let id
   it('should get vector of rules', function (done) {
-    let jsonRule = JSON.stringify(rule)
+    let jsonRule = JSON.stringify(normalRule)
     chai.request(server)
       .get('/rules')
       .end(function (err, res) {
@@ -66,7 +55,7 @@ describe('add simple rule', function () {
   })
 
   it('should get a rule by id', function (done) {
-    let jsonRule = JSON.stringify(rule)
+    let jsonRule = JSON.stringify(normalRule)
     chai.request(server)
       .get('/rules/' + id.toString())
       .end(function (err, res) {
@@ -78,6 +67,40 @@ describe('add simple rule', function () {
         res.body.should.have.property('rules')
         res.body.rules.should.have.property('json')
         res.body.rules.json.should.equal(jsonRule)
+        done()
+      })
+  })
+
+  it('test empty rule', function (done) {
+    let jsonRule = JSON.stringify(emptyConditionRule)
+    chai.request(server)
+      .post('/rules')
+      .send({ json: jsonRule })
+      .end(function (err, res) {
+        // expected: { success: true, rule: rule }
+        should.equal(err, null)
+        res.should.have.status(httpStatus.BAD_REQUEST)
+        res.body.should.be.a('object')
+        res.body.should.have.property('success')
+        res.body.success.should.be.equal(false)
+        res.body.should.have.property('error')
+        done()
+      })
+  })
+
+  it('test missing conditions rule', function (done) {
+    let jsonRule = JSON.stringify(missingConditionRule)
+    chai.request(server)
+      .post('/rules')
+      .send({ json: jsonRule })
+      .end(function (err, res) {
+        // expected: { success: true, rule: rule }
+        should.equal(err, null)
+        res.should.have.status(httpStatus.BAD_REQUEST)
+        res.body.should.be.a('object')
+        res.body.should.have.property('success')
+        res.body.success.should.be.equal(false)
+        res.body.should.have.property('error')
         done()
       })
   })
