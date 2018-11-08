@@ -58,11 +58,11 @@ export default class Rules extends React.Component {
     }
     this.state = {
       conditions: [],
-      fact: this.facts[0],
-      value: 10,
-      operator: this.ops[0],
-      type: this.type[0],
-      params: 10
+      fact: null,
+      value: null,
+      operator: null,
+      type: null,
+      params: null
     }
   }
 
@@ -73,12 +73,6 @@ export default class Rules extends React.Component {
   }
 
   submit = (event) => {
-    if (this.state.conditions.length === 0) {
-      this.state.conditions.push(this.defaultCondition)
-      this.setState({
-        conditions: this.state.conditions
-      })
-    }
     event.preventDefault()
     this.props.onClick(this.state)
   }
@@ -117,7 +111,7 @@ export default class Rules extends React.Component {
           </FormControl>
           <FormControl type="text" placeholder="value" onChange={this.handleChange('value')}/>
           <HelpBlock>
-            <p className="text-danger">{this.props.errors.value}</p>
+            <p className="text-danger">{this.props.errors.message}</p>
           </HelpBlock>
         </Col>
         <Col smOffset={12} sm={10}>
@@ -141,7 +135,7 @@ export default class Rules extends React.Component {
           </FormControl>
           <FormControl type="text" placeholder="value" onChange={this.handleChange('params')}/>
           <HelpBlock>
-            <p className="text-danger">{this.props.errors.params}</p>
+            <p className="text-danger">{this.props.errors.message}</p>
           </HelpBlock>
         </Col>
       </FormGroup>
@@ -174,7 +168,23 @@ export default class Rules extends React.Component {
     )
   }
 
+  refresh () {
+    if (!this.props.refresh) {
+      return
+    }
+    this.setState({
+      conditions: [],
+      fact: null,
+      value: null,
+      operator: null,
+      type: null,
+      params: null
+    })
+    this.props.desactivateRefresh()
+  }
+
   render () {
+    this.refresh()
     return (
       <Grid>
         <Row className="show-grid">
@@ -200,6 +210,8 @@ export default class Rules extends React.Component {
 }
 
 Rules.propTypes = {
+  desactivateRefresh: PropTypes.func,
   onClick: PropTypes.func,
-  errors: PropTypes.object
+  errors: PropTypes.object,
+  refresh: PropTypes.boolean
 }
