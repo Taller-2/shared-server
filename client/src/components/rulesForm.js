@@ -7,13 +7,12 @@ import {
   FormControl,
   FormGroup,
   Grid,
-  Row,
-  HelpBlock
+  Row
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import RuleTranslator from '../service/ruleTranslator'
 
-export default class Rules extends React.Component {
+export default class RulesForm extends React.Component {
   constructor (props) {
     super(props)
     this.facts = [
@@ -62,9 +61,18 @@ export default class Rules extends React.Component {
     }
   }
 
+  checkValue (name, event) {
+    if (name === 'value' || name === 'params') {
+      if (!isNaN(event.target.value)) {
+        return parseInt(event.target.value, 10)
+      }
+    }
+    return event.target.value
+  }
+
   handleChange = name => event => {
     this.setState({
-      [name]: event.target.value
+      [name]: this.checkValue(name, event)
     })
   }
 
@@ -113,9 +121,6 @@ export default class Rules extends React.Component {
             { this.showOptions(this.ops) }
           </FormControl>
           <FormControl type="text" placeholder={this.defaultValue} onChange={this.handleChange('value')}/>
-          <HelpBlock>
-            <p className="text-danger">{this.props.errors.message}</p>
-          </HelpBlock>
         </Col>
         <Col smOffset={12} sm={10}>
           <Button type="button" onClick={ this.addCondition }>
@@ -142,9 +147,6 @@ export default class Rules extends React.Component {
             { this.showOptions(this.type) }
           </FormControl>
           <FormControl type="text" placeholder={this.defaultValue} onChange={this.handleChange('params')}/>
-          <HelpBlock>
-            <p className="text-danger">{this.props.errors.message}</p>
-          </HelpBlock>
         </Col>
       </FormGroup>
     )
@@ -217,9 +219,9 @@ export default class Rules extends React.Component {
   }
 }
 
-Rules.propTypes = {
+RulesForm.propTypes = {
   desactivateRefresh: PropTypes.func,
   onClick: PropTypes.func,
   errors: PropTypes.object,
-  refresh: PropTypes.boolean
+  refresh: PropTypes.bool
 }

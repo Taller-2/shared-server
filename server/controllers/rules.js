@@ -20,7 +20,7 @@ module.exports.findById = function (request, response) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
+        .json({ success: false, errors: error })
     })
 }
 
@@ -29,7 +29,7 @@ module.exports.create = function (request, response, next) {
   if (!isRuleValid(aRule)) {
     response
       .status(httpStatus.BAD_REQUEST)
-      .json({ success: false, error: 'Missing conditions' })
+      .json({ success: false, errors: 'Missing conditions' })
     return
   }
   model.Rules.create({
@@ -44,7 +44,7 @@ module.exports.create = function (request, response, next) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error.message })
+        .json({ success: false, errors: error.message })
     })
 }
 
@@ -62,7 +62,7 @@ module.exports.update = function (request, response) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
+        .json({ success: false, errors: error })
     })
 }
 
@@ -76,7 +76,7 @@ module.exports.delete = function (request, response) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
+        .json({ success: false, errors: error })
     })
 }
 
@@ -113,4 +113,19 @@ const isRuleValid = function (aJsonRule) {
   if (typeof aJsonRule === 'undefined') return false
   const rule = JSON.parse(aJsonRule)
   return isConditionValid(rule.conditions)
+}
+
+exports.validateCreate = () => {
+  return [
+    body('json').custom(jsonRule => {
+      return model.Rules.findAll(
+        { where: { json: jsonRule } }
+      )
+        .then(rule => {
+          if (rule.length !== 0) {
+            return Promise.reject(new Error('The rule already exists'))
+          }
+        })
+    })
+  ]
 }

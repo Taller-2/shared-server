@@ -1,5 +1,5 @@
 import React from 'react'
-import Rules from '../components/rules'
+import RulesForm from '../components/rulesForm'
 import { Redirect } from 'react-router-dom'
 import Http from '../service/Http'
 import httpStatus from 'http-status-codes'
@@ -44,17 +44,21 @@ export default class RulesContainer extends React.Component {
       .then(response => {
         if (response.status === httpStatus.CREATED) {
           this.setState({ redirectToRules: true })
-          alert('Regla creada exitosamente')
+          alert('Rule created successfully')
         } else {
-          toast(JSON.stringify(response.content.error))
+          if (response.content.errors.json) {
+            toast(JSON.stringify(response.content.errors.json))
+          } else {
+            toast(JSON.stringify(response.content.errors))
+          }
           this.setState({
-            errors: response.content.error,
+            errors: response.content.errors,
             refresh: true
           })
         }
       })
       .catch(err => {
-        toast('Error al agregar la regla' + err)
+        toast(err)
       })
   }
 
@@ -72,7 +76,7 @@ export default class RulesContainer extends React.Component {
     return (
       <div>
         <ToastContainer></ToastContainer>
-        <Rules
+        <RulesForm
           errors={errors}
           refresh={refresh}
           onClick={(rulesValues) => this.handleClick(rulesValues)}
