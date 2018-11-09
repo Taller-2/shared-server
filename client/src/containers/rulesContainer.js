@@ -46,8 +46,13 @@ export default class RulesContainer extends React.Component {
           this.setState({ redirectToRules: true })
           alert('Rule created successfully')
         } else {
-          toast(JSON.stringify(response.content.errors))
+          if (response.content.errors.json) {
+            toast(JSON.stringify(response.content.errors.json))
+          } else {
+            toast(JSON.stringify(response.content.errors))
+          }
           this.setState({
+            errors: response.content.errors,
             refresh: true
           })
         }
