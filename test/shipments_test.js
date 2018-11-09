@@ -8,18 +8,22 @@ const truncate = require('../scripts/db/truncate')
 
 chai.use(require('chai-http'))
 
+let id
+
 describe('Shipments controller', function () {
   beforeEach((done) => {
     truncate('Shipment').then(() => {
       model.Shipment
         .create(dummyShipment)
-        .then(() => { done() })
+        .then((shipment) => {
+          id = shipment.id
+          done()
+        })
     })
   })
 
   const baseURL = '/shipments'
   const dummyShipment = {
-    id: 1,
     transactionId: 123,
     address: 'Calle falsa 123',
     status: 'pending'
@@ -27,7 +31,6 @@ describe('Shipments controller', function () {
 
   it('Create shipment OK', (done) => {
     const other = Object.assign({}, dummyShipment)
-    other.id = 111
     chai
       .request(server)
       .post(baseURL)
@@ -37,7 +40,7 @@ describe('Shipments controller', function () {
         res.should.have.status(httpStatus.CREATED)
         const { success, shipment } = res.body
         success.should.be.equal(true)
-        shipment.id.should.be.equal(other.id)
+        shipment.id.should.be.equal(id + 1)
         shipment.address.should.be.equal(other.address)
         shipment.status.should.be.equal(other.status)
         done()
@@ -52,7 +55,7 @@ describe('Shipments controller', function () {
       .send(other)
       .end((err, res) => {
         should.equal(err, null)
-        res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
         const { success } = res.body
         success.should.be.equal(false)
         done()
@@ -62,7 +65,7 @@ describe('Shipments controller', function () {
   it('Update shipment OK', (done) => {
     const requestBody = { status: 'shipped' }
     chai.request(server)
-      .put(`${baseURL}/${dummyShipment.id}`)
+      .put(`${baseURL}/${id}`)
       .send(requestBody)
       .end((err, res) => {
         should.equal(err, null)
@@ -88,7 +91,7 @@ describe('Shipments controller', function () {
   it('Update shipment FAIL invalid status', (done) => {
     const requestBody = { status: 'asd' }
     chai.request(server)
-      .put(`${baseURL}/${dummyShipment.id}`)
+      .put(`${baseURL}/${id}`)
       .send(requestBody)
       .end((err, res) => {
         should.equal(err, null)
@@ -101,7 +104,7 @@ describe('Shipments controller', function () {
   it('Update shipment FAIL invalid status type', (done) => {
     const requestBody = { status: 1 }
     chai.request(server)
-      .put(`${baseURL}/${dummyShipment.id}`)
+      .put(`${baseURL}/${id}`)
       .send(requestBody)
       .end((err, res) => {
         should.equal(err, null)
@@ -117,9 +120,6 @@ describe('Shipments controller', function () {
       .put(`${baseURL}/${999}`)
       .send(requestBody)
       .end((err, res) => {
-        console.log('+++++++++++++++++++++++++++++++++++++++')
-        console.log('ERROR: ', res.text)
-        console.log('+++++++++++++++++++++++++++++++++++++++')
         should.equal(err, null)
         res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
         res.body.success.should.be.equal(false)
@@ -147,13 +147,13 @@ describe('Shipments controller', function () {
         res.body.success.should.be.equal(true)
         chai.expect(res.body.shipments).to.be.an('array')
         chai.expect(res.body.shipments).to.have.length(1)
-        chai.expect(res.body.shipments[0].id).to.equal(dummyShipment.id)
+        chai.expect(res.body.shipments[0].id).to.equal(id)
         done()
       })
   })
   it('delete shipments OK', (done) => {
     chai.request(server)
-      .delete(`${baseURL}/${dummyShipment.id}`)
+      .delete(`${baseURL}/${id}`)
       .end((err, res) => {
         should.equal(err, null)
         res.should.have.status(httpStatus.OK)
