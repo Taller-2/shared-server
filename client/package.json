@@ -15,7 +15,7 @@
     "react-dom": "^16.4.2",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.5",
+    "react-scripts": "^2.1.1",
     "react-toastify": "^4.4.0"
   },
   "scripts": {
@@ -26,8 +26,14 @@
   },
   "proxy": "http://localhost:5000/",
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
-    "eslint": "^4.19.1",
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.6.0",
     "eslint-plugin-react": "^7.11.1"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
