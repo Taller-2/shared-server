@@ -123,7 +123,7 @@ exports.validateCreate = () => {
       )
         .then(rule => {
           if (rule.length !== 0) {
-            return Promise.reject(new Error('La regla ya existe'))
+            return Promise.reject(new Error('The rule already exists'))
           }
         })
     })
