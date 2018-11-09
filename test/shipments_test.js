@@ -39,7 +39,6 @@ describe('Shipments controller', function () {
         res.should.have.status(httpStatus.CREATED)
         const { success, shipment } = res.body
         success.should.be.equal(true)
-        shipment.id.should.be.equal(id + 1)
         shipment.address.should.be.equal(dummyShipment.address)
         shipment.status.should.be.equal(dummyShipment.status)
         done()
