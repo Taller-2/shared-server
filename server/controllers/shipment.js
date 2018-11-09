@@ -84,7 +84,7 @@ module.exports.getUIEnums = function (request, response, next) {
 
 exports.validateCreate = () => {
   return [
-    body('id', 'El identificador de envío debe ser numérico').isInt(),
+    body('transactionId', 'El identificador de envío debe ser numérico').isInt(),
     body('address', 'La direccion es requerida').exists().trim(),
     body('status', 'Estado del envío invalido').exists().trim().custom((value) => shipmentStatus.includes(value))
   ]
