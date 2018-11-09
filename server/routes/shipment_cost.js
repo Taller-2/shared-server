@@ -4,21 +4,15 @@ const shipmentCostController = require('../controllers/shipment_cost')
 
 /*
 const {
-  userCharacteristics: {
-    daytrips, // (int)
-    monthtrips, // (int)
-    antiquity  // (int)
-    email, // (string)
-  },
+  daytrips, // (int)
+  monthtrips, // (int)
+  antiquity  // (int)
+  email, // (string)
   userScore,  // (float)
   paymentMethod, // (string) [debit, credit, cash]
-  shippingCharacteristics: {
-    distance,  // (float) (KM)
-    geographicalPosition: {
-      latitude,  // (float)
-      longitude // (float)
-    }
-  },
+  distance,  // (float) (KM)
+  latitude,  // (float)
+  longitude // (float)
   tripDate, // (string: YYYY/MM/DD)
   tripTime // (string: HH:MM)
 } = req.body
