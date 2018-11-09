@@ -1,10 +1,11 @@
 const router = require('express').Router()
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 const rulesController = require('../controllers/rules')
+const validation = require('../middlewares/validation')
 
 router.get('/:id?', rulesController.findById)
 
-router.post('/', bodyParser.json(), rulesController.create)
+router.post('/', rulesController.validateCreate(), validation.validationHandler, rulesController.create)
 
 router.put('/:id', rulesController.update)
 
