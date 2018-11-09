@@ -30,19 +30,18 @@ describe('Shipments controller', function () {
   }
 
   it('Create shipment OK', (done) => {
-    const other = Object.assign({}, dummyShipment)
     chai
       .request(server)
       .post(baseURL)
-      .send(other)
+      .send(dummyShipment)
       .end((err, res) => {
         should.equal(err, null)
         res.should.have.status(httpStatus.CREATED)
         const { success, shipment } = res.body
         success.should.be.equal(true)
         shipment.id.should.be.equal(id + 1)
-        shipment.address.should.be.equal(other.address)
-        shipment.status.should.be.equal(other.status)
+        shipment.address.should.be.equal(dummyShipment.address)
+        shipment.status.should.be.equal(dummyShipment.status)
         done()
       })
   })
