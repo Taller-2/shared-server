@@ -42,7 +42,7 @@ module.exports.factorRule = {
     'type': 'factor',
     'params': {
       'data': 15,
-      'fact': 'distance'
+      'fact': ['distance']
     }
   }
 }

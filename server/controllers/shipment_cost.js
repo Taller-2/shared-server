@@ -25,7 +25,10 @@ formula.when('percentage', function (event, data, cost) {
   return 'enabled'
 })
 formula.when('factor', function (event, data, cost) {
-  const factor = event.params.data * data[event.params.fact]
+  let factor = 0
+  event.params.fact.forEach(aFact => {
+    factor += event.params.data * data[aFact]
+  })
   cost.cost += factor
   return 'enabled'
 })
