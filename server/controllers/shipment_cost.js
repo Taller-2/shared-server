@@ -96,19 +96,22 @@ function addRules (rules) {
 }
 function runRules (engine, facts, res) {
   let array
-  engine.run(facts).then(triggeredEvents => {
-    // engine returns a list of events with truthy conditions
-    let cost = { cost: 0 }
-    array = triggeredEvents.map(event => (formula(event, facts, cost)))
-    if (array.length === 0) array = ['disabled']
-    res
-      .status(httpStatus.OK)
-      .json({ success: true, cost: getResult(array, cost.cost) })
-  }).catch((error) => {
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ success: false, errors: error })
-  })
+  engine
+    .run(facts)
+    .then(triggeredEvents => {
+      // engine returns a list of events with truthy conditions
+      let cost = { cost: 0 }
+      array = triggeredEvents.map(event => (formula(event, facts, cost)))
+      if (array.length === 0) array = ['disabled']
+      res
+        .status(httpStatus.OK)
+        .json({ success: true, cost: getResult(array, cost.cost) })
+    })
+    .catch((error) => {
+      res
+        .status(httpStatus.INTERNAL_SERVER_ERROR)
+        .json({ success: false, errors: error })
+    })
 }
 
 function isDictionary (obj) {
