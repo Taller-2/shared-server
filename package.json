@@ -83,7 +83,8 @@
       "server/controllers/session.js",
       "scripts/**",
       "server/routes/app_server_logged_data.js",
-      "server/controllers/http_service.js"
+      "server/controllers/http_service.js",
+      "server/middlewares/error_handler.js"
     ]
   }
 }
