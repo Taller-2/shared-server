@@ -94,26 +94,71 @@ function addRules (rules) {
   }
   return engine
 }
-
 function runRules (engine, facts, res) {
   let array
   engine.run(facts).then(triggeredEvents => {
     // engine returns a list of events with truthy conditions
     let cost = { cost: 0 }
     array = triggeredEvents.map(event => (formula(event, facts, cost)))
-    res.status(httpStatus.OK)
-    res.send(getResult(array, cost.cost))
-  }).catch((err) => res.send({ message: 'ERROR: ' + err }))
+    if (array.length === 0) array = ['disabled']
+    res
+      .status(httpStatus.OK)
+      .json({ success: true, cost: getResult(array, cost.cost) })
+  }).catch((error) => {
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, errors: error })
+  })
+}
+
+function isDictionary (obj) {
+  if (!obj) return false
+  if (Array.isArray(obj)) return false
+  if (obj.constructor !== Object) return false
+  return true
 }
 
 module.exports.getCost = async function (req, res) {
+  if (!isDictionary(req.body)) {
+    res
+      .status(httpStatus.UNPROCESSABLE_ENTITY)
+      .json({ success: false, errors: 'The facts should be inside an object' })
+    return
+  }
   let rulesVector = null
   await db.Rules.findAll({ raw: true })
     .then(rules => {
       rulesVector = rules
     })
-    .catch(error => (res.send({ success: false, error: error })))
+    .catch(error => {
+      res
+        .status(httpStatus.INTERNAL_SERVER_ERROR)
+        .json({ success: false, error: error })
+    })
   let engine = addRules(rulesVector)
   let facts = req.body
   runRules(engine, facts, res)
+}
+
+const { body } = require('express-validator/check')
+const { factsTypes } = require('./shipment_cost_data_types')
+
+exports.validateCreate = () => {
+  let msg = ''
+  return [
+    body(Object.keys(factsTypes), msg)
+      .not().isArray()
+      .custom((aValue, { req }) => {
+        for (let aFact in req.body) {
+          if (aValue === 'undefined') continue
+          if (req.body[aFact] !== aValue) continue
+          const type = typeof aValue
+          const expectedType = factsTypes[aFact]
+          if (!(type === expectedType)) {
+            return false
+          }
+        }
+        return true
+      })
+  ]
 }
