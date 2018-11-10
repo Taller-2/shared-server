@@ -14,17 +14,26 @@ export default class RulesContainer extends React.Component {
     }
   }
 
-  handleClick (fact, value) {
-    Http.post('shipment-cost/', { [fact]: value })
+  buildFacts (factsList) {
+    let facts = {}
+    factsList.forEach(aFact => {
+      facts = Object.assign(facts, aFact)
+    })
+    return facts
+  }
+
+  handleClick (factsList) {
+    const facts = this.buildFacts(factsList)
+    Http.post('shipment-cost/', facts)
       .then(response => {
         if (response.status === httpStatus.OK) {
           this.setState({
             errors: {},
-            cost: 'the cost is ' + response.content.cost.cost + ' because it is ' + response.content.cost.status.value
+            cost: 'the cost is ' + response.content.cost.cost + ' because it is ' + response.content.cost.status
           })
         } else {
           this.setState({
-            errors: { value: response.content.errors[fact] }
+            errors: { value: response.content.errors }
           })
         }
       })
@@ -44,7 +53,7 @@ export default class RulesContainer extends React.Component {
         <ShipmentCostForm
           errors={errors}
           cost={cost}
-          onClick={(fact, value) => this.handleClick(fact, value)}
+          onClick={(factsList) => this.handleClick(factsList)}
         />
       </div>
     )

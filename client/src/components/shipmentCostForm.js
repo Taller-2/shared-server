@@ -19,7 +19,8 @@ export default class ShipmentCostForm extends React.Component {
     this.facts = facts
     this.state = {
       fact: this.facts[0],
-      value: null
+      value: null,
+      factsList: []
     }
   }
 
@@ -38,9 +39,19 @@ export default class ShipmentCostForm extends React.Component {
     })
   }
 
+  refresh () {
+    this.setState({
+      conditions: [],
+      fact: this.facts[0],
+      value: null,
+      factsList: []
+    })
+  }
+
   submit = (event) => {
     event.preventDefault()
-    this.props.onClick(this.state.fact, this.state.value)
+    this.props.onClick(this.state.factsList)
+    this.refresh()
   }
 
   showOptions (options) {
@@ -49,6 +60,22 @@ export default class ShipmentCostForm extends React.Component {
         return (<option key={index} value={option}>{option}</option>)
       })
     )
+  }
+
+  addFact = () => {
+    this.state.factsList.push({
+      [this.state.fact]: this.state.value
+    })
+    this.setState({
+      'factsList': this.state.factsList
+    })
+  }
+
+  removeFact = () => {
+    this.state.factsList.pop()
+    this.setState({
+      'factsList': this.state.factsList
+    })
   }
 
   showFacts () {
@@ -62,6 +89,16 @@ export default class ShipmentCostForm extends React.Component {
             { this.showOptions(this.facts) }
           </FormControl>
           <FormControl type="text" placeholder="insert a value" onChange={this.handleChange('value')}/>
+        </Col>
+        <Col smOffset={12} sm={10}>
+          <Button type="button" onClick={ this.addFact }>
+            +
+          </Button>
+        </Col>
+        <Col smOffset={12} sm={10}>
+          <Button type="button" onClick={ this.removeFact }>
+            -
+          </Button>
         </Col>
       </FormGroup>
     )
@@ -96,9 +133,30 @@ export default class ShipmentCostForm extends React.Component {
     )
   }
 
+  listFacts () {
+    let translatedFacts = []
+    this.state.factsList.forEach((aFact) => {
+      translatedFacts.push(JSON.stringify(aFact))
+    })
+    return (
+      <FormGroup controlId="condition">
+        <Col sm={10}>
+          { this.showOptions(translatedFacts) }
+        </Col>
+      </FormGroup>
+    )
+  }
+
   render () {
     return (
       <Grid>
+        <Row className="show-grid">
+          <Col xs={12} md={4} mdOffset={9}>
+            <Form horizontal>
+              { this.listFacts() }
+            </Form>
+          </Col>
+        </Row>
         <Row className="show-grid">
           <Col xs={12} md={6} mdOffset={3}>
             <Form horizontal>
