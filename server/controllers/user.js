@@ -14,7 +14,7 @@ module.exports.findById = function (request, response) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
+        .json({ success: false, errors: error })
     })
 }
 
@@ -35,7 +35,7 @@ module.exports.create = function (request, response, next) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
+        .json({ success: false, errors: error })
     })
 }
 
@@ -53,7 +53,7 @@ module.exports.update = function (request, response) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
+        .json({ success: false, errors: error })
     })
 }
 
@@ -67,7 +67,7 @@ module.exports.delete = function (request, response) {
     .catch(error => {
       response
         .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
+        .json({ success: false, errors: error })
     })
 }
 
