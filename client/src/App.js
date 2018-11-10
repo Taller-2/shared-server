@@ -16,6 +16,7 @@ import RulesListContainer from './containers/rulesListContainer'
 import AppServerGraphsContainer from './containers/appServerGraphsContainer'
 import PaymentsContainer from './containers/PaymentContainer'
 import ShipmentsContainer from './containers/ShipmentsContainer'
+import ShipmentsCostContainer from './containers/shipmentCostContainer'
 
 class App extends Component {
   constructor (props) {
@@ -51,6 +52,7 @@ class App extends Component {
               <PrivateRoute path="/appServerGraphs" component={AppServerGraphsContainer} />
               <PrivateRoute path="/payments" component={PaymentsContainer} />
               <PrivateRoute path="/shipments" component={ShipmentsContainer} />
+              <PrivateRoute path="/shipment-cost" component={ShipmentsCostContainer} />
             </div>
           </Router>
         </div>
