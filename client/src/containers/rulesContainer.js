@@ -24,11 +24,15 @@ export default class RulesContainer extends React.Component {
       'event': {
         'type': type,
         'params': {
-          'data': params
+          'data': params,
+          'fact': []
         }
       }
     }
     conditions.forEach((aCondition) => {
+      if (type === 'factor') {
+        rule.event.params.fact.push(aCondition.fact)
+      }
       rule.conditions.all.push({
         'fact': aCondition.fact,
         'operator': aCondition.operator,
