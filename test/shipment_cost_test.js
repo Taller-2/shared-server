@@ -26,14 +26,12 @@ function checkCost (err, res, expectedResult) {
   should.equal(JSON.stringify(cost), JSON.stringify(expectedResult))
 }
 
-async function create (rules) {
-  return rules.forEach((aRule) => {
-    return model.Rules.create({ json: JSON.stringify(aRule) })
-  })
-}
-
 async function addRule (rules) {
-  return create(rules)
+  let promise
+  rules.forEach((aRule) => {
+    promise = model.Rules.create({ json: JSON.stringify(aRule) })
+  })
+  return promise
 }
 
 describe('shipment cost test', function () {
