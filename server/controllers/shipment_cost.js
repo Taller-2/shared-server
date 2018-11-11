@@ -117,7 +117,7 @@ function runRules (engine, facts, res) {
     })
 }
 
-function isDictionary (obj) {
+function isObject (obj) {
   if (!obj) return false
   if (Array.isArray(obj)) return false
   if (obj.constructor !== Object) return false
@@ -125,7 +125,7 @@ function isDictionary (obj) {
 }
 
 module.exports.getCost = async function (req, res) {
-  if (!isDictionary(req.body)) {
+  if (!isObject(req.body)) {
     res
       .status(httpStatus.UNPROCESSABLE_ENTITY)
       .json({ success: false, errors: 'The facts should be inside an object' })
