@@ -138,7 +138,7 @@ describe('User controller', function () {
           })
       })
   })
-  it('Shoul Fail name too long', (done) => {
+  it('Should Fail name too long', (done) => {
     const requestBody = {
       name: 'namenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamename',
       email: 'email@example.com',
