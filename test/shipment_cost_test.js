@@ -3,12 +3,12 @@ const should = require('should')
 const app = require('../server/index')
 const server = app.listen()
 const truncate = require('../scripts/db/truncate')
+const model = require('../server/models')
 const httpStatus = require('http-status-codes')
 const {
   freeRule,
   disabledRule,
   factorRule,
-  minPriceRule,
   percentageRule,
   discountRule,
   surchargeRule,
@@ -16,214 +16,149 @@ const {
 } = require('./shipment_cost_definitions')
 chai.use(require('chai-http'))
 
-function ruleCheck (err, res, jsonRule) {
-  should.equal(err, null)
-  res.should.have.status(httpStatus.CREATED)
-  res.body.should.be.a('object')
-  res.body.should.have.property('success')
-  res.body.success.should.be.equal(true)
-  res.body.should.have.property('rule')
-  res.body.rule.should.have.property('json')
-  res.body.rule.json.should.equal(jsonRule)
-}
-
 function checkCost (err, res, expectedResult) {
-  if (err !== null) {
-    console.log('++++++++++++++++++++++++++++++++++++++++++++++')
-    console.log('ERROR: ', err)
-    console.log('++++++++++++++++++++++++++++++++++++++++++++++')
-  }
   should.equal(err, null)
   res.should.have.status(httpStatus.OK)
-  should.equal(JSON.stringify(res.body), JSON.stringify(expectedResult))
+  res.body.should.have.property('success')
+  res.body.should.have.property('cost')
+  const { success, cost } = res.body
+  success.should.be.equal(true)
+  should.equal(JSON.stringify(cost), JSON.stringify(expectedResult))
 }
 
-function postRulesVector (rules, server, done) {
-  rules.forEach((aRule, idx) => {
-    let jsonRule = JSON.stringify(aRule)
-    chai.request(server)
-      // { success: true, rule: rule }
-      .post('/rules')
-      .send({ json: jsonRule })
-      .end(function (err, res) {
-        ruleCheck(err, res, jsonRule)
-        if (idx === rules.length - 1) {
-          setImmediate(done)
-        }
-      })
+async function addRule (rules) {
+  let promise
+  rules.forEach((aRule) => {
+    promise = model.Rules.create({ json: JSON.stringify(aRule) })
   })
+  return promise
 }
 
 describe('shipment cost test', function () {
-  // --------------------------------------------------------------------
-  it('Post a free rule', function (done) {
-    truncate('Rules')
-    postRulesVector([freeRule], server, done)
-  })
+  beforeEach(async () => { return truncate('Rules') })
+
   it('should receive shipment cost value that is zero', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'email': 'jorge@comprame.com' })
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'free', cost: 0 })
-        setImmediate(done)
+    addRule([freeRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'email': 'jorge@comprame.com' })
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'free', cost: 0 })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post a disabled rule', function (done) {
-    truncate('Rules')
-    postRulesVector([disabledRule], server, done)
   })
   it('Negative score should receive a null shipment cost value', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'userScore': -3 })
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'disabled', cost: null })
-        setImmediate(done)
+    addRule([disabledRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'userScore': -3 })
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'disabled', cost: null })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post a factor rule', function (done) {
-    truncate('Rules')
-    postRulesVector([factorRule], server, done)
   })
   it('Should receive a shipment cost value multiple of the distance', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'distance': 35 })
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 525 })
-        setImmediate(done)
+    addRule([factorRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'distance': 35 })
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'enabled', cost: 525 })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post a minimun price rule', function (done) {
-    truncate('Rules')
-    postRulesVector([minPriceRule], server, done)
-  })
-  it('should receive disable answer', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'price': 35 })
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'disabled', cost: null })
-        setImmediate(done)
-      })
-  })
-  // --------------------------------------------------------------------
-  it('Post several rules', function (done) {
-    truncate('Rules')
-    const rulesVector = [freeRule, disabledRule, factorRule, minPriceRule]
-    postRulesVector(rulesVector, server, done)
   })
   it('Disable answer must prevail', function (done) {
     const facts = {
       'email': 'jorge@comprame.com',
       'userScore': -3,
-      'distance': 35,
-      'price': 35
+      'distance': 35
     }
-    chai.request(server)
-      .post('/shipment-cost')
-      .send(facts)
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'disabled', cost: null })
-        setImmediate(done)
+    addRule([freeRule, disabledRule, factorRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send(facts)
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'disabled', cost: null })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post percentage rule', function (done) {
-    truncate('Rules')
-    const rulesVector = [percentageRule]
-    postRulesVector(rulesVector, server, done)
   })
   it('should receive free cost because of only percentage rule', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'duration': 50 })
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 0 })
-        setImmediate(done)
+    addRule([percentageRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'userScore': 50 })
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'enabled', cost: 0 })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post percentage and factor rule', function (done) {
-    truncate('Rules')
-    const rulesVector = [percentageRule, factorRule]
-    postRulesVector(rulesVector, server, done)
   })
   it('Factor rule should apply first because of mayor priority', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'duration': 50, 'distance': 40 })
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 540 })
-        setImmediate(done)
+    addRule([percentageRule, factorRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'distance': 40, userScore: 50 })
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'enabled', cost: 540 })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post percentage, factor and discount rule', function (done) {
-    truncate('Rules')
-    const rulesVector = [percentageRule, factorRule, discountRule]
-    postRulesVector(rulesVector, server, done)
   })
   it('percentage and discount rules should apply in parallel', function (done) {
-    chai.request(server)
-      .post('/shipment-cost')
-      .send({ 'duration': 50, 'distance': 40 })
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 531 })
-        setImmediate(done)
+    addRule([percentageRule, factorRule, discountRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'distance': 40, 'userScore': 50 })
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'enabled', cost: 531 })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post only a factor', function (done) {
-    truncate('Rules')
-    const rulesVector = [factorRule]
-    postRulesVector(rulesVector, server, done)
   })
   it('get cost with several facts and only one rule', function (done) {
     const facts = {
       'email': 'jorge@comprame.com',
       'userScore': -3,
-      'distance': 40,
-      'price': 35
+      'distance': 40
     }
-    chai.request(server)
-      .post('/shipment-cost')
-      .send(facts)
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 600 })
-        setImmediate(done)
+    addRule([factorRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send(facts)
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'enabled', cost: 600 })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post a surcharge rule', function (done) {
-    truncate('Rules')
-    const rulesVector = [surchargeRule]
-    postRulesVector(rulesVector, server, done)
   })
   it('should get a surcharge', function (done) {
     const facts = {
       'email': 'jorge@comprame.com',
       'userScore': -3,
-      'duration': 50,
-      'price': 35
+      'distance': 50
     }
-    chai.request(server)
-      .post('/shipment-cost')
-      .send(facts)
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 10 })
-        setImmediate(done)
+    addRule([surchargeRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send(facts)
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'enabled', cost: 10 })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('Post a sum rule', function (done) {
-    truncate('Rules')
-    const rulesVector = [sumRule]
-    postRulesVector(rulesVector, server, done)
   })
   it('should get a sum', function (done) {
     const facts = {
@@ -231,19 +166,16 @@ describe('shipment cost test', function () {
       'userScore': -3,
       'monthtrips': 12
     }
-    chai.request(server)
-      .post('/shipment-cost')
-      .send(facts)
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 20 })
-        setImmediate(done)
+    addRule([sumRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send(facts)
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'enabled', cost: 20 })
+            done()
+          })
       })
-  })
-  // --------------------------------------------------------------------
-  it('post unused rules', function (done) {
-    truncate('Rules')
-    const rulesVector = [sumRule, surchargeRule, minPriceRule]
-    postRulesVector(rulesVector, server, done)
   })
   it('should apply only rules that match with facts', function (done) {
     const facts = {
@@ -251,15 +183,124 @@ describe('shipment cost test', function () {
       'userScore': -3,
       'monthtrips': 12
     }
-    chai.request(server)
-      .post('/shipment-cost')
-      .send(facts)
-      .end(function (err, res) {
-        checkCost(err, res, { status: 'enabled', cost: 20 })
-        setImmediate(done)
+    addRule([sumRule, surchargeRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send(facts)
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'enabled', cost: 20 })
+            done()
+          })
       })
   })
-  // --------------------------------------------------------------------
+  it('should FAIL because of invalid type', function (done) {
+    const facts = {
+      'email': 3,
+      'userScore': -3,
+      'monthtrips': 12
+    }
+    addRule([sumRule, surchargeRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send(facts)
+          .end(function (err, res) {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+            res.body.should.have.property('success')
+            res.body.success.should.be.equal(false)
+            done()
+          })
+      })
+  })
+  it('should FAIL because of latitude invalid type', function (done) {
+    const facts = {
+      'latitude': '',
+      'userScore': -3,
+      'monthtrips': 12
+    }
+    addRule([sumRule, surchargeRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send(facts)
+          .end(function (err, res) {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+            res.body.should.have.property('success')
+            res.body.success.should.be.equal(false)
+            done()
+          })
+      })
+  })
+  it('should FAIL because of invalid posted data', function (done) {
+    addRule([sumRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send([])
+          .end(function (err, res) {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+            res.body.should.have.property('success')
+            res.body.success.should.be.equal(false)
+            done()
+          })
+      })
+  })
+  it('should FAIL because of invalid tripTime', function (done) {
+    addRule([sumRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'tripTime': null })
+          .end(function (err, res) {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+            res.body.should.have.property('success')
+            res.body.success.should.be.equal(false)
+            done()
+          })
+      })
+  })
+  it('should FAIL because of invalid userScore', function (done) {
+    addRule([sumRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'userScore': 'invalid' })
+          .end(function (err, res) {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+            res.body.should.have.property('success')
+            res.body.success.should.be.equal(false)
+            done()
+          })
+      })
+  })
+  it('should get disabled if no fact is sent', function (done) {
+    // addRule([sumRule])
+    chai.request(server)
+      .post('/shipment-cost')
+      .send({})
+      .end(function (err, res) {
+        checkCost(err, res, { status: 'disabled', cost: null })
+        done()
+      })
+  })
+  it('should FAIL invalid facts', function (done) {
+    addRule([sumRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ a: { b: { c: { d: { e: 'f' } } } } })
+          .end(function (err, res) {
+            checkCost(err, res, { status: 'disabled', cost: null })
+            done()
+          })
+      })
+  })
   after(function (done) {
     truncate('Rules')
     server.close()

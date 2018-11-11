@@ -42,23 +42,7 @@ module.exports.factorRule = {
     'type': 'factor',
     'params': {
       'data': 15,
-      'fact': 'distance'
-    }
-  }
-}
-
-module.exports.minPriceRule = {
-  'conditions': {
-    'all': [{
-      'fact': 'price',
-      'operator': 'lessThan',
-      'value': 50
-    }]
-  },
-  'event': {
-    'type': 'disabled',
-    'params': {
-      'data': null
+      'fact': ['distance']
     }
   }
 }
@@ -66,7 +50,7 @@ module.exports.minPriceRule = {
 module.exports.percentageRule = {
   'conditions': {
     'all': [{
-      'fact': 'duration',
+      'fact': 'userScore',
       'operator': 'equal',
       'value': 50
     }]
@@ -82,7 +66,7 @@ module.exports.percentageRule = {
 module.exports.discountRule = {
   'conditions': {
     'all': [{
-      'fact': 'duration',
+      'fact': 'userScore',
       'operator': 'equal',
       'value': 50
     }]
@@ -98,7 +82,7 @@ module.exports.discountRule = {
 module.exports.surchargeRule = {
   'conditions': {
     'all': [{
-      'fact': 'duration',
+      'fact': 'distance',
       'operator': 'equal',
       'value': 50
     }]

@@ -11,45 +11,14 @@ import {
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import RuleTranslator from '../service/ruleTranslator'
+import { facts, ops, type } from './rules_data'
 
 export default class RulesForm extends React.Component {
   constructor (props) {
     super(props)
-    this.facts = [
-      'daytrips',
-      'monthtrips',
-      'antiquity',
-      'userScore',
-      'paymentMethod',
-      'duration',
-      'distance',
-      'latitud',
-      'longitud',
-      'date',
-      'time',
-      'serverId',
-      'tripDate',
-      'tripTime',
-      'email',
-      'price'
-    ]
-    this.ops = [
-      'equal',
-      'greaterThanInclusive',
-      'lessThanInclusive',
-      'greaterThan',
-      'domainEqual',
-      'lessThan'
-    ]
-    this.type = [
-      'percentage',
-      'factor',
-      'sum',
-      'discount',
-      'surcharge',
-      'free',
-      'disabled'
-    ]
+    this.facts = facts
+    this.ops = ops
+    this.type = type
     this.defaultValue = '10'
     this.state = {
       conditions: [],

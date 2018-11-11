@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const bodyParser = require('body-parser')
+const validation = require('../middlewares/validation')
 const shipmentCostController = require('../controllers/shipment_cost')
 
 /*
@@ -19,6 +19,11 @@ const {
 see also: https://github.com/Taller-2/shared-server/wiki/Development#explicacion-de-que-tipo-de-datos-recibe-el-endpoint-shipment-cost
 */
 
-router.post('/', bodyParser.json(), shipmentCostController.getCost)
+router.post(
+  '/',
+  shipmentCostController.validateCreate(),
+  validation.validationHandler,
+  shipmentCostController.getCost
+)
 
 module.exports = router

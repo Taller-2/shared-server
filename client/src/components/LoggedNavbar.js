@@ -27,6 +27,9 @@ const LoggedNavbar = function () {
         <LinkContainer to="/shipments">
           <NavItem eventKey={7}>Envíos</NavItem>
         </LinkContainer>
+        <LinkContainer to="/shipment-cost">
+          <NavItem eventKey={8}>Simular costo de envio</NavItem>
+        </LinkContainer>
         <LinkContainer to="/logout">
           <NavItem eventKey={8}>Salir</NavItem>
         </LinkContainer>

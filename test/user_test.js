@@ -138,4 +138,22 @@ describe('User controller', function () {
           })
       })
   })
+  it('Should Fail name too long', (done) => {
+    const requestBody = {
+      name: 'namenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamenamename',
+      email: 'email@example.com',
+      pass: 'example',
+      enabled: 'pedro'
+    }
+    chai
+      .request(server)
+      .post(baseURL)
+      .send(requestBody)
+      .end((err, res) => {
+        should.equal(err, null)
+        res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.body.should.have.property('errors')
+        done()
+      })
+  })
 })
