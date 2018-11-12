@@ -27,11 +27,11 @@ function checkCost (err, res, expectedResult) {
 }
 
 async function addRule (rules) {
-  let promise
-  rules.forEach((aRule) => {
-    promise = model.Rules.create({ json: JSON.stringify(aRule) })
-  })
-  return promise
+  return Promise.all(
+    rules.map((aRule, _) => {
+      return model.Rules.create({ json: JSON.stringify(aRule) })
+    })
+  )
 }
 
 describe('shipment cost test', function () {
