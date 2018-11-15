@@ -45,15 +45,24 @@ export default class AppServerGraphsContainer extends React.Component {
     return names
   }
 
+  getGraphFromName (title, analysis) {
+    for (let graph in analysis) {
+      if (analysis[graph].title === title) {
+        return graph
+      }
+    }
+    return null
+  }
+
   getGraph (currentOption) {
     Http.get('/app-server-logged-data')
       .then(response => {
         if (response.success) {
-          let graphName = currentOption
+          let graphName = this.getGraphFromName(currentOption, response.analysis)
           if (JSON.stringify(response.analysis) === JSON.stringify({})) {
             return
           }
-          if (!(currentOption in response.analysis)) {
+          if (graphName === null) {
             graphName = Object.keys(response.analysis)[0]
           }
           let newOptions = this.createChart(response.analysis[graphName])
