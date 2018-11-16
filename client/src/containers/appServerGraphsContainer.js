@@ -25,7 +25,7 @@ export default class AppServerGraphsContainer extends React.Component {
       },
       series: [
         {
-          type: 'bar',
+          type: '',
           data: []
         }
       ]
@@ -33,7 +33,11 @@ export default class AppServerGraphsContainer extends React.Component {
     this.state = {
       errors: {},
       options: Object.assign({}, this.optionsTemplate),
-      graphTitles: ['No graphs']
+      graphTitles: ['No graphs'],
+      types: [
+        'bar',
+        'line'
+      ]
     }
   }
 
@@ -54,7 +58,7 @@ export default class AppServerGraphsContainer extends React.Component {
     return null
   }
 
-  getGraph (currentOption) {
+  getGraph (currentOption, type) {
     Http.get('/app-server-logged-data')
       .then(response => {
         if (response.success) {
@@ -65,7 +69,7 @@ export default class AppServerGraphsContainer extends React.Component {
           if (graphName === null) {
             graphName = Object.keys(response.analysis)[0]
           }
-          let newOptions = this.createChart(response.analysis[graphName])
+          let newOptions = this.createChart(response.analysis[graphName], type)
           this.setState({
             graphTitles: this.getGraphNames(response.analysis),
             options: newOptions
@@ -79,25 +83,26 @@ export default class AppServerGraphsContainer extends React.Component {
       })
   }
 
-  createChart (dataAnalysis) {
+  createChart (dataAnalysis, type) {
     const { xAxis, yAxis, title, yAxisTitle } = dataAnalysis
     let newOptions = Object.assign({}, this.optionsTemplate)
     newOptions.xAxis.categories = xAxis
     newOptions.title.text = title
     newOptions.series[0].data = yAxis
     newOptions.yAxis.title.text = yAxisTitle
+    newOptions.series[0].type = type
     return newOptions
   }
 
   render () {
-    const { errors, options, graphTitles } = this.state
-    // this.getGraph('')
+    const { errors, options, graphTitles, types } = this.state
     return (
       <AppServerGraphsForm
+        types={types}
         errors={errors}
         options={options}
         graphTitles={graphTitles}
-        onClick={(currentOption) => this.getGraph(currentOption)}
+        onClick={(currentOption, type) => this.getGraph(currentOption, type)}
       />
     )
   }

@@ -8,7 +8,8 @@ export default class AppServerGraphsForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentOption: ''
+      currentOption: '',
+      type: this.props.types[0]
     }
   }
 
@@ -20,7 +21,7 @@ export default class AppServerGraphsForm extends React.Component {
 
   submit = (event) => {
     event.preventDefault()
-    this.props.onClick(this.state.currentOption)
+    this.props.onClick(this.state.currentOption, this.state.type)
   }
 
   showOptions (options) {
@@ -44,6 +45,11 @@ export default class AppServerGraphsForm extends React.Component {
           <HelpBlock>
             <p className="text-danger">{this.props.errors.value}</p>
           </HelpBlock>
+        </Col>
+        <Col sm={10}>
+          <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('type')}>
+            { this.showOptions(this.props.types) }
+          </FormControl>
         </Col>
       </FormGroup>
     )
@@ -85,6 +91,7 @@ export default class AppServerGraphsForm extends React.Component {
 }
 
 AppServerGraphsForm.propTypes = {
+  types: PropTypes.array,
   onClick: PropTypes.func,
   errors: PropTypes.object,
   options: PropTypes.object,
