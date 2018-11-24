@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return [
+    return Promise.all([
       queryInterface.addColumn(
         'AppServers',
         'secret',
@@ -17,15 +17,13 @@ module.exports = {
           unique: true
         }
       )
-    ]
+    ])
   },
-
   down: (queryInterface, Sequelize) => {
-    return [
-      queryInterface.removeColumn(
-        'AppServers',
-        'secret',
-        Sequelize.STRING
-      )]
+    return queryInterface.removeColumn(
+      'AppServers',
+      'secret',
+      Sequelize.STRING
+    )
   }
 }
