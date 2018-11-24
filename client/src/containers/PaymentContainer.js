@@ -102,7 +102,6 @@ export default class PaymentContainer extends React.Component {
   submitNewPayment = (event) => {
     event.preventDefault()
     const payment = {
-      transactionId: this.state.transactionId,
       currency: this.state.currency,
       amount: this.state.amount,
       paymentMethod: this.state.paymentMethod,

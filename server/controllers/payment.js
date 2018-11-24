@@ -22,9 +22,9 @@ module.exports.findAll = function (request, response, next) {
 }
 
 module.exports.create = function (request, response, next) {
-  const { transactionId, currency, amount, paymentMethod, status } = request.body
+  const { currency, amount, paymentMethod, status } = request.body
   Payments
-    .create({ transactionId, currency, amount, paymentMethod, status })
+    .create({ currency, amount, paymentMethod, status })
     .then(payment => {
       response
         .status(httpStatus.CREATED)
@@ -84,15 +84,6 @@ module.exports.getUIEnums = function (request, response, next) {
 
 exports.validateCreate = () => {
   return [
-    body('transactionId', 'El identificador de transacción es requerido').exists().trim().not().isEmpty(),
-    body('transactionId', 'El identificador de transacción debe ser numérico').isInt(),
-    body('transactionId').custom(value => {
-      return Payments.findById(value).then(payment => {
-        if (payment) {
-          return Promise.reject(new Error('Este identificador de transacción ya fue ingresado'))
-        }
-      })
-    }),
     body('currency', 'Moneda invalida').exists().trim().custom((value) => currencies.includes(value)),
     body('paymentMethod', 'Metodo de pago invalido').exists().trim().custom((value) => paymentMethods.includes(value)),
     body('amount', 'Monto invalido').exists().isDecimal(),

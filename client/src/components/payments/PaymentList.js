@@ -26,7 +26,7 @@ const PaymentList = (props) => (
       </thead>
       <tbody>
         { props.payments.map(p => (
-          <tr key={p.id}>
+          <tr key={p.transactionId}>
             <td>{ p.transactionId }</td>
             <td>{ messages.currencies[p.currency] }</td>
             <td>{ p.amount }</td>

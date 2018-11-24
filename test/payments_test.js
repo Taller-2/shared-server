@@ -22,7 +22,6 @@ describe('Payments controller', function () {
 
   it('Create payment OK', (done) => {
     const other = Object.assign({}, dummyPayment)
-    other.transactionId = 111
     chai
       .request(server)
       .post(baseURL)
@@ -32,24 +31,10 @@ describe('Payments controller', function () {
         res.should.have.status(httpStatus.CREATED)
         const { success, payment } = res.body
         success.should.be.equal(true)
-        payment.transactionId.should.be.equal(other.transactionId)
         payment.currency.should.be.equal(other.currency)
         payment.amount.should.be.equal(other.amount)
         payment.paymentMethod.should.be.equal(other.paymentMethod)
         payment.status.should.be.equal(other.status)
-        done()
-      })
-  })
-
-  it('Create payment FAIL duplicate id', (done) => {
-    chai
-      .request(server)
-      .post(baseURL)
-      .send(dummyPayment)
-      .end((err, res) => {
-        should.equal(err, null)
-        res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
-        res.body.success.should.be.equal(false)
         done()
       })
   })

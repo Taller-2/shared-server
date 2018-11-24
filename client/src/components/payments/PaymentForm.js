@@ -14,20 +14,6 @@ const PaymentForm = (props) => (
     <Row className="show-grid">
       <Col xs={12} md={6} mdOffset={3}>
         <Form horizontal>
-          <FormGroup controlId="transactionId">
-            <Col componentClass={ControlLabel} sm={2}>
-              #
-            </Col>
-            <Col sm={10}>
-              <FormControl type="number" placeholder="Numero de Transacción" onChange={props.handleChange('transactionId')}/>
-              <HelpBlock>
-                <p className="text-danger">{ props.errors.transactionId
-                  ? (typeof props.errors.transactionId === 'string' ? props.errors.transactionId : 'Este campo es requerido')
-                  : '' }</p>
-              </HelpBlock>
-            </Col>
-          </FormGroup>
-
           <FormGroup controlId="currency">
             <Col componentClass={ControlLabel} sm={2}>
               Moneda
