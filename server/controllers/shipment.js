@@ -3,6 +3,7 @@ const { body, param } = require('express-validator/check')
 const httpStatus = require('http-status-codes')
 
 const Shipment = model.Shipment
+const Payment = model.Payment
 const shipmentStatus = require('../enums/shipment_status')
 
 module.exports.findAll = function (request, response, next) {
@@ -20,9 +21,9 @@ module.exports.findAll = function (request, response, next) {
 }
 
 module.exports.create = function (request, response, next) {
-  const { address, id, status } = request.body
+  const { transactionId, address, id, status } = request.body
   Shipment
-    .create({ address, id, status })
+    .create({ transactionId, address, id, status })
     .then(shipment => {
       response
         .status(httpStatus.CREATED)
@@ -84,6 +85,13 @@ module.exports.getUIEnums = function (request, response, next) {
 
 exports.validateCreate = () => {
   return [
+    body('transactionId').custom(value => {
+      return Payment.findById(value).then(payment => {
+        if (!payment) {
+          return Promise.reject(new Error('El pago no existe'))
+        }
+      })
+    }),
     body('transactionId', 'El identificador de envío debe ser numérico').isInt(),
     body('address', 'La direccion es requerida').exists().trim(),
     body('status', 'Estado del envío invalido').exists().trim().custom((value) => shipmentStatus.includes(value))
