@@ -9,31 +9,46 @@ const truncate = require('../scripts/db/truncate')
 chai.use(require('chai-http'))
 
 let id
+let transactionId
+let invalidTransactionId
 
 describe('Shipments controller', function () {
   beforeEach((done) => {
-    truncate('Shipment').then(() => {
-      model.Shipment
-        .create(dummyShipment)
-        .then((shipment) => {
-          id = shipment.id
-          done()
+    truncate('Payment').then(() => {
+      model.Payment.create(dummyPayment).then((payment) => {
+        transactionId = payment.transactionId
+        invalidTransactionId = transactionId + 1
+        truncate('Shipment').then(() => {
+          model.Shipment
+            .create(dummyShipment)
+            .then((shipment) => {
+              id = shipment.id
+              done()
+            })
         })
+      })
     })
   })
 
   const baseURL = '/shipments'
   const dummyShipment = {
-    transactionId: 123,
     address: 'Calle falsa 123',
     status: 'pending'
   }
+  const dummyPayment = {
+    currency: 'ARS',
+    amount: 45.5,
+    paymentMethod: 'cash',
+    status: 'approved'
+  }
 
   it('Create shipment OK', (done) => {
+    const other = Object.assign({}, dummyShipment)
+    other.transactionId = transactionId
     chai
       .request(server)
       .post(baseURL)
-      .send(dummyShipment)
+      .send(other)
       .end((err, res) => {
         should.equal(err, null)
         res.should.have.status(httpStatus.CREATED)
@@ -41,6 +56,21 @@ describe('Shipments controller', function () {
         success.should.be.equal(true)
         shipment.address.should.be.equal(dummyShipment.address)
         shipment.status.should.be.equal(dummyShipment.status)
+        done()
+      })
+  })
+  it('Create shipment FAIL payment does not exist', (done) => {
+    const other = Object.assign({}, dummyShipment)
+    other.transactionId = invalidTransactionId
+    chai
+      .request(server)
+      .post(baseURL)
+      .send(other)
+      .end((err, res) => {
+        should.equal(err, null)
+        res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+        const { success } = res.body
+        success.should.be.equal(false)
         done()
       })
   })

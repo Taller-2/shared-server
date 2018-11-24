@@ -90,9 +90,11 @@ exports.validateCreate = () => {
         if (!payment) {
           return Promise.reject(new Error('El pago no existe'))
         }
+        if (payment.status !== 'approved') {
+          return Promise.reject(new Error('El pago no fue aprobado'))
+        }
       })
     }),
-    body('transactionId', 'El identificador de envío debe ser numérico').isInt(),
     body('address', 'La direccion es requerida').exists().trim(),
     body('status', 'Estado del envío invalido').exists().trim().custom((value) => shipmentStatus.includes(value))
   ]
