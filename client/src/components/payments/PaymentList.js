@@ -17,7 +17,6 @@ const PaymentList = (props) => (
       <thead>
         <tr>
           <th># Transacción</th>
-          <th>Moneda</th>
           <th>Monto</th>
           <th>Metodo de pago</th>
           <th>Estado</th>
@@ -28,7 +27,6 @@ const PaymentList = (props) => (
         { props.payments.map(p => (
           <tr key={p.transactionId}>
             <td>{ p.transactionId }</td>
-            <td>{ messages.currencies[p.currency] }</td>
             <td>{ p.amount }</td>
             <td>{ messages.payment.methods[p.paymentMethod] }</td>
             <td>{ messages.payment.status[p.status] }</td>

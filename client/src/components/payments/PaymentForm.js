@@ -14,21 +14,6 @@ const PaymentForm = (props) => (
     <Row className="show-grid">
       <Col xs={12} md={6} mdOffset={3}>
         <Form horizontal>
-          <FormGroup controlId="currency">
-            <Col componentClass={ControlLabel} sm={2}>
-              Moneda
-            </Col>
-            <Col sm={10}>
-              <FormControl componentClass="select" placeholder="Seleccionar" onChange={props.handleChange('currency')}>
-                <option value="">Seleccionar</option>
-                { props.currencies.map(c => <option key={c} value={c}>{messages.currencies[c]}</option>) }
-              </FormControl>
-              <HelpBlock>
-                <p className="text-danger">{ props.errors.currency ? 'Este campo es requerido' : '' }</p>
-              </HelpBlock>
-            </Col>
-          </FormGroup>
-
           <FormGroup controlId="amount">
             <Col componentClass={ControlLabel} sm={2}>
               Monto
