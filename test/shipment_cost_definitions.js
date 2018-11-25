@@ -98,7 +98,7 @@ module.exports.surchargeRule = {
 module.exports.sumRule = {
   'conditions': {
     'all': [{
-      'fact': 'monthtrips',
+      'fact': 'userScore',
       'operator': 'lessThan',
       'value': 15
     }]
