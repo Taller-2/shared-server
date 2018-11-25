@@ -1,20 +1,25 @@
+module.exports.factsDefaultValues = {
+  'antiquity': 10,
+  'email': 'test@gmail.com',
+  'userScore': 15,
+  'paymentMethod': 'cash',
+  'distance': 35,
+  'latitude': 37.658974,
+  'longitude': -5.526148,
+  'tripDate': '2017/03/28',
+  'tripTime': '13:30:00'
+}
+
 module.exports.facts = [
-  'daytrips',
-  'monthtrips',
   'antiquity',
+  'email',
   'userScore',
   'paymentMethod',
-  'duration',
   'distance',
-  'latitud',
-  'longitud',
-  'date',
-  'time',
-  'serverId',
+  'latitude',
+  'longitude',
   'tripDate',
-  'tripTime',
-  'email',
-  'price'
+  'tripTime'
 ]
 module.exports.ops = [
   'equal',

@@ -11,7 +11,7 @@ import {
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import RuleTranslator from '../service/ruleTranslator'
-import { facts, ops, type } from './rules_data'
+import { facts, ops, type, factsDefaultValues } from './rules_data'
 
 export default class RulesForm extends React.Component {
   constructor (props) {
@@ -19,7 +19,6 @@ export default class RulesForm extends React.Component {
     this.facts = facts
     this.ops = ops
     this.type = type
-    this.defaultValue = '10'
     this.state = {
       conditions: [],
       fact: this.facts[0],
@@ -28,6 +27,7 @@ export default class RulesForm extends React.Component {
       type: this.type[0],
       params: 10
     }
+    this.defaultValue = factsDefaultValues[this.state.fact]
   }
 
   checkValue (name, event) {
@@ -43,6 +43,9 @@ export default class RulesForm extends React.Component {
     this.setState({
       [name]: this.checkValue(name, event)
     })
+    if (name === 'fact') {
+      this.defaultValue = factsDefaultValues[event.target.value]
+    }
   }
 
   submit = (event) => {
