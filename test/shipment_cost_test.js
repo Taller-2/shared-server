@@ -163,8 +163,7 @@ describe('shipment cost test', function () {
   it('should get a sum', function (done) {
     const facts = {
       'email': 'jorge@comprame.com',
-      'userScore': -3,
-      'monthtrips': 12
+      'userScore': 14
     }
     addRule([sumRule])
       .then(() => {
@@ -180,8 +179,7 @@ describe('shipment cost test', function () {
   it('should apply only rules that match with facts', function (done) {
     const facts = {
       'email': 'jorge@comprame.com',
-      'userScore': -3,
-      'monthtrips': 12
+      'userScore': 12
     }
     addRule([sumRule, surchargeRule])
       .then(() => {
@@ -197,8 +195,7 @@ describe('shipment cost test', function () {
   it('should FAIL because of invalid type', function (done) {
     const facts = {
       'email': 3,
-      'userScore': -3,
-      'monthtrips': 12
+      'userScore': -3
     }
     addRule([sumRule, surchargeRule])
       .then(() => {
@@ -217,8 +214,7 @@ describe('shipment cost test', function () {
   it('should FAIL because of latitude invalid type', function (done) {
     const facts = {
       'latitude': '',
-      'userScore': -3,
-      'monthtrips': 12
+      'userScore': -3
     }
     addRule([sumRule, surchargeRule])
       .then(() => {

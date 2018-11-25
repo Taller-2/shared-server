@@ -11,7 +11,7 @@ import {
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import RuleTranslator from '../service/ruleTranslator'
-import { facts, ops, type } from './rules_data'
+import { facts, ops, type, factsDefaultValues, factOps } from './rules_data'
 
 export default class RulesForm extends React.Component {
   constructor (props) {
@@ -19,15 +19,15 @@ export default class RulesForm extends React.Component {
     this.facts = facts
     this.ops = ops
     this.type = type
-    this.defaultValue = '10'
     this.state = {
       conditions: [],
       fact: this.facts[0],
-      value: 10,
+      value: null,
       operator: this.ops[0],
       type: this.type[0],
       params: 10
     }
+    this.defaultValue = factsDefaultValues[this.facts[0]]
   }
 
   checkValue (name, event) {
@@ -42,7 +42,14 @@ export default class RulesForm extends React.Component {
   handleChange = name => event => {
     this.setState({
       [name]: this.checkValue(name, event)
+
     })
+    if (name === 'fact') {
+      this.defaultValue = factsDefaultValues[event.target.value]
+      this.setState({
+        operator: factOps[event.target.value][0]
+      })
+    }
   }
 
   submit = (event) => {
@@ -58,11 +65,20 @@ export default class RulesForm extends React.Component {
     )
   }
 
+  getValue (value) {
+    if (JSON.stringify(value) === 'null') {
+      return this.defaultValue
+    } else if (JSON.stringify(value) === 'NaN') {
+      return this.defaultValue
+    }
+    return value
+  }
+
   addCondition = () => {
     this.state.conditions.push({
       fact: this.state.fact,
       operator: this.state.operator,
-      value: this.state.value
+      value: this.getValue(this.state.value)
     })
     this.setState({
       'conditions': this.state.conditions
@@ -87,7 +103,7 @@ export default class RulesForm extends React.Component {
             { this.showOptions(this.facts) }
           </FormControl>
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('operator')}>
-            { this.showOptions(this.ops) }
+            { this.showOptions(factOps[this.state.fact]) }
           </FormControl>
           <FormControl type="text" placeholder={this.defaultValue} onChange={this.handleChange('value')}/>
         </Col>
@@ -115,7 +131,7 @@ export default class RulesForm extends React.Component {
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('type')}>
             { this.showOptions(this.type) }
           </FormControl>
-          <FormControl type="text" placeholder={this.defaultValue} onChange={this.handleChange('params')}/>
+          <FormControl type="text" placeholder='10' onChange={this.handleChange('params')}/>
         </Col>
       </FormGroup>
     )

@@ -29,12 +29,14 @@ export default class RulesContainer extends React.Component {
         if (response.status === httpStatus.OK) {
           this.setState({
             errors: {},
-            cost: 'the cost is ' + response.content.cost.cost + ' because it is ' + response.content.cost.status
+            cost: JSON.stringify(response.content.cost)
           })
         } else {
-          this.setState({
-            errors: { value: response.content.errors }
-          })
+          if (response.status === httpStatus.UNPROCESSABLE_ENTITY) {
+            this.setState({
+              errors: { value: response.content.errors }
+            })
+          }
         }
       })
       .catch(err => {

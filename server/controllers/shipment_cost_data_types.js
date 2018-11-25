@@ -1,6 +1,4 @@
 module.exports.factsTypes = {
-  'daytrips': typeof 1,
-  'monthtrips': typeof 1,
   'antiquity': typeof 1,
   'email': typeof '',
   'userScore': typeof 1.1,
