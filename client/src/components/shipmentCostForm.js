@@ -11,7 +11,7 @@ import {
   HelpBlock
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { facts, factsDefaultValues } from './rules_data'
+import { facts, defaultValues } from './rules_data'
 
 export default class ShipmentCostForm extends React.Component {
   constructor (props) {
@@ -22,7 +22,7 @@ export default class ShipmentCostForm extends React.Component {
       value: null,
       factsList: []
     }
-    this.defaultValue = factsDefaultValues[this.state.fact]
+    this.defaultValue = defaultValues[this.state.fact]
   }
 
   checkValue (name, event) {
@@ -39,7 +39,7 @@ export default class ShipmentCostForm extends React.Component {
       [name]: this.checkValue(name, event)
     })
     if (name === 'fact') {
-      this.defaultValue = factsDefaultValues[event.target.value]
+      this.defaultValue = defaultValues[event.target.value]
     }
   }
 
@@ -66,9 +66,18 @@ export default class ShipmentCostForm extends React.Component {
     )
   }
 
+  getValue (value) {
+    if (JSON.stringify(value) === 'null') {
+      return this.defaultValue
+    } else if (JSON.stringify(value) === 'NaN') {
+      return this.defaultValue
+    }
+    return value
+  }
+
   addFact = () => {
     this.state.factsList.push({
-      [this.state.fact]: this.state.value
+      [this.state.fact]: this.getValue(this.state.value)
     })
     this.setState({
       'factsList': this.state.factsList
