@@ -11,7 +11,7 @@ import {
   HelpBlock
 } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { facts } from './rules_data'
+import { facts, factsDefaultValues } from './rules_data'
 
 export default class ShipmentCostForm extends React.Component {
   constructor (props) {
@@ -22,6 +22,7 @@ export default class ShipmentCostForm extends React.Component {
       value: null,
       factsList: []
     }
+    this.defaultValue = factsDefaultValues[this.state.fact]
   }
 
   checkValue (name, event) {
@@ -37,6 +38,9 @@ export default class ShipmentCostForm extends React.Component {
     this.setState({
       [name]: this.checkValue(name, event)
     })
+    if (name === 'fact') {
+      this.defaultValue = factsDefaultValues[event.target.value]
+    }
   }
 
   refresh () {
@@ -88,7 +92,7 @@ export default class ShipmentCostForm extends React.Component {
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('fact')}>
             { this.showOptions(this.facts) }
           </FormControl>
-          <FormControl type="text" placeholder="insert a value" onChange={this.handleChange('value')}/>
+          <FormControl type="text" placeholder={this.defaultValue} onChange={this.handleChange('value')}/>
         </Col>
         <Col smOffset={12} sm={10}>
           <Button type="button" onClick={ this.addFact }>
