@@ -7,7 +7,7 @@ module.exports.factsDefaultValues = {
   'latitude': 37.658974,
   'longitude': -5.526148,
   'tripDate': '2017/03/28',
-  'tripTime': '13:30:00'
+  'tripTime': '13:30'
 }
 
 module.exports.facts = [
