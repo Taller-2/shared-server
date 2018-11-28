@@ -21,9 +21,9 @@ module.exports.findAll = function (request, response, next) {
 }
 
 module.exports.create = function (request, response, next) {
-  const { transactionId, address, id, status } = request.body
+  const { transactionId, address } = request.body
   Shipment
-    .create({ transactionId, address, id, status })
+    .create({ transactionId, address, status: 'pending' })
     .then(shipment => {
       response
         .status(httpStatus.CREATED)
@@ -38,29 +38,25 @@ module.exports.create = function (request, response, next) {
 
 module.exports.update = function (request, response, next) {
   const { id, status } = request.body
-  Shipment
-    .update(
-      { status: status },
-      { where: { id: id } }
-    )
-    .then(() => {
-      Shipment.findAll()
-        .then(shipments => {
-          response
-            .status(httpStatus.OK)
-            .json({ success: true, shipments: shipments })
-        })
-        .catch(error => {
-          response
-            .status(httpStatus.INTERNAL_SERVER_ERROR)
-            .json({ success: false, error: error })
-        })
+  Shipment.findById(id).then(shipment => {
+    Payment.findOne({ where: { transactionId: shipment.transactionId } }).then(payment => {
+      if (payment.status !== 'approved') {
+        response
+          .status(httpStatus.UNPROCESSABLE_ENTITY)
+          .json({ success: false, error: 'Payment was not approved' })
+      } else {
+        shipment
+          .update(
+            { status: status }
+          )
+          .then(shipment => {
+            response
+              .status(httpStatus.OK)
+              .json({ success: true, shipments: shipment })
+          })
+      }
     })
-    .catch(error => {
-      response
-        .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ success: false, error: error })
-    })
+  })
 }
 
 module.exports.delete = function (request, response, next) {
@@ -90,13 +86,9 @@ exports.validateCreate = () => {
         if (!payment) {
           return Promise.reject(new Error('El pago no existe'))
         }
-        if (payment.status !== 'approved') {
-          return Promise.reject(new Error('El pago no fue aprobado'))
-        }
       })
     }),
-    body('address', 'La direccion es requerida').exists().trim(),
-    body('status', 'Estado del envío invalido').exists().trim().custom((value) => shipmentStatus.includes(value))
+    body('address', 'La direccion es requerida').exists().trim()
   ]
 }
 

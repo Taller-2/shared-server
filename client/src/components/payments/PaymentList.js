@@ -1,22 +1,15 @@
 import React from 'react'
-import { Table, Button, ButtonToolbar } from 'react-bootstrap'
+import { Button, ButtonToolbar, Table } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import messages from '../../i18n'
 
 const PaymentList = (props) => (
   <div style={{ width: '80%', margin: 'auto' }}>
-    <div>
-      <Link to={`${props.path}/new`}>
-        <Button type="button">
-          Nuevo Pago
-        </Button>
-      </Link>
-    </div>
     <Table responsive>
       <thead>
         <tr>
           <th># Transacción</th>
+          <th>ID de compra</th>
           <th>Monto</th>
           <th>Metodo de pago</th>
           <th>Estado</th>
@@ -27,6 +20,7 @@ const PaymentList = (props) => (
         { props.payments.map(p => (
           <tr key={p.transactionId}>
             <td>{ p.transactionId }</td>
+            <td>{p.purchaseID}</td>
             <td>{ p.amount }</td>
             <td>{ messages.payment.methods[p.paymentMethod] }</td>
             <td>{ messages.payment.status[p.status] }</td>

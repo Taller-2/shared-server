@@ -22,9 +22,15 @@ module.exports.findAll = function (request, response, next) {
 }
 
 module.exports.create = function (request, response, next) {
-  const { amount, paymentMethod, status } = request.body
+  const { amount, paymentMethod, purchaseID } = request.body
   Payments
-    .create({ currency: 'ARS', amount, paymentMethod, status })
+    .create({
+      currency: 'ARS',
+      status: 'pending',
+      amount,
+      paymentMethod,
+      purchaseID
+    })
     .then(payment => {
       response
         .status(httpStatus.CREATED)
@@ -85,8 +91,7 @@ module.exports.getUIEnums = function (request, response, next) {
 exports.validateCreate = () => {
   return [
     body('paymentMethod', 'Metodo de pago invalido').exists().trim().custom((value) => paymentMethods.includes(value)),
-    body('amount', 'Monto invalido').exists().isDecimal(),
-    body('status', 'Estado del pago invalido').exists().trim().custom((value) => paymentStatus.includes(value))
+    body('amount', 'Monto invalido').exists().isDecimal()
   ]
 }
 
