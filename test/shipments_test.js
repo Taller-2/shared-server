@@ -90,6 +90,19 @@ describe('Shipments controller', function () {
       })
   })
 
+  it('Update shipment OK', (done) => {
+    const requestBody = { status: 'shipped' }
+    chai.request(server)
+      .put(`${baseURL}/${id}`)
+      .send(requestBody)
+      .end((err, res) => {
+        should.equal(err, null)
+        res.should.have.status(httpStatus.OK)
+        res.body.success.should.be.equal(true)
+        done()
+      })
+  })
+
   it('Update shipment FAIL not found', (done) => {
     const requestBody = { status: 'shipped' }
     chai.request(server)
