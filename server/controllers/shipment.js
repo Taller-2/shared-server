@@ -37,7 +37,8 @@ module.exports.create = function (request, response, next) {
 }
 
 module.exports.update = function (request, response, next) {
-  const { id, status } = request.body
+  const { status } = request.body
+  let id = request.params.id
   Shipment.findById(id).then(shipment => {
     Payment.findOne({ where: { transactionId: shipment.transactionId } }).then(payment => {
       if (payment.status !== 'approved') {

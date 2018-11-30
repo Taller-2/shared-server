@@ -20,7 +20,7 @@ describe('Shipments controller', function () {
         invalidTransactionId = transactionId + 1
         truncate('Shipment').then(() => {
           model.Shipment
-            .create(dummyShipment)
+            .create(Object.assign({}, dummyShipment, { transactionId }))
             .then((shipment) => {
               id = shipment.id
               done()
