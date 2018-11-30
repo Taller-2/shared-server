@@ -3,6 +3,7 @@ const { body, param } = require('express-validator/check')
 const httpStatus = require('http-status-codes')
 
 const Payments = model.Payment
+const Shipments = model.Shipment
 const paymentMethods = require('../enums/payment_method')
 const paymentStatus = require('../enums/payment_status')
 const currencies = require('../enums/currency')
@@ -13,6 +14,32 @@ module.exports.findAll = function (request, response, next) {
       response
         .status(httpStatus.OK)
         .json({ success: true, payments: payments })
+    })
+    .catch(error => {
+      response
+        .status(httpStatus.INTERNAL_SERVER_ERROR)
+        .json({ success: false, error: error })
+    })
+}
+
+module.exports.statusForPurchase = function (request, response, next) {
+  Payments.findOne({ where: { purchaseID: request.params.purchaseId } })
+    .then(payment => {
+      Shipments.findOne({ where: { transactionId: payment.transactionId } })
+        .then(shipment => {
+          response
+            .status(httpStatus.OK)
+            .json({
+              success: true,
+              payment_status: payment ? payment.status : null,
+              shipment_status: shipment ? shipment.status : null
+            })
+        })
+        .catch(error => {
+          response
+            .status(httpStatus.INTERNAL_SERVER_ERROR)
+            .json({ success: false, error: error })
+        })
     })
     .catch(error => {
       response
