@@ -4,8 +4,6 @@ const shipmentCostController = require('../controllers/shipment_cost')
 
 /*
 const {
-  daytrips, // (int)
-  monthtrips, // (int)
   antiquity  // (int)
   email, // (string)
   userScore,  // (float)
