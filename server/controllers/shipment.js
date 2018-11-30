@@ -41,19 +41,31 @@ module.exports.update = function (request, response, next) {
   let id = request.params.id
   Shipment.findById(id).then(shipment => {
     Payment.findOne({ where: { transactionId: shipment.transactionId } }).then(payment => {
-      if (payment.status !== 'approved') {
+      if (payment.status === 'pending') {
         response
           .status(httpStatus.UNPROCESSABLE_ENTITY)
-          .json({ success: false, error: 'Payment was not approved' })
+          .json({ success: false, error: 'Payment was not approved yet' })
+      } else if (payment.status === 'rejected' && status !== 'cancelled') {
+        response
+          .status(httpStatus.UNPROCESSABLE_ENTITY)
+          .json({ success: false, error: 'Payment was rejected' })
       } else {
         shipment
           .update(
             { status: status }
           )
-          .then(shipment => {
-            response
-              .status(httpStatus.OK)
-              .json({ success: true, shipments: shipment })
+          .then(() => {
+            Shipment.findAll()
+              .then(shipments => {
+                response
+                  .status(httpStatus.OK)
+                  .json({ success: true, shipments: shipments })
+              })
+              .catch(error => {
+                response
+                  .status(httpStatus.INTERNAL_SERVER_ERROR)
+                  .json({ success: false, error: error })
+              })
           })
       }
     })
