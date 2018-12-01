@@ -4,8 +4,16 @@ export default {
     USD: 'Dolares'
   },
   payment: {
-    status: { pending: 'Pendiente', approved: 'Aprobado', rejected: 'Rechazado' },
-    methods: { cash: 'Efectivo', creditCard: 'Tarjeta de Crédito' }
+    status: {
+      pending: 'Pendiente',
+      approved: 'Aprobado',
+      rejected: 'Rechazado'
+    },
+    methods: {
+      cash: 'Efectivo',
+      credit: 'Tarjeta de Crédito',
+      debit: 'Tarjeta de Débito'
+    }
   },
   shipment: {
     status: { pending: 'Pendiente', shipped: 'Enviado', cancelled: 'Cancelado' }

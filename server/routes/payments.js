@@ -9,6 +9,8 @@ router.post('/', paymentController.validateCreate(), validation.validationHandle
 
 router.get('/', paymentController.findAll)
 
+router.get('/status-for-purchase/:purchaseId', paymentController.statusForPurchase)
+
 router.put('/:transactionId', paymentController.validateUpdate(), validation.validationHandler, paymentController.update)
 
 router.delete('/:transactionId', paymentController.delete)

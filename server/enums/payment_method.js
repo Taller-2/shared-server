@@ -1,1 +1,1 @@
-module.exports = ['cash', 'creditCard']
+module.exports = ['cash', 'credit', 'debit']

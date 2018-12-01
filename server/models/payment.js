@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     currency: DataTypes.STRING,
     amount: DataTypes.FLOAT,
     paymentMethod: DataTypes.STRING,
-    status: DataTypes.STRING
+    status: DataTypes.STRING,
+    purchaseID: DataTypes.STRING
   }, {})
   Payment.associate = function (models) {
     // associations can be defined here
