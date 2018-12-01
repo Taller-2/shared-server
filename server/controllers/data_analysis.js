@@ -16,6 +16,10 @@ function numberOfArticlesAsAFunctionOfTime (data, action, title, yAxisTitle) {
   if (JSON.stringify(postedArticles) === JSON.stringify([])) {
     return false
   }
+  postedArticles = postedArticles.map(event => {
+    event.timestamp = event.timestamp.split(' ')[0]
+    return event
+  })
   let postedArticlesGroupedByTimestamp = postedArticles.groupBy('timestamp')
   const timestamp = Object.keys(postedArticlesGroupedByTimestamp)
   let numberOfArticles = []
