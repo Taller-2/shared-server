@@ -17,7 +17,7 @@
     "create": "sequelize db:create",
     "migrate": "sequelize db:migrate",
     "drop": "sequelize db:drop",
-    "test": "npm run beforetest && NODE_ENV=test nyc mocha --exit",
+    "test": "npm run beforetest && NODE_ENV=test && nyc mocha --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "beforetest": "eslint .",
     "eslint-fix": "eslint . --fix"
