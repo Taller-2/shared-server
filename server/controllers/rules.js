@@ -134,7 +134,7 @@ exports.validateCreate = () => {
         if (aCondition.fact === 'tripTime') {
           let isDateValid = moment(aCondition.value, 'h:mm A').format('HH:mm') === aCondition.value
           if (!isDateValid) {
-            return Promise.reject(new Error('tripTime shoul have format HH:mm'))
+            return Promise.reject(new Error('tripTime should have format HH:mm'))
           }
         }
       }
