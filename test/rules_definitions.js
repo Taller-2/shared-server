@@ -79,3 +79,35 @@ module.exports.multipleConditionsRule = {
     }
   }
 }
+
+module.exports.InvalidTripTimeRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'tripTime',
+      'operator': 'equal',
+      'value': '24:34'
+    }]
+  },
+  'event': {
+    'type': 'test',
+    'params': {
+      'data': 0
+    }
+  }
+}
+
+module.exports.InvalidTripDateRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'tripDate',
+      'operator': 'equal',
+      'value': '02/12/2017'
+    }]
+  },
+  'event': {
+    'type': 'test',
+    'params': {
+      'data': 0
+    }
+  }
+}
