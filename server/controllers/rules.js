@@ -115,9 +115,29 @@ const isRuleValid = function (aJsonRule) {
   return isConditionValid(rule.conditions)
 }
 
+let moment = require('moment')
+
 exports.validateCreate = () => {
   return [
     body('json').custom(jsonRule => {
+      if (typeof jsonRule === typeof undefined) {
+        return true
+      }
+      let rule = JSON.parse(jsonRule)
+      for (let aCondition of rule.conditions.all) {
+        if (aCondition.fact === 'tripDate') {
+          let isDateValid = moment(aCondition.value, 'YYYY/MM/DD').format('YYYY/MM/DD') === aCondition.value
+          if (!isDateValid) {
+            return Promise.reject(new Error('tripDate should have format YYYY/MM/DD'))
+          }
+        }
+        if (aCondition.fact === 'tripTime') {
+          let isDateValid = moment(aCondition.value, 'h:mm A').format('HH:mm') === aCondition.value
+          if (!isDateValid) {
+            return Promise.reject(new Error('tripTime shoul have format HH:mm'))
+          }
+        }
+      }
       return model.Rules.findAll(
         { where: { json: jsonRule } }
       )

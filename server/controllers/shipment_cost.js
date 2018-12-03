@@ -148,6 +148,7 @@ module.exports.getCost = async function (req, res) {
 
 const { body } = require('express-validator/check')
 const { factsTypes } = require('./shipment_cost_data_types')
+let moment = require('moment')
 
 exports.validateCreate = () => {
   let msg = ''
@@ -162,6 +163,18 @@ exports.validateCreate = () => {
           const expectedType = factsTypes[aFact]
           if (!(type === expectedType)) {
             return false
+          }
+          if (aFact === 'tripDate') {
+            let isDateValid = moment(aValue, 'YYYY/MM/DD').format('YYYY/MM/DD') === aValue
+            if (!isDateValid) {
+              return false
+            }
+          }
+          if (aFact === 'tripTime') {
+            let isDateValid = moment(aValue, 'h:mm A').format('HH:mm') === aValue
+            if (!isDateValid) {
+              return Promise.reject(new Error('tripTime shoul have format HH:mm'))
+            }
           }
         }
         return true
