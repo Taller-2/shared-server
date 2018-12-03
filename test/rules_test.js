@@ -10,7 +10,9 @@ const {
   normalRule,
   emptyConditionRule,
   missingConditionRule,
-  multipleConditionsRule
+  multipleConditionsRule,
+  InvalidTripDateRule,
+  InvalidTripTimeRule
 } = require('./rules_definitions')
 
 const baseURL = '/rules'
@@ -206,6 +208,34 @@ describe('add simple rule', function () {
         // expected: { success: true, rule: rule }
         should.equal(err, null)
         res.should.have.status(httpStatus.INTERNAL_SERVER_ERROR)
+        res.body.should.be.a('object')
+        res.body.should.have.property('success')
+        res.body.success.should.be.equal(false)
+        done()
+      })
+  })
+  it('Should FAIL invalid trip date format', (done) => {
+    let jsonRule = JSON.stringify(InvalidTripDateRule)
+    chai.request(server)
+      .post(baseURL)
+      .send({ json: jsonRule })
+      .end(function (err, res) {
+        should.equal(err, null)
+        res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+        res.body.should.be.a('object')
+        res.body.should.have.property('success')
+        res.body.success.should.be.equal(false)
+        done()
+      })
+  })
+  it('Should FAIL invalid trip time format', (done) => {
+    let jsonRule = JSON.stringify(InvalidTripTimeRule)
+    chai.request(server)
+      .post(baseURL)
+      .send({ json: jsonRule })
+      .end(function (err, res) {
+        should.equal(err, null)
+        res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
         res.body.should.be.a('object')
         res.body.should.have.property('success')
         res.body.success.should.be.equal(false)

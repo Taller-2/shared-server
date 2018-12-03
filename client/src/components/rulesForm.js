@@ -40,14 +40,15 @@ export default class RulesForm extends React.Component {
   }
 
   handleChange = name => event => {
+    let value = this.checkValue(name, event)
     this.setState({
-      [name]: this.checkValue(name, event)
+      [name]: value
 
     })
     if (name === 'fact') {
-      this.defaultValue = factsDefaultValues[event.target.value]
+      this.defaultValue = factsDefaultValues[value]
       this.setState({
-        operator: factOps[event.target.value][0]
+        operator: factOps[value][0]
       })
     }
   }

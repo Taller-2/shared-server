@@ -110,3 +110,35 @@ module.exports.sumRule = {
     }
   }
 }
+
+module.exports.tripDateRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'tripDate',
+      'operator': 'lessThan',
+      'value': '2017/12/24'
+    }]
+  },
+  'event': {
+    'type': 'sum',
+    'params': {
+      'data': 20
+    }
+  }
+}
+
+module.exports.tripTimeRule = {
+  'conditions': {
+    'all': [{
+      'fact': 'tripTime',
+      'operator': 'lessThan',
+      'value': '13:34'
+    }]
+  },
+  'event': {
+    'type': 'sum',
+    'params': {
+      'data': 20
+    }
+  }
+}

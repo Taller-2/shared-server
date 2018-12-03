@@ -12,7 +12,9 @@ const {
   percentageRule,
   discountRule,
   surchargeRule,
-  sumRule
+  sumRule,
+  tripDateRule,
+  tripTimeRule
 } = require('./shipment_cost_definitions')
 chai.use(require('chai-http'))
 
@@ -293,6 +295,36 @@ describe('shipment cost test', function () {
           .send({ a: { b: { c: { d: { e: 'f' } } } } })
           .end(function (err, res) {
             checkCost(err, res, { status: 'disabled', cost: null })
+            done()
+          })
+      })
+  })
+  it('should FAIL invalid trip date', function (done) {
+    addRule([tripDateRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'tripDate': '20/12/2017' })
+          .end(function (err, res) {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+            res.body.should.have.property('success')
+            res.body.success.should.be.equal(false)
+            done()
+          })
+      })
+  })
+  it('should FAIL invalid trip time', function (done) {
+    addRule([tripTimeRule])
+      .then(() => {
+        chai.request(server)
+          .post('/shipment-cost')
+          .send({ 'tripTime': '24:24' })
+          .end(function (err, res) {
+            should.equal(err, null)
+            res.should.have.status(httpStatus.UNPROCESSABLE_ENTITY)
+            res.body.should.have.property('success')
+            res.body.success.should.be.equal(false)
             done()
           })
       })
