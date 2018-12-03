@@ -167,7 +167,7 @@ exports.validateCreate = () => {
           if (aFact === 'tripDate') {
             let isDateValid = moment(aValue, 'YYYY/MM/DD').format('YYYY/MM/DD') === aValue
             if (!isDateValid) {
-              return false
+              return Promise.reject(new Error('tripDate should have format YYYY/MM/DD'))
             }
           }
           if (aFact === 'tripTime') {
