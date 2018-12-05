@@ -20,8 +20,8 @@ y luego correr 'Attach' en VSCode
 
 Ver [Wiki](https://github.com/Taller-2/shared-server/wiki)
 
-Ver [Manual de usuario](https://docs.google.com/document/d/1zmU7tOLcLHVLC0iqRxA6Vse1rqAn9aXWfkqyS1tJCMU/edit)
-Ver [Manual de diseño](https://docs.google.com/document/d/1R-rxSH0auLjw1GANp8zt8LR0QPZd29woJvUFLghzCsQ/edit)
-Ver [Manual de proyecto](https://docs.google.com/document/d/1beiVoOduFfhgMuekZwSR3FcGdA3s68ZGfd4r9yZFVQk/edit#)
+Ver [Manual de usuario](https://docs.google.com/document/d/1zmU7tOLcLHVLC0iqRxA6Vse1rqAn9aXWfkqyS1tJCMU/edit)  
+Ver [Manual de diseño](https://docs.google.com/document/d/1R-rxSH0auLjw1GANp8zt8LR0QPZd29woJvUFLghzCsQ/edit)  
+Ver [Manual de proyecto](https://docs.google.com/document/d/1beiVoOduFfhgMuekZwSR3FcGdA3s68ZGfd4r9yZFVQk/edit#)  
 
 
