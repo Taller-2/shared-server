@@ -45,8 +45,7 @@ class App extends Component {
               <Route path="/logout"
                 render={routeProps => <Logout {...routeProps} onLogout={ () => this.setState(this.state) }/>} />
               <Route path="/register" component={RegisterContainer} />
-              <PrivateRoute exact path="/" component={Home} />
-              <PrivateRoute path="/app-server-status" component={AppServerStatus} />
+              <PrivateRoute exact path="/" component={AppServerStatus} />
               <PrivateRoute path="/addRules" component={RulesContainer} />
               <PrivateRoute path="/rulesList" component={RulesListContainer} />
               <PrivateRoute path="/appServerGraphs" component={AppServerGraphsContainer} />
@@ -70,11 +69,5 @@ const Logout = (props) => {
 Logout.propTypes = {
   onLogout: PropTypes.func
 }
-
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-)
 
 export default App

@@ -106,16 +106,14 @@ export default class RulesForm extends React.Component {
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('operator')}>
             { this.showOptions(factOps[this.state.fact]) }
           </FormControl>
-          <FormControl type="text" placeholder={this.defaultValue} onChange={this.handleChange('value')}/>
+          <FormControl type="text" value={this.defaultValue} onChange={this.handleChange('value')}/>
         </Col>
-        <Col smOffset={12} sm={10}>
-          <Button type="button" onClick={ this.addCondition }>
-            +
+        <Col smOffset={4} sm={10}>
+          <Button type="button" onClick={ this.addCondition } style={{ margin: '1em' }}>
+            Agregar
           </Button>
-        </Col>
-        <Col smOffset={12} sm={10}>
           <Button type="button" onClick={ this.removeCondition }>
-            -
+            Eliminar
           </Button>
         </Col>
       </FormGroup>
@@ -132,30 +130,41 @@ export default class RulesForm extends React.Component {
           <FormControl componentClass="select" placeholder="Type" onChange={this.handleChange('type')}>
             { this.showOptions(this.type) }
           </FormControl>
-          <FormControl type="text" placeholder='10' onChange={this.handleChange('params')}/>
+          <FormControl type="text" value='10' onChange={this.handleChange('params')}/>
         </Col>
       </FormGroup>
     )
   }
 
+  showCondition (options) {
+    return (
+      options.map((option, index) => {
+        return (
+          <Row key={index} className="show-grid">
+            <Col md={6}>
+              {option}
+            </Col>
+          </Row>
+        )
+      })
+    )
+  }
   listConditions () {
     let translatedConditions = []
     this.state.conditions.forEach((aCondition) => {
       translatedConditions.push(RuleTranslator.getCondition(aCondition))
     })
     return (
-      <FormGroup controlId="condition">
-        <Col sm={10}>
-          { this.showOptions(translatedConditions) }
-        </Col>
-      </FormGroup>
+      <Grid controlId="condition">
+        { this.showCondition(translatedConditions) }
+      </Grid>
     )
   }
 
   accept () {
     return (
       <FormGroup>
-        <Col smOffset={2} sm={10}>
+        <Col mdOffset={5} md={6}>
           <Button type="submit" onClick={ this.submit }>
             Aceptar
           </Button>
@@ -182,20 +191,13 @@ export default class RulesForm extends React.Component {
   render () {
     this.refresh()
     return (
-      <Grid>
-        <Row className="show-grid">
-          <Col xs={12} md={4} mdOffset={9}>
-            <Form horizontal>
-              { this.listConditions() }
-            </Form>
-          </Col>
-        </Row>
-
+      <Grid style={{ marginTop: '3em' }}>
         <Row className="show-grid">
           <Col xs={12} md={6} mdOffset={3}>
             <Form horizontal>
               { this.condition() }
               { this.consequence() }
+              { this.listConditions() }
               { this.accept() }
             </Form>
           </Col>
