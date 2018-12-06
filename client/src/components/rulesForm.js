@@ -108,7 +108,6 @@ export default class RulesForm extends React.Component {
           </FormControl>
           <FormControl type="text" value={this.defaultValue} onChange={this.handleChange('value')}/>
         </Col>
-        
         <Col smOffset={4} sm={10}>
           <Button type="button" onClick={ this.addCondition } style={{ margin: '1em' }}>
             Agregar
