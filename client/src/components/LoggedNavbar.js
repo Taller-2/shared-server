@@ -12,17 +12,17 @@ const LoggedNavbar = function () {
         <LinkContainer to="/appServerGraphs">
           <NavItem eventKey={2}>Actividad de servidores</NavItem>
         </LinkContainer>
-        <LinkContainer to="/addRules">
-          <NavItem eventKey={3}>Agregar reglas</NavItem>
-        </LinkContainer>
-        <LinkContainer to="/rulesList">
-          <NavItem eventKey={4}>Lista de reglas</NavItem>
-        </LinkContainer>
         <LinkContainer to="/payments">
-          <NavItem eventKey={5}>Pagos</NavItem>
+          <NavItem eventKey={3}>Pagos</NavItem>
         </LinkContainer>
         <LinkContainer to="/shipments">
-          <NavItem eventKey={6}>Envíos</NavItem>
+          <NavItem eventKey={4}>Envíos</NavItem>
+        </LinkContainer>
+        <LinkContainer to="/addRules">
+          <NavItem eventKey={5}>Agregar reglas</NavItem>
+        </LinkContainer>
+        <LinkContainer to="/rulesList">
+          <NavItem eventKey={6}>Lista de reglas</NavItem>
         </LinkContainer>
         <LinkContainer to="/shipment-cost">
           <NavItem eventKey={7}>Simular costo de envio</NavItem>
